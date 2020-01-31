@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">dundone</string>
+    <string name="neople_url">https://api.neople.co.kr</string>
+    <string name="apikey">5PH6jW0R4WIuBOhtldAAoMFN8tu1FGD8</string>
+    <string name="spfCharData">characterData</string>
+</resources>

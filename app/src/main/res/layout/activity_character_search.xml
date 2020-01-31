@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".auction.AuctionSearchActivity">
+
+    <EditText
+        android:id="@+id/char_name_in_character_search"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/radius_empty_rect_character"
+        android:hint="이곳에 아이템을 입력해주세요"
+        android:fontFamily=""
+        android:textSize="18sp"
+        android:padding="15dp"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:textColorHint="#626382"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
+    <Button
+        android:id="@+id/char_search_btn_in_character_search"
+        android:layout_width="87dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/radius_rect_character"
+        android:fontFamily="@font/black_han_sans_regular"
+        android:text="검색"
+        android:textColor="@color/colorBackground"
+        android:textSize="28sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/char_name_in_character_search" />
+
+    <FrameLayout
+        android:id="@+id/back_in_character_search"
+        style="@style/CharacterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            style="@style/ButtonImageSize"
+            app:srcCompat="@drawable/back_arrow_char" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/home_in_character_search"
+        style="@style/CharacterButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            style="@style/ButtonImageSize"
+            app:srcCompat="@drawable/home_char" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="캐릭터 검색"
+        android:textColor="#646382"
+        android:textSize="40sp"
+        android:fontFamily="@font/font_family"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.27"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="293dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

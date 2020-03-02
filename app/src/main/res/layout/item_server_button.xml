@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="72dp"
+    android:layout_height="24dp"
+    android:background="@drawable/radius_empty_little_red_rect"
+    android:textColor="@color/colorLittleRed"
+    android:gravity="center"
+    tools:text="서버"
+    />

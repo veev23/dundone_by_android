@@ -1,6 +1,23 @@
 <resources>
     <string name="app_name">dundone</string>
     <string name="neople_url">https://api.neople.co.kr</string>
+    <string name="dundone_url">http://13.125.39.173</string>
     <string name="apikey">5PH6jW0R4WIuBOhtldAAoMFN8tu1FGD8</string>
-    <string name="spfCharData">characterData</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="appbar_scrolling_view_behavior" translatable="false">
+        com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
+    </string>
+
+    <!--TagName -->
+    <string name="char_home_fragment">HomeFragment</string>
+    <string name="char_auction_fragment">auctionFragment</string>
+    <string name="char_list_fragment">CharListFragment</string>
+    <string name="char_add_fragment">CharAddFragment</string>
+    <string name="char_detail_fragment">CharDetailFragment</string>
 </resources>

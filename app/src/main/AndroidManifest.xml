@@ -12,17 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".character.CharacterSearchResultActivity"></activity>
-        <activity android:name=".character.CharacterSearchActivity" />
-        <activity
-            android:name=".auction.ItemSearchResultActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".character.CharacterListActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".auction.AuctionSearchActivity"
-            android:launchMode="singleTop" />
         <activity
             android:name=".main.MainActivity"
             android:launchMode="singleTask" />

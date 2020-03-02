@@ -9,29 +9,51 @@
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_background</item>
+        <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
 
     <!-- Button -->
     <style name="ButtonSize">
-        <item name="android:layout_width">39dp</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:layout_margin">16dp</item>
-        <item name="android:padding">10dp</item>
-    </style>
-    <style name="AuctionButton" parent="@style/ButtonSize">
-        <item name="android:background">@drawable/radius_empty_rect_auction</item>
-    </style>
-    <style name="CharacterButton" parent="@style/ButtonSize">
-        <item name="android:background">@drawable/radius_empty_rect_character</item>
+        <item name="android:layout_width">55dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:background">@drawable/radius_empty_rect</item>
     </style>
     <style name="ButtonImageSize">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">15dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
-    <style name="FLoatButton">
-        <item name="android:background">@drawable/button_float_char</item>
+
+    <style name="RadiusItem">
+        <item name="android:background">@drawable/radius_white_rect</item>
+    </style>
+
+
+    <style name="DefaultPadding">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+    <style name="TextPadding">
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+    </style>
+
+    <style name="Title">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:lineSpacingExtra">1.3sp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">27sp</item>
     </style>
 </resources>

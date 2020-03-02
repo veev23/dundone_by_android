@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="15dp"
+    style="@style/RadiusItem">
+    <include
+        android:id="@+id/char_info_in_char_info"
+        layout="@layout/include_char_mini_info"/>
+</LinearLayout>

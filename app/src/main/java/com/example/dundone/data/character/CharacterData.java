@@ -1,33 +1,17 @@
 package com.example.dundone.data.character;
 
 import com.example.dundone.data.server.ServerData;
-
-public class CharacterData {
-    public CharacterData(String charName, String charId, ServerData server, OtherData others) {
-        this.charName = charName;
-        this.charId = charId;
-        this.server = server;
+public class CharacterData extends CharBaseData {
+    public CharacterData(String charName, String charId, ServerData server, RaidData others) {
+        super(charName, charId, server);
         this.others = others;
     }
-
-    public String getCharName() {
-        return charName;
+    public CharacterData(CharBaseData cbd, RaidData others){
+        super(cbd);
+        this.others =others;
     }
-
-    public String getCharId() {
-        return charId;
-    }
-
-    public ServerData getServer() {
-        return server;
-    }
-
-    public OtherData getOthers() {
+    public RaidData getOthers() {
         return others;
     }
-
-    private String charName;
-    private String charId;
-    private ServerData server;
-    private OtherData others;
+    private RaidData others;
 }

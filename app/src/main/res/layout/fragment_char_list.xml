@@ -31,5 +31,13 @@
             android:layout_marginTop="-50dp"
             android:layout_marginEnd="16dp"
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ad_view_in_char_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/home_fragment_ad_unit"/>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

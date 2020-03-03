@@ -14,11 +14,6 @@ public interface dnfAPI {
     @GET("/df/servers")
     Call<ResServerList> getServerList(@Query("apikey") String apikey);
 
-    //3번 : 캐릭터 기본 정보 조회
-    @GET("/df/servers/{serverId}/characters/{characterId}")
-    Call<ResCharSearch> getCharBaseData(@Query("apikey") String apikey, @Path("serverId") String serverId,
-                                      @Path("characterId") String characterId);
-
 
     //17번 : 아이템 검색
     @GET("/df/items?q=trade:true&wordType=front&limit=30")

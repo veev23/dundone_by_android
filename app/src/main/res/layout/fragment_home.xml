@@ -1,27 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
+    android:orientation="vertical"
     tools:context=".main.home.HomeFragment">
 
     <FrameLayout
         android:background="@drawable/gradation_dark_to_light"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_gravity="center"
-            android:id="@+id/imageView"
             android:layout_width="164dp"
             android:layout_height="164dp"
             android:scaleType="centerCrop"
             android:src="@drawable/app_logo" />
     </FrameLayout>
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ad_view_in_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/home_fragment_ad_unit"/>
+    <include layout="@layout/include_neople_openapi_image"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:id="@+id/openapi_in_home"/>
+
+</LinearLayout>

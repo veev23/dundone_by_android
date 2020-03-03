@@ -5,12 +5,14 @@ import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ProgressBar;
@@ -19,9 +21,12 @@ import android.widget.Toast;
 
 import com.example.dundone.R;
 import com.example.dundone.Singleton;
+import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.server.ResServerList;
 import com.example.dundone.data.server.ServerData;
+import com.example.dundone.main.NeopleAPI;
 
 import java.util.ArrayList;
 
@@ -44,7 +49,7 @@ import static com.example.dundone.Singleton.DpToPixel;
 
 public class CharacterAddFragment extends Fragment {
 
-    private Context context;
+    private Context mContext;
     private ArrayList<ServerData> servers = new ArrayList<>();
     private TextView[] tvServer;
     private int selectedServer = 0;
@@ -65,44 +70,55 @@ public class CharacterAddFragment extends Fragment {
     @BindView(R.id.cl_in_char_add)
     ConstraintLayout container;
 
+    @BindView(R.id.openapi_in_char_add)
+    View ivToDevSite;
+
     private void updateSearchResultTo(int resId) {
         ConstraintSet targetConstSet = new ConstraintSet();
-        targetConstSet.clone(context, resId);
-        TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(500));
+        targetConstSet.clone(mContext, resId);
+        TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
         targetConstSet.applyTo(container);
+    }
+
+    private void hideKeyBoard() {
+        InputMethodManager im = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(etCharSearch.getWindowToken(), 0);
     }
 
     @OnClick(R.id.search_button_in_char_add)
     void reqCharSearch() {
         pbLoadingBar.setVisibility(View.VISIBLE);
+        etCharSearch.clearFocus();
+        hideKeyBoard();
         updateSearchResultTo(R.layout.constrain_layout_list_up_in_char_add);
-
-        //---------------------testCode--------------------
-        charSearchList.add(new CharBaseData("남캐", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-        charSearchList.add(new CharBaseData("plnder2", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-        charSearchList.add(new CharBaseData("남캐", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-        charSearchList.add(new CharBaseData("남캐", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-        searchAdapter.notifyDataSetChanged();
-        pbLoadingBar.setVisibility(View.GONE);
-        //-------------------------------------------------
-        /*
-        Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes();
+         String serverId = servers.get(selectedServer).getServerId();
+        String charName = etCharSearch.getText().toString();
+        Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
         resCharSearchCall.enqueue(new Callback<ResCharSearch>() {
             @Override
             public void onResponse(Call<ResCharSearch> call, Response<ResCharSearch> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     pbLoadingBar.setVisibility(View.GONE);
-                }
-                else{
-                    Toast.makeText(context, "errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
+                    charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
+                    charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
+                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
+                    charSearchList.clear();
+                    //TODO:charSearchList 초기화 후 response.body()에서 갱신
+                     searchAdapter.notifyDataSetChanged();
+                     if(charSearchList.isEmpty()){
+                         Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                     }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
+
             @Override
             public void onFailure(Call<ResCharSearch> call, Throwable t) {
-                Toast.makeText(context, "error : " + t.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });
-        */
+
     }
 
     private void pressSearchSetting() {
@@ -110,7 +126,7 @@ public class CharacterAddFragment extends Fragment {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Toast.makeText(context, "검색", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "검색", Toast.LENGTH_LONG).show();
                     reqCharSearch();
                     return true;
                 }
@@ -120,9 +136,9 @@ public class CharacterAddFragment extends Fragment {
     }
 
     private void serverTabOnClick(final int i) {
-        tvServer[selectedServer].setTextColor(ContextCompat.getColor(context, R.color.colorLittleRed));
+        tvServer[selectedServer].setTextColor(ContextCompat.getColor(mContext, R.color.colorLittleRed));
         tvServer[selectedServer].setBackgroundResource(R.drawable.radius_empty_little_red_rect);
-        tvServer[i].setTextColor(ContextCompat.getColor(context, R.color.colorButtonBackgorund));
+        tvServer[i].setTextColor(ContextCompat.getColor(mContext, R.color.colorButtonBackgorund));
         tvServer[i].setBackgroundResource(R.drawable.radius_little_red_rect);
         selectedServer = i;
     }
@@ -135,13 +151,13 @@ public class CharacterAddFragment extends Fragment {
                 if (response.isSuccessful()) {
                     gridLayoutSetting(inflater, response.body().getRows());
                 } else {
-                    Toast.makeText(context, "errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<ResServerList> call, Throwable t) {
-                Toast.makeText(context, "error : " + t.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -155,24 +171,29 @@ public class CharacterAddFragment extends Fragment {
         int screenwidth = metrics.widthPixels;
         int cellWidth = 82;
         //양 옆 마진 제외
-        int column = (screenwidth - DpToPixel(context, 32)) / DpToPixel(context, cellWidth);
+        int column = (screenwidth - DpToPixel(mContext, 32)) / DpToPixel(mContext, cellWidth);
         int row = servers.size() / column;
         glServerView.setColumnCount(column);
         glServerView.setRowCount(row + 1);
         for (int i = 0, c = 0, r = 0; i < servers.size(); i++, c++) {
             if (c == column) {
-                c = 0;
                 r++;
+                //if last row
+                if (r == row) {
+                    c = column / 4;
+                } else {
+                    c = 0;
+                }
             }
             tvServer[i] = (TextView) inflater.inflate(R.layout.item_server_button, null, false);
             tvServer[i].setText(servers.get(i).getServerName());
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
-            param.width = DpToPixel(context, 72);
-            param.height = DpToPixel(context, 30);
-            param.leftMargin = DpToPixel(context, 5);
-            param.rightMargin = DpToPixel(context, 5);
-            param.topMargin = DpToPixel(context, 6);
-            param.bottomMargin = DpToPixel(context, 6);
+            param.width = DpToPixel(mContext, 72);
+            param.height = DpToPixel(mContext, 30);
+            param.leftMargin = DpToPixel(mContext, 5);
+            param.rightMargin = DpToPixel(mContext, 5);
+            param.topMargin = DpToPixel(mContext, 6);
+            param.bottomMargin = DpToPixel(mContext, 6);
             param.columnSpec = GridLayout.spec(c);
             param.rowSpec = GridLayout.spec(r);
             param.setGravity(Gravity.CENTER);
@@ -189,36 +210,50 @@ public class CharacterAddFragment extends Fragment {
         serverTabOnClick(0);
     }
 
-
     private void recyclerViewSetting() {
-        searchAdapter = new CharacterSearchResultAdapter(context, charSearchList);
-        rvCharResult.setLayoutManager(new LinearLayoutManager(context));
+        searchAdapter = new CharacterSearchResultAdapter(mContext, charSearchList);
+        rvCharResult.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharResult.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new CharacterSearchResultAdapter.OnItemClickListener() {
             @Override
             public void onItemCilckListener(View v, int p) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 String tag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
-                Toast.makeText(context, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
                 Fragment fragment = fm.findFragmentByTag(tag);
                 if (fragment == null | !(fragment instanceof CharListFragment)) return;
                 CharListFragment clf = (CharListFragment) fragment;
                 clf.add(charSearchList.get(p));
             }
         });
+        CustomRecyclerDecoration customDivider = new CustomRecyclerDecoration(20);
+        rvCharResult.addItemDecoration(customDivider);
     }
 
     private void init(LayoutInflater inflater) {
         reqGetServerList(inflater);
         pressSearchSetting();
         recyclerViewSetting();
+        ivToDevSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NeopleAPI neopleAPI = new NeopleAPI(mContext);
+                neopleAPI.toNeopleDeveloperSite();
+            }
+        });
+        container.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "되는데?", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_char_add, container, false);
-        context = getContext();
+        mContext = getContext();
         ButterKnife.bind(this, v);
         init(inflater);
         return v;

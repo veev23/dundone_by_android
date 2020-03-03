@@ -15,6 +15,9 @@ import com.example.dundone.main.character.CharListFragment;
 import com.example.dundone.main.character.CharacterAddFragment;
 import com.example.dundone.main.entities.TabItem;
 import com.example.dundone.main.home.HomeFragment;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
@@ -118,6 +121,12 @@ implements FragmentChange {
     }
 
     private void init() {
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
         fragmentManager = getSupportFragmentManager();
         replaceFragment(new HomeFragment(), getString(R.string.char_home_fragment));
         tabSetting();

@@ -20,4 +20,8 @@
     <string name="char_list_fragment">CharListFragment</string>
     <string name="char_add_fragment">CharAddFragment</string>
     <string name="char_detail_fragment">CharDetailFragment</string>
+
+    <!--Admob -->
+    <string name="home_fragment_ad_unit">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="char_list_fragment_ad_unit">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:networkSecurityConfig="@xml/network_security_config"
         android:name=".Singleton"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:windowSoftInputMode="stateAlwaysHidden"
             android:name=".main.MainActivity"
             android:launchMode="singleTask" />
         <activity
@@ -25,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9586028374479291~1874143003"/>
     </application>
 
 </manifest>

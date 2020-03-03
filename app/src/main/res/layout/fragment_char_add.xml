@@ -14,19 +14,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_in_char_add"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/frameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/Title"
@@ -53,24 +46,38 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:layout_weight="1"
                         android:imeOptions="actionSearch"
                         android:inputType="text"
                         android:textColor="@color/colorButtonBackgorund"
                         android:textSize="14sp" />
 
-                    <ImageView
-                        android:id="@+id/search_button_in_char_add"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="15dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/search_g" />
+                    <FrameLayout
+                        android:layout_width="40dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0"
+                        android:layout_marginEnd="16dp"
+                        >
+
+                        <ImageView
+                            android:id="@+id/search_button_in_char_add"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/search_g" />
+                    </FrameLayout>
+
                 </LinearLayout>
             </LinearLayout>
 
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_in_char_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
             <LinearLayout
                 android:id="@+id/list_layout_in_char_add"
                 android:layout_width="match_parent"
@@ -80,7 +87,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
                 android:padding="16dp"
-                android:background="@drawable/radius_grey_rect">
+                android:background="@drawable/tab_background_grey">
                 <ProgressBar
                     android:id="@+id/progressbar_in_char_add"
                     style="?android:attr/progressBarStyle"
@@ -92,6 +99,8 @@
                     android:id="@+id/char_search_list_in_char_add"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
+                <include android:id="@+id/openapi_in_char_add"
+                    layout="@layout/include_neople_openapi_image"/>
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

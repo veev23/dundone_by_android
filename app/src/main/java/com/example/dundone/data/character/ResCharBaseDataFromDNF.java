@@ -3,8 +3,8 @@ package com.example.dundone.data.character;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ResCharBaseData {
-    public ResCharBaseData(String characterId, String characterName, int level, String jobId, String jobGrowId, String jobName, String jobGrowName, String adventureName, String guildId, String guildName) {
+public class ResCharBaseDataFromDNF {
+    public ResCharBaseDataFromDNF(String characterId, String characterName, int level, String jobId, String jobGrowId, String jobName, String jobGrowName, String adventureName, String guildId, String guildName) {
         this.characterId = characterId;
         this.characterName = characterName;
         this.level = level;
@@ -99,32 +99,32 @@ public class ResCharBaseData {
 
     @SerializedName("characterId")
     @Expose
-    public String characterId;
+    private String characterId;
     @SerializedName("characterName")
     @Expose
-    public String characterName;
+    private String characterName;
     @SerializedName("level")
     @Expose
-    public int level;
+    private int level;
     @SerializedName("jobId")
     @Expose
-    public String jobId;
+    private String jobId;
     @SerializedName("jobGrowId")
     @Expose
-    public String jobGrowId;
+    private String jobGrowId;
     @SerializedName("jobName")
     @Expose
-    public String jobName;
+    private String jobName;
     @SerializedName("jobGrowName")
     @Expose
-    public String jobGrowName;
+    private String jobGrowName;
     @SerializedName("adventureName")
     @Expose
-    public String adventureName;
+    private String adventureName;
     @SerializedName("guildId")
     @Expose
-    public String guildId;
+    private String guildId;
     @SerializedName("guildName")
     @Expose
-    public String guildName;
+    private String guildName;
 }

@@ -14,12 +14,15 @@
         com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior
     </string>
 
-    <!--TagName -->
+    <!--FragmentTagName -->
     <string name="char_home_fragment">HomeFragment</string>
     <string name="char_auction_fragment">auctionFragment</string>
     <string name="char_list_fragment">CharListFragment</string>
     <string name="char_add_fragment">CharAddFragment</string>
     <string name="char_detail_fragment">CharDetailFragment</string>
+    <string name="char_lookup_epic_fragment">CharLookupEpicFragment</string>
+    <string name="hell_recommend_fragment">HellRecommendFragment</string>
+    <string name="recommend_result_fragment">RecommendResultFragment</string>
 
     <!--Admob -->
     <string name="home_fragment_ad_unit">ca-app-pub-3940256099942544/6300978111</string>

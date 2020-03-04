@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
@@ -14,6 +15,7 @@ import com.example.dundone.main.auction.AuctionFragment;
 import com.example.dundone.main.character.CharListFragment;
 import com.example.dundone.main.character.CharacterAddFragment;
 import com.example.dundone.main.entities.TabItem;
+import com.example.dundone.main.hell.HellRecommendFragment;
 import com.example.dundone.main.home.HomeFragment;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -68,7 +70,7 @@ implements FragmentChange {
                         replaceFragment(new AuctionFragment(), getString(R.string.char_auction_fragment));
                         break;
                     case 3:
-                        replaceFragment(new HomeFragment(), getString(R.string.char_home_fragment));
+                        replaceFragment(new HellRecommendFragment(), getString(R.string.hell_recommend_fragment));
                         break;
                     default:
                         return;
@@ -101,8 +103,10 @@ implements FragmentChange {
         TextView tabText = tab.findViewById(R.id.tab_text);
         ImageView tabImage = tab.findViewById(R.id.tab_image);
         if (clicked) {
+            tabText.setTextColor(getColor(R.color.colorButtonBackgorund));
             tabImage.setImageResource(tiMainTabItem[tabIndex].getClickedImage());
         } else {
+            tabText.setTextColor(getColor(R.color.colorGrey));
             tabImage.setImageResource(tiMainTabItem[tabIndex].getUnClickedImage());
         }
     }
@@ -113,8 +117,10 @@ implements FragmentChange {
         ImageView tabImage = tab.findViewById(R.id.tab_image);
         tabText.setText(menuTabItem.getText());
         if (clicked) {
+            tabText.setTextColor(getColor(R.color.colorButtonBackgorund));
             tabImage.setImageResource(menuTabItem.getClickedImage());
         } else {
+            tabText.setTextColor(getColor(R.color.colorGrey));
             tabImage.setImageResource(menuTabItem.getUnClickedImage());
         }
         return tab;
@@ -147,7 +153,7 @@ implements FragmentChange {
     public void addFragment(@NonNull Fragment fragment, String calleeName){
         if(fragmentManager.findFragmentByTag(calleeName) != null) return;
         transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.from_right_to_left, R.anim.from_left_to_right);
+        transaction.setCustomAnimations(R.anim.from_right_to_left, R.anim.fragment_fade_exit);
         transaction.add(R.id.fragment_main, fragment,calleeName);
         transaction.addToBackStack(calleeName);
         transaction.commit();
@@ -155,10 +161,11 @@ implements FragmentChange {
      }
     @Override
     public void backFragment(){
-        if(fragmentManager.getBackStackEntryCount() > 0) {
+        if(fragmentManager.getBackStackEntryCount() > 1) {
             fragmentManager.popBackStack();
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

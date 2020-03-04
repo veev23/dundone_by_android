@@ -12,6 +12,7 @@ import butterknife.ButterKnife;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.dundone.AddToAdapterInterface;
 import com.example.dundone.R;
@@ -88,7 +89,7 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
     }
     private void toCharacterDetailFragment(CharBaseData charBaseData){
         Bundle bundle = new Bundle(1);
-        bundle.putSerializable("char_info", charBaseData);
+        bundle.putSerializable("CharBaseData", charBaseData);
         CharDetailFragment cdf = new CharDetailFragment();
         cdf.setArguments(bundle);
         ((MainActivity)getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));

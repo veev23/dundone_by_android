@@ -98,11 +98,12 @@ public class CharacterAddFragment extends Fragment {
             @Override
             public void onResponse(Call<ResCharSearch> call, Response<ResCharSearch> response) {
                 if (response.isSuccessful()) {
+                    charSearchList.clear();
                     pbLoadingBar.setVisibility(View.GONE);
                     charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-                    charSearchList.clear();
+
                     //TODO:charSearchList 초기화 후 response.body()에서 갱신
                      searchAdapter.notifyDataSetChanged();
                      if(charSearchList.isEmpty()){
@@ -151,7 +152,7 @@ public class CharacterAddFragment extends Fragment {
                 if (response.isSuccessful()) {
                     gridLayoutSetting(inflater, response.body().getRows());
                 } else {
-                    Toast.makeText(mContext, "errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "neople errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -179,8 +180,8 @@ public class CharacterAddFragment extends Fragment {
             if (c == column) {
                 r++;
                 //if last row
-                if (r == row) {
-                    c = column / 4;
+                if (r == row && (servers.size()-i) % 2 == column % 2) {
+                    c = (column-1) / 2 - ((servers.size()-i)/2);
                 } else {
                     c = 0;
                 }
@@ -190,11 +191,11 @@ public class CharacterAddFragment extends Fragment {
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
             param.width = DpToPixel(mContext, 72);
             param.height = DpToPixel(mContext, 30);
-            param.leftMargin = DpToPixel(mContext, 5);
-            param.rightMargin = DpToPixel(mContext, 5);
+           // param.leftMargin = DpToPixel(mContext, 5);
+           // param.rightMargin = DpToPixel(mContext, 5);
             param.topMargin = DpToPixel(mContext, 6);
             param.bottomMargin = DpToPixel(mContext, 6);
-            param.columnSpec = GridLayout.spec(c);
+            param.columnSpec = GridLayout.spec(c, 1.0f);
             param.rowSpec = GridLayout.spec(r);
             param.setGravity(Gravity.CENTER);
             tvServer[i].setLayoutParams(param);

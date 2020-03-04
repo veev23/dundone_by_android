@@ -21,6 +21,7 @@ public class HellRecommendFragment extends Fragment {
 
     public static final int many=0;
     public static final int wish=1;
+
     private void toRecommendResult(int type){
         Toast.makeText(mContext, "머임???", Toast.LENGTH_SHORT).show();
         Bundle bundle = new Bundle(1);

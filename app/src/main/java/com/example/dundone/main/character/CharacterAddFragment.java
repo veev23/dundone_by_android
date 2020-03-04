@@ -26,7 +26,9 @@ import com.example.dundone.data.character.CharBaseData;
 import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.server.ResServerList;
 import com.example.dundone.data.server.ServerData;
+import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.NeopleAPI;
+import com.example.dundone.onBackPressListener;
 
 import java.util.ArrayList;
 
@@ -47,7 +49,18 @@ import retrofit2.Response;
 
 import static com.example.dundone.Singleton.DpToPixel;
 
-public class CharacterAddFragment extends Fragment {
+public class CharacterAddFragment extends Fragment implements onBackPressListener {
+
+    private boolean isSearched=false;
+    @Override
+    public void onBackPress(){
+        if(isSearched){
+            updateSearchViewBefore();
+        }
+        else{
+            ((MainActivity)getActivity()).backFragment();
+        }
+    }
 
     private Context mContext;
     private ArrayList<ServerData> servers = new ArrayList<>();
@@ -73,11 +86,20 @@ public class CharacterAddFragment extends Fragment {
     @BindView(R.id.openapi_in_char_add)
     View ivToDevSite;
 
-    private void updateSearchResultTo(int resId) {
-        ConstraintSet targetConstSet = new ConstraintSet();
-        targetConstSet.clone(mContext, resId);
+    private ConstraintSet mAfterConstSet = new ConstraintSet();
+    private ConstraintSet mBeforeConstSet = new ConstraintSet();
+    private void updateSearchViewBefore() {
+        isSearched=false;
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
-        targetConstSet.applyTo(container);
+        mBeforeConstSet.applyTo(container);
+    }
+    private void updateSearchViewAfter() {
+        isSearched=true;
+        pbLoadingBar.setVisibility(View.VISIBLE);
+        charSearchList.clear();
+        searchAdapter.notifyDataSetChanged();
+        TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
+        mAfterConstSet.applyTo(container);
     }
 
     private void hideKeyBoard() {
@@ -87,21 +109,24 @@ public class CharacterAddFragment extends Fragment {
 
     @OnClick(R.id.search_button_in_char_add)
     void reqCharSearch() {
-        pbLoadingBar.setVisibility(View.VISIBLE);
-        etCharSearch.clearFocus();
         hideKeyBoard();
-        updateSearchResultTo(R.layout.constrain_layout_list_up_in_char_add);
-         String serverId = servers.get(selectedServer).getServerId();
+        etCharSearch.clearFocus();
+        updateSearchViewAfter();
+
+        //네오플에서 서버 목록을 불러오지 못했을 때
+        if(servers.isEmpty()) return;
+        String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
         Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
         resCharSearchCall.enqueue(new Callback<ResCharSearch>() {
             @Override
             public void onResponse(Call<ResCharSearch> call, Response<ResCharSearch> response) {
                 if (response.isSuccessful()) {
-                    charSearchList.clear();
                     pbLoadingBar.setVisibility(View.GONE);
                     charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
+                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
+                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
 
                     //TODO:charSearchList 초기화 후 response.body()에서 갱신
@@ -242,12 +267,10 @@ public class CharacterAddFragment extends Fragment {
                 neopleAPI.toNeopleDeveloperSite();
             }
         });
-        container.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "되는데?", Toast.LENGTH_SHORT).show();
-            }
-        });
+
+
+        mAfterConstSet.clone(mContext, R.layout.constrain_layout_list_up_in_char_add);
+        mBeforeConstSet.clone(container);
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.example.dundone.main.character.CharacterAddFragment;
 import com.example.dundone.main.entities.TabItem;
 import com.example.dundone.main.hell.HellRecommendFragment;
 import com.example.dundone.main.home.HomeFragment;
+import com.example.dundone.onBackPressListener;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -33,6 +34,15 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
 implements FragmentChange {
+    public interface onKeyBackPressedListener {
+        public void onBack();
+    }
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener) {
+        mOnKeyBackPressedListener = listener;
+    }
+
 
     private final Context context = this;
     @BindView(R.id.tl_main_tab)
@@ -162,10 +172,27 @@ implements FragmentChange {
     @Override
     public void backFragment(){
         if(fragmentManager.getBackStackEntryCount() > 1) {
-            fragmentManager.popBackStack();
+           fragmentManager.popBackStack();
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if(fragmentManager.getBackStackEntryCount() > 1) {
+            FragmentManager.BackStackEntry backStackEntry =
+                    fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1);
+            Fragment fragment = fragmentManager.findFragmentByTag(backStackEntry.getName());
+            if(fragment instanceof onBackPressListener){
+                ((onBackPressListener) fragment).onBackPress();
+            }
+            else{
+                fragmentManager.popBackStack();
+            }
+        }
+        else {
+            System.exit(0);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

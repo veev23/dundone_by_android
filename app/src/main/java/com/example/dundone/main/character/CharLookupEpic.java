@@ -15,6 +15,7 @@ import com.example.dundone.data.character.CharBaseData;
 import com.example.dundone.main.MainActivity;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +29,8 @@ public class CharLookupEpic extends Fragment {
     private TextView tvCharName;
     private TextView tvTitle;
     private ImageView ivCharImg;
+
+    RecyclerView rvEpicViews;
 
     @OnClick(R.id.back_button)
     void back(){

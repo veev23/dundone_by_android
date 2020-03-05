@@ -44,9 +44,9 @@ public class CharDetailFragment extends Fragment {
         ((MainActivity)getActivity()).backFragment();
     }
     private void initCharStatus(){
-        tvCharName = vCharMenu.findViewById(R.id.tv_char_name);
+        tvCharName = vCharMenu.findViewById(R.id.tv_name);
         tvTitle = vCharMenu.findViewById(R.id.tv_title);
-        ivCharImg = vCharMenu.findViewById(R.id.iv_char_img);
+        ivCharImg = vCharMenu.findViewById(R.id.iv_descript_img);
 
         Bundle bundle = getArguments();
         if(bundle !=null) {

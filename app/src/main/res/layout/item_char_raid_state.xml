@@ -10,7 +10,7 @@
 
     <include
         android:id="@+id/char_info_in_raid_state"
-        layout="@layout/include_char_mini_info"
+        layout="@layout/include_mini_info"
         />
     <LinearLayout
         android:layout_width="match_parent"

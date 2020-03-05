@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/iv_char_img"
+                    android:id="@+id/iv_descript_img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
@@ -47,7 +47,7 @@
             android:layout_marginStart="10dp"
             >
             <TextView
-                android:id="@+id/tv_char_name"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="2.3sp"
@@ -55,7 +55,7 @@
                 android:textSize="18sp"
                 tools:text="캐릭터명" />
             <TextView
-                android:id="@+id/tv_char_server"
+                android:id="@+id/tv_detail_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:lineSpacingExtra="2.3sp"

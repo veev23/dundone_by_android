@@ -1,11 +1,8 @@
 package com.example.dundone.main.character;
 import android.content.Context;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.Target;
 import com.example.dundone.R;
 import com.example.dundone.data.character.CharacterData;
-import com.example.dundone.main.MainActivity;
 
 import java.util.ArrayList;
 
@@ -58,13 +48,13 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             super(itemView);
             View vCharInfo=itemView.findViewById(R.id.char_info_in_raid_state);
 
-            tvCharName = vCharInfo.findViewById(R.id.tv_char_name);
-            tvCharServer = vCharInfo.findViewById(R.id.tv_char_server);
+            tvCharName = vCharInfo.findViewById(R.id.tv_name);
+            tvCharServer = vCharInfo.findViewById(R.id.tv_detail_info);
             tvPreyRemain = itemView.findViewById(R.id.prey_remain_in_raid_state);
             tvFiendRemain = itemView.findViewById(R.id.fiend_remain_in_raid_state);
             tvPreyTodayClear = itemView.findViewById(R.id.prey_today_clear_in_raid_state);
             tvFiendTodayClear = itemView.findViewById(R.id.fiend_today_clear_in_raid_state);
-            ivCharImg = vCharInfo.findViewById(R.id.iv_char_img);
+            ivCharImg = vCharInfo.findViewById(R.id.iv_descript_img);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

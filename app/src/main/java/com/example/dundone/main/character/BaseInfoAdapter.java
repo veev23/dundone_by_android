@@ -10,17 +10,18 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
 import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.item.EpicData;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CharacterSearchResultAdapter extends RecyclerView.Adapter<CharacterSearchResultAdapter.CharacterBaseViewHolder> {
+public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.BaseInfoViewHolder> {
 
     private OnItemClickListener mListener = null;
     private Context mContext;
-    private ArrayList<CharBaseData> mItemList;
+    private ArrayList<E> mItemList;
 
     public interface OnItemClickListener {
         void onItemCilckListener(View v, int p);
@@ -29,21 +30,21 @@ public class CharacterSearchResultAdapter extends RecyclerView.Adapter<Character
         this.mListener = listener;
     }
 
-    CharacterSearchResultAdapter(Context context, ArrayList<CharBaseData> list){
+    BaseInfoAdapter(Context context, ArrayList<E> list){
         mContext = context;
         mItemList=list;
     }
-    class CharacterBaseViewHolder extends RecyclerView.ViewHolder {
+    class BaseInfoViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
         TextView tvServer;
-        ImageView ivCharImage;
+        ImageView ivImage;
 
-        CharacterBaseViewHolder(@NonNull View v) {
+        BaseInfoViewHolder(@NonNull View v) {
             super(v);
-            View vCharInfo=v.findViewById(R.id.char_info_in_char_info);
-            tvName = vCharInfo.findViewById(R.id.tv_char_name);
-            tvServer = vCharInfo.findViewById(R.id.tv_char_server);
-            ivCharImage = vCharInfo.findViewById(R.id.iv_char_img);
+            View vCharInfo=v.findViewById(R.id.base_info);
+            tvName = vCharInfo.findViewById(R.id.tv_name);
+            tvServer = vCharInfo.findViewById(R.id.tv_detail_info);
+            ivImage = vCharInfo.findViewById(R.id.iv_descript_img);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -56,25 +57,32 @@ public class CharacterSearchResultAdapter extends RecyclerView.Adapter<Character
                 }
             });
         }
+
     }
 
     @NonNull
     @Override
-    public CharacterBaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public BaseInfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_char_info, parent, false) ;
-        CharacterBaseViewHolder vh = new CharacterBaseViewHolder(view);
+        View view = inflater.inflate(R.layout.item_base_info, parent, false) ;
+        BaseInfoViewHolder vh = new BaseInfoViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CharacterBaseViewHolder holder, int position) {
-        CharBaseData item = mItemList.get(position);
-        holder.tvName.setText(item.getCharName());
-        holder.tvServer.setText(item.getServerData().getServerName());
-        String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+"/characters/"+ item.getCharId() + "?zoom=3";
-
-        Glide.with(mContext).load(url).into(holder.ivCharImage);
+    public void onBindViewHolder(@NonNull BaseInfoViewHolder holder, int position) {
+        E itemE = mItemList.get(position);
+        if(itemE instanceof CharBaseData) {
+            CharBaseData item = (CharBaseData)itemE;
+            holder.tvName.setText(item.getCharName());
+            holder.tvServer.setText(item.getServerData().getServerName());
+            String url = "https://img-api.neople.co.kr/df/servers/" + item.getServerData().getServerId() + "/characters/" + item.getCharId() + "?zoom=3";
+            Glide.with(mContext).load(url).into(holder.ivImage);
+        }
+        else if(itemE instanceof EpicData){
+            EpicData item = (EpicData)itemE;
+            holder.tvName.setText(item.getName());
+        }
     }
 
     @Override

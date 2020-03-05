@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -75,7 +74,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     @BindView(R.id.char_search_list_in_char_add)
     RecyclerView rvCharResult;
-    private CharacterSearchResultAdapter searchAdapter;
+    private BaseInfoAdapter searchAdapter;
     @BindView(R.id.progressbar_in_char_add)
     ProgressBar pbLoadingBar;
     private ArrayList<CharBaseData> charSearchList = new ArrayList<>();
@@ -113,8 +112,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         etCharSearch.clearFocus();
         updateSearchViewAfter();
 
-        //네오플에서 서버 목록을 불러오지 못했을 때
-        if(servers.isEmpty()) return;
         String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
         Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
@@ -177,6 +174,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 if (response.isSuccessful()) {
                     gridLayoutSetting(inflater, response.body().getRows());
                 } else {
+                    gridLayoutSetting(inflater, null);
                     Toast.makeText(mContext, "neople errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -190,7 +188,9 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     private void gridLayoutSetting(LayoutInflater inflater, ArrayList<ServerData> serverRes) {
         servers.add(new ServerData("all", "전체"));
-        servers.addAll(serverRes);
+        if(serverRes != null) {
+            servers.addAll(serverRes);
+        }
         tvServer = new TextView[servers.size()];
 
         DisplayMetrics metrics = getResources().getDisplayMetrics();
@@ -216,8 +216,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
             param.width = DpToPixel(mContext, 72);
             param.height = DpToPixel(mContext, 30);
-           // param.leftMargin = DpToPixel(mContext, 5);
-           // param.rightMargin = DpToPixel(mContext, 5);
             param.topMargin = DpToPixel(mContext, 6);
             param.bottomMargin = DpToPixel(mContext, 6);
             param.columnSpec = GridLayout.spec(c, 1.0f);
@@ -237,10 +235,10 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     }
 
     private void recyclerViewSetting() {
-        searchAdapter = new CharacterSearchResultAdapter(mContext, charSearchList);
+        searchAdapter = new BaseInfoAdapter(mContext, charSearchList);
         rvCharResult.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharResult.setAdapter(searchAdapter);
-        searchAdapter.setOnItemClickListener(new CharacterSearchResultAdapter.OnItemClickListener() {
+        searchAdapter.setOnItemClickListener(new BaseInfoAdapter.OnItemClickListener() {
             @Override
             public void onItemCilckListener(View v, int p) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();

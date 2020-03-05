@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradation_dark_to_light"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

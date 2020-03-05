@@ -74,7 +74,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     @BindView(R.id.char_search_list_in_char_add)
     RecyclerView rvCharResult;
-    private BaseInfoAdapter searchAdapter;
+    private BaseInfoAdapter<CharBaseData> searchAdapter;
     @BindView(R.id.progressbar_in_char_add)
     ProgressBar pbLoadingBar;
     private ArrayList<CharBaseData> charSearchList = new ArrayList<>();
@@ -235,7 +235,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     }
 
     private void recyclerViewSetting() {
-        searchAdapter = new BaseInfoAdapter(mContext, charSearchList);
+        searchAdapter = new BaseInfoAdapter<>(mContext, charSearchList);
         rvCharResult.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharResult.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new BaseInfoAdapter.OnItemClickListener() {

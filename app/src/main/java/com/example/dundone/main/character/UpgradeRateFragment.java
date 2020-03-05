@@ -2,19 +2,19 @@ package com.example.dundone.main.character;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.dundone.R;
-import com.example.dundone.main.NeopleAPI;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,9 +23,20 @@ public class UpgradeRateFragment extends Fragment {
 
     private Context mContext;
 
-    @BindView(R.id.success)
+    @BindView(R.id.success_bar)
     View mSuccessBar;
-
+    @BindView(R.id.fail_bar)
+    View mFailBar;
+    @BindView(R.id.success_count)
+    TextView mSuccessCount;
+    @BindView(R.id.fail_count)
+    TextView mFailCount;
+    @BindView(R.id.success_rate)
+    TextView mSuccessRate;
+    @BindView(R.id.fail_rate)
+    TextView mFailRate;
+    @BindView(R.id.constraintlayout)
+    ConstraintLayout clLayout;
 
 
     private void initLayout(){
@@ -53,13 +64,24 @@ public class UpgradeRateFragment extends Fragment {
         view.post(new Runnable() {
             @Override
             public void run() {
-                mSuccessBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-                int height = mSuccessBar.getHeight();
-                height = (int)((double)height * 0.5)+1;
-                ConstraintLayout.LayoutParams params =
-                        (ConstraintLayout.LayoutParams)mSuccessBar.getLayoutParams();
-                params.height = height;
-                mSuccessBar.setLayoutParams(params);
+                ConstraintSet targetSet = new ConstraintSet();
+                targetSet.clone(clLayout);
+                int maxHeight = mSuccessBar.getHeight();
+                int height_success = (int)((double)maxHeight * 0.5)+1;
+                int height_fail = maxHeight-height_success;
+                TransitionManager.beginDelayedTransition(clLayout,new AutoTransition().setDuration(1000));
+
+                targetSet.constrainHeight(R.id.success_bar, height_success);
+                targetSet.constrainHeight(R.id.fail_bar, height_fail);
+                targetSet.clear(R.id.success_bar, ConstraintSet.TOP);
+                targetSet.clear(R.id.fail_bar, ConstraintSet.TOP);
+
+                mSuccessCount.setText("50회");
+                mFailCount.setText("50회");
+                mSuccessRate.setText("50%");
+                mFailRate.setText("50%");
+
+                targetSet.applyTo(clLayout);
             }
         });
     }

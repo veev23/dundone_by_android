@@ -40,11 +40,11 @@
                     android:id="@+id/viewpager"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="24dp"
                     android:background="@color/colorBackground"
                     android:minHeight="300dp"
                     android:padding="24dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/iv_neople_openapi"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -52,6 +52,7 @@
                 </androidx.viewpager2.widget.ViewPager2>
 
                 <LinearLayout
+                    android:id="@+id/linearLayout4"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginStart="24dp"
@@ -100,18 +101,22 @@
 
                 </com.google.android.material.tabs.TabLayout>
 
+                <ImageView
+                    android:id="@+id/iv_neople_openapi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorBackground"
+                    android:src="@drawable/neople_openapi"
+                    android:padding="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <include
-                android:id="@+id/iv_neople_openapi"
-                layout="@layout/include_neople_openapi_image" />
         </LinearLayout>
     </ScrollView>
-
     <include
         android:id="@+id/back_button"
         layout="@layout/include_back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

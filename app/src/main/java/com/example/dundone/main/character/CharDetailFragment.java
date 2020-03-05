@@ -84,13 +84,21 @@ public class CharDetailFragment extends Fragment {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-    @OnClick(R.id.lookup_epic_button)
-    void toCharLookupEpic(){
+    private void callAddFragment(Fragment fragment, String calleeName){
         Bundle bundle = new Bundle(1);
         bundle.putSerializable("CharBaseData", charBaseData);
-        CharLookupEpic cdf = new CharLookupEpic();
-        cdf.setArguments(bundle);
-        ((MainActivity)getActivity()).addFragment(cdf, getString(R.string.char_lookup_epic_fragment));
+        fragment.setArguments(bundle);
+        ((MainActivity)getActivity()).addFragment(fragment, calleeName);
+    }
+    @OnClick(R.id.lookup_epic_button)
+    void toCharLookupEpic(){
+        CharLookupEpic fragment = new CharLookupEpic();
+        callAddFragment(fragment, getString(R.string.char_lookup_epic_fragment));
+    }
+    @OnClick(R.id.lookup_upgrade_button)
+    void toCharLookupUpgrade(){
+        CharLookupUpgradeFragment fragment = new CharLookupUpgradeFragment();
+        callAddFragment(fragment, getString(R.string.char_lookup_upgrade_fragment));
     }
 
     private void init(){

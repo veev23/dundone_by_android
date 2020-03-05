@@ -75,8 +75,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     @BindView(R.id.char_search_list_in_char_add)
     RecyclerView rvCharResult;
     private BaseInfoAdapter<CharBaseData> searchAdapter;
-    @BindView(R.id.progressbar_in_char_add)
-    ProgressBar pbLoadingBar;
     private ArrayList<CharBaseData> charSearchList = new ArrayList<>();
 
     @BindView(R.id.cl_in_char_add)
@@ -94,7 +92,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     }
     private void updateSearchViewAfter() {
         isSearched=true;
-        pbLoadingBar.setVisibility(View.VISIBLE);
+        ivToDevSite.setVisibility(View.GONE);
         charSearchList.clear();
         searchAdapter.notifyDataSetChanged();
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
@@ -110,7 +108,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     void reqCharSearch() {
         hideKeyBoard();
         etCharSearch.clearFocus();
-        updateSearchViewAfter();
 
         String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
@@ -119,7 +116,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             @Override
             public void onResponse(Call<ResCharSearch> call, Response<ResCharSearch> response) {
                 if (response.isSuccessful()) {
-                    pbLoadingBar.setVisibility(View.GONE);
+
+                    updateSearchViewAfter();
                     charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
                     charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
@@ -134,6 +132,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 } else {
                     Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                 }
+                ivToDevSite.setVisibility(View.VISIBLE);
             }
 
             @Override

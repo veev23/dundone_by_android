@@ -134,7 +134,6 @@ public class CharLookupEpic extends Fragment {
         mEpicList.add(new EpicData("10", "2"));
         mEpicList.add(new EpicData("11", "2"));
         rvEpicViews.setLayoutManager(new LinearLayoutManager(mContext));
-        rvEpicViews.setHasFixedSize(true);
         rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(10));
 
         baseInfoAdapter=new BaseInfoAdapter<>(mContext, mEpicList);

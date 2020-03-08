@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.util.TypedValue;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +32,9 @@ public class Singleton extends Application {
     public static Retrofit retrofit;
     public static dnfAPI dnfService;
     public static dundoneAPI dundoneService;
+
+
+    public static Gson gson = new GsonBuilder().create();
 
     @Override
     public void onCreate(){

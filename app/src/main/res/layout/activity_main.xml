@@ -50,16 +50,12 @@
     <FrameLayout
         android:id="@+id/main_button"
         style="@style/ButtonSize"
+        android:background="@drawable/button_plus"
         android:layout_gravity="center"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:elevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            style="@style/ButtonImageSize"
-            android:src="@drawable/plus_white" />
 
     </FrameLayout>
 

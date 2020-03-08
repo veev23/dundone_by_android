@@ -31,6 +31,9 @@ public class RecommendResultFragment extends Fragment {
     View ivToDevSite;
     @BindView(R.id.iv_scrape)
     ImageView ivScrape;
+    @BindView(R.id.hide_answer)
+    View vHideAnswer;
+
     @OnClick(R.id.back_button)
     void back(){
         ((MainActivity)getActivity()).backFragment();
@@ -45,16 +48,17 @@ public class RecommendResultFragment extends Fragment {
         if(type == many){
             ivBackground.setImageResource(R.drawable.recommend_background1);
             tvTitle.setText("많이 먹게 해주세요!!");
-            ivScrape.setImageResource(R.drawable.scrape1);
+            ivScrape.setImageResource(R.drawable.scrape_sky);
         }
         else{
             ivBackground.setImageResource(R.drawable.recommend_background2);
             tvTitle.setText("신화 먹게 해주세요!!");
-            ivScrape.setImageResource(R.drawable.scrape2);
+            ivScrape.setImageResource(R.drawable.scrape_little_red);
         }
     }
     @OnClick(R.id.hide_answer)
     void channelOpen(){
+        vHideAnswer.setVisibility(View.GONE);
         Toast.makeText(mContext, "안녕!", Toast.LENGTH_SHORT).show();
     }
     private void init(){

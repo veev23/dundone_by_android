@@ -14,7 +14,6 @@ public class NeopleAPI {
     public NeopleAPI(Context context) {
         this.mContext = context;
     }
-
     public void toNeopleDeveloperSite(){
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setMessage("네오플 개발자 페이지로 가시겠습니까?")

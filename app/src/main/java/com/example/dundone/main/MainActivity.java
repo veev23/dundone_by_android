@@ -3,6 +3,7 @@ package com.example.dundone.main;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -170,10 +171,12 @@ implements FragmentChange {
         fragmentManager.executePendingTransactions();
      }
     @Override
-    public void backFragment(){
+    public boolean backFragment(){
         if(fragmentManager.getBackStackEntryCount() > 1) {
            fragmentManager.popBackStack();
+           return true;
         }
+        return false;
     }
 
     @Override
@@ -190,10 +193,9 @@ implements FragmentChange {
             }
         }
         else {
-            System.exit(0);
+            finish();
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

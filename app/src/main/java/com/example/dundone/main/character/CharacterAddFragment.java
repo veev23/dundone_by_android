@@ -1,6 +1,7 @@
 package com.example.dundone.main.character;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -22,12 +23,16 @@ import com.example.dundone.R;
 import com.example.dundone.Singleton;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.CharacterData;
+import com.example.dundone.data.character.RaidData;
 import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.server.ResServerList;
 import com.example.dundone.data.server.ServerData;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.NeopleAPI;
+import com.example.dundone.main.ResponseCode;
 import com.example.dundone.onBackPressListener;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
@@ -47,19 +52,24 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.example.dundone.Singleton.DpToPixel;
+import static com.example.dundone.Singleton.gson;
+import static com.example.dundone.main.character.CharListFragment.CHAR_LIST;
+import static com.example.dundone.main.character.CharListFragment.PREF_CHAR_TYPE;
 
 public class CharacterAddFragment extends Fragment implements onBackPressListener {
 
-    private boolean isSearched=false;
+    private boolean isSearched = false;
+
     @Override
-    public void onBackPress(){
-        if(isSearched){
+    public void onBackPress() {
+        if (isSearched) {
             updateSearchViewBefore();
-        }
-        else{
-            ((MainActivity)getActivity()).backFragment();
+        } else {
+            ((MainActivity) getActivity()).backFragment();
         }
     }
+
+    ArrayList<CharacterData> charDataAddedList;
 
     private Context mContext;
     private ArrayList<ServerData> servers = new ArrayList<>();
@@ -85,13 +95,18 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     private ConstraintSet mAfterConstSet = new ConstraintSet();
     private ConstraintSet mBeforeConstSet = new ConstraintSet();
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     private void updateSearchViewBefore() {
-        isSearched=false;
+        isSearched = false;
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
         mBeforeConstSet.applyTo(container);
     }
+
     private void updateSearchViewAfter() {
-        isSearched=true;
+        isSearched = true;
         ivToDevSite.setVisibility(View.GONE);
         charSearchList.clear();
         searchAdapter.notifyDataSetChanged();
@@ -106,9 +121,18 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     @OnClick(R.id.search_button_in_char_add)
     void reqCharSearch() {
+
+        Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색", Toast.LENGTH_LONG).show();
         hideKeyBoard();
         etCharSearch.clearFocus();
+        updateSearchViewAfter();
+        charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
+        charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
+        charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
 
+        //TODO:charSearchList 초기화 후 response.body()에서 갱신
+        searchAdapter.notifyDataSetChanged();
+/*----------------------
         String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
         Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
@@ -116,21 +140,24 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             @Override
             public void onResponse(Call<ResCharSearch> call, Response<ResCharSearch> response) {
                 if (response.isSuccessful()) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                        updateSearchViewAfter();
+                        charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
+                        charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
+                        charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
+                        charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
+                        charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
 
-                    updateSearchViewAfter();
-                    charSearchList.add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
-                    charSearchList.add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
-                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-                    charSearchList.add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
-
-                    //TODO:charSearchList 초기화 후 response.body()에서 갱신
-                     searchAdapter.notifyDataSetChanged();
-                     if(charSearchList.isEmpty()){
-                         Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
-                     }
+                        //TODO:charSearchList 초기화 후 response.body()에서 갱신
+                        searchAdapter.notifyDataSetChanged();
+                        if (charSearchList.isEmpty()) {
+                            Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
                 }
                 ivToDevSite.setVisibility(View.VISIBLE);
             }
@@ -140,6 +167,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });
+        */
 
     }
 
@@ -148,7 +176,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    Toast.makeText(mContext, "검색", Toast.LENGTH_LONG).show();
                     reqCharSearch();
                     return true;
                 }
@@ -187,7 +214,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     private void gridLayoutSetting(LayoutInflater inflater, ArrayList<ServerData> serverRes) {
         servers.add(new ServerData("all", "전체"));
-        if(serverRes != null) {
+        if (serverRes != null) {
             servers.addAll(serverRes);
         }
         tvServer = new TextView[servers.size()];
@@ -204,8 +231,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             if (c == column) {
                 r++;
                 //if last row
-                if (r == row && (servers.size()-i) % 2 == column % 2) {
-                    c = (column-1) / 2 - ((servers.size()-i)/2);
+                if (r == row && (servers.size() - i) % 2 == column % 2) {
+                    c = (column - 1) / 2 - ((servers.size() - i) / 2);
                 } else {
                     c = 0;
                 }
@@ -242,8 +269,9 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             public void onItemCilckListener(View v, int p) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
                 String tag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
-                Toast.makeText(mContext, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
                 Fragment fragment = fm.findFragmentByTag(tag);
+                Toast.makeText(mContext, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
+                //TODO: 다른 화면에서 온 경우는 막아야함. + 다른 화면에서는 못오게 막아야함.
                 if (fragment == null | !(fragment instanceof CharListFragment)) return;
                 CharListFragment clf = (CharListFragment) fragment;
                 clf.add(charSearchList.get(p));
@@ -265,9 +293,11 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             }
         });
 
-
         mAfterConstSet.clone(mContext, R.layout.constrain_layout_list_up_in_char_add);
         mBeforeConstSet.clone(container);
+
+        pref = mContext.getSharedPreferences(PREF_CHAR_TYPE, Context.MODE_PRIVATE);
+        editor = pref.edit();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.dundone.main.character;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,7 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,26 +25,37 @@ import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharBaseData;
 import com.example.dundone.data.character.CharacterData;
 import com.example.dundone.data.character.RaidData;
+import com.example.dundone.data.character.ResCharStatus;
 import com.example.dundone.data.server.ServerData;
 import com.example.dundone.main.MainActivity;
+import com.example.dundone.main.ResponseCode;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
+import static com.example.dundone.Singleton.dundoneService;
+import static com.example.dundone.Singleton.gson;
+
 public class CharListFragment extends Fragment implements AddToAdapterInterface<CharBaseData> {
 
+    //sharedpreference string
+    public static final String PREF_CHAR_TYPE ="PREF_CHAR_TYPE";
+    public static final String CHAR_LIST = "CHAR_LIST";
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
     private Context mContext;
     private ArrayList<CharacterData> characterDataList;
     private CharacterListAdapter characterListAdapter;
+
+
     @BindView(R.id.recylerview_char_list)
     RecyclerView rvCharListView;
 
-    @BindView(R.id.ad_view_in_char_list)
+    @BindView(R.id.ad_view)
     AdView mAdView;
     /** Called when leaving the activity */
     @Override
@@ -73,19 +89,32 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
         mAdView.loadAd(adRequest);
     }
 
+    private void prefCharDataSave(ArrayList<CharacterData> arr){
+        String json = gson.toJson(arr);
+        if(json.equals("null")) return;
+        editor.putString(CHAR_LIST,json);
+        editor.commit();
+    }
+    private ArrayList<CharacterData> prefCharDataSearch(){
+        String json = pref.getString(CHAR_LIST, "[]");
+        if(json.equals("null")) return new ArrayList<>();
+        return gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>(){}.getType());
+    }
+
+    @Override
+    public void onStop() {
+        prefCharDataSave(characterDataList);
+        super.onStop();
+    }
 
     private void init(){
         adViewInit();
+
+        pref = mContext.getSharedPreferences(PREF_CHAR_TYPE, Context.MODE_PRIVATE);
+        editor = pref.edit();
+        characterDataList = prefCharDataSearch();
+
         bindRecyclerView();
-    }
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_char_list, container, false);
-        mContext = getContext();
-        ButterKnife.bind(this, v);
-        init();
-        return v;
     }
     private void toCharacterDetailFragment(CharBaseData charBaseData){
         Bundle bundle = new Bundle(1);
@@ -94,15 +123,70 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
         cdf.setArguments(bundle);
         ((MainActivity)getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));
     }
+    private void reqGetStatus(CharacterData charData, int i){
+        Call<ResCharStatus> charStatusCall =
+                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
+        charStatusCall.enqueue(new Callback<ResCharStatus>() {
+            @Override
+            public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
+                if (response.isSuccessful()) {
+                    if(response.body().getCode() == ResponseCode.SUCCESS) {
+                        RaidData rdData = response.body().getOthers();
+                        rdData.initParsing();
+                        charData.setOthers(rdData);
+                        characterListAdapter.notifyItemChanged(i);
+                    }
+                    else{
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResCharStatus> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+    private void reqGetStatus(CharBaseData charData){
+        Call<ResCharStatus> charStatusCall =
+                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
+        charStatusCall.enqueue(new Callback<ResCharStatus>() {
+            @Override
+            public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
+                if (response.isSuccessful()) {
+                    if(response.body().getCode() == ResponseCode.SUCCESS) {
+                        RaidData rdData = response.body().getOthers();
+                        rdData.initParsing();
+                        //TODO : 중복된 이름인지 확인하는 작업 필요
+                        characterDataList.add(new CharacterData(charData, rdData));
+                        characterListAdapter.notifyItemInserted(characterDataList.size());
+                        Toast.makeText(mContext, charData.getCharName(), Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResCharStatus> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
     private void bindRecyclerView(){
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
-        rvCharListView.setHasFixedSize(true);
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
-        characterDataList = new ArrayList<>();
-
-        //test code
-        characterDataList.add(new CharacterData("plnder","07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal","바칼"), new RaidData(1,true,1,true)));
-         //---------
+        for(int i =0; i<characterDataList.size(); i++) {
+            reqGetStatus(characterDataList.get(i), i);
+        }
 
         characterListAdapter = new CharacterListAdapter(characterDataList, mContext);
         rvCharListView.setAdapter(characterListAdapter);
@@ -115,7 +199,16 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
     }
     @Override
     public void add(CharBaseData data){
-        characterDataList.add(new CharacterData(data, new RaidData(1,true,1,true)));
-        characterListAdapter.notifyDataSetChanged();
+        reqGetStatus(data);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_char_list, container, false);
+        mContext = getContext();
+        ButterKnife.bind(this, v);
+        init();
+        return v;
     }
 }

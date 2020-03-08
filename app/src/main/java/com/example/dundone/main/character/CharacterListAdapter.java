@@ -42,7 +42,9 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         TextView tvFiendRemain;
         TextView tvPreyTodayClear;
         TextView tvFiendTodayClear;
+        TextView tvEpics;
         ImageView ivCharImg;
+
 
         public CharacterListViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,6 +56,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             tvFiendRemain = itemView.findViewById(R.id.fiend_remain_in_raid_state);
             tvPreyTodayClear = itemView.findViewById(R.id.prey_today_clear_in_raid_state);
             tvFiendTodayClear = itemView.findViewById(R.id.fiend_today_clear_in_raid_state);
+            tvEpics = itemView.findViewById(R.id.epic_count);
             ivCharImg = vCharInfo.findViewById(R.id.iv_descript_img);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,6 +77,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     public CharacterListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        itemList.get(i).getOthers().initParsing();
         View view = inflater.inflate(R.layout.item_char_raid_state, viewGroup, false) ;
         CharacterListViewHolder vh = new CharacterListViewHolder(view);
         return vh;
@@ -86,9 +90,9 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         viewHolder.tvCharServer.setText(item.getServerData().getServerName());
         viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()));
         viewHolder.tvFiendRemain.setText(String.valueOf(item.getOthers().getFiendRemain()));
+        viewHolder.tvEpics.setText(String.valueOf(item.getOthers().getEpicWeek()));
         viewHolder.tvPreyTodayClear.setVisibility(item.getOthers().isPreyTodayClear()?View.VISIBLE:View.INVISIBLE);
         viewHolder.tvFiendTodayClear.setVisibility(item.getOthers().isFiendTodayClear()?View.VISIBLE:View.INVISIBLE);
-
 
         String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+
                 "/characters/"+item.getCharId()+"?zoom=3";

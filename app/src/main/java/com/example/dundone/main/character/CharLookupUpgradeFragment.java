@@ -18,6 +18,8 @@ import com.example.dundone.main.NeopleAPI;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -52,6 +54,8 @@ public class CharLookupUpgradeFragment extends Fragment {
         ((MainActivity)getActivity()).backFragment();
     }
     private void initCharStatus(){
+
+
         tvCharName = vCharMenu.findViewById(R.id.tv_name);
         tvTitle = vCharMenu.findViewById(R.id.tv_title);
         ivCharImg = vCharMenu.findViewById(R.id.iv_descript_img);
@@ -109,11 +113,13 @@ public class CharLookupUpgradeFragment extends Fragment {
             tab.setText(tabTexts[i]);
         }
     }
+    private void reqGetStatus(){
+
+        initViewPager();
+    }
     private void init(){
         initCharStatus();
-        initViewPager();
-
-
+reqGetStatus();
         ivToDevStie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

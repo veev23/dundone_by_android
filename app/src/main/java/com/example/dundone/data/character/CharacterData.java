@@ -13,5 +13,10 @@ public class CharacterData extends CharBaseData {
     public RaidData getOthers() {
         return others;
     }
+
+    public void setOthers(RaidData others) {
+        this.others = others;
+    }
+
     private RaidData others;
 }

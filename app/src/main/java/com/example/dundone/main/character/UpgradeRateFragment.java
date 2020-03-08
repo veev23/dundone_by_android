@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dundone.R;
+import com.example.dundone.Singleton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,8 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.dundone.Singleton.DpToPixel;
 
 public class UpgradeRateFragment extends Fragment {
 
@@ -38,13 +41,46 @@ public class UpgradeRateFragment extends Fragment {
     @BindView(R.id.constraintlayout)
     ConstraintLayout clLayout;
 
+    private int successCount;
+    private int failCount;
 
-    private void initLayout(){
+    private void initLayout() {
         Bundle bundle = getArguments();
+        if(bundle == null){
+            mSuccessCount.setText("불러오지 못했습니다.");
+            mFailCount.setText("불러오지 못했습니다.");
+        }
+        else {
+            successCount = bundle.getInt("successCount");
+            failCount = bundle.getInt("failCount");
+        }
 
+        int sum = successCount + failCount;
+        int successRate = (sum == 0)?0:100 * successCount / sum;
+        int failRate = (sum==0)?0:100-successRate;
+
+        ConstraintSet targetSet = new ConstraintSet();
+        targetSet.clone(clLayout);
+        int maxHeight = mSuccessBar.getHeight();
+        int height_success = (int) ((double) maxHeight * (double)successRate);
+        int height_fail = (int) ((double) maxHeight * (double)failRate);
+        TransitionManager.beginDelayedTransition(clLayout, new AutoTransition().setDuration(1000));
+
+        targetSet.constrainHeight(R.id.success_bar, height_success);
+        targetSet.constrainHeight(R.id.fail_bar, height_fail);
+        targetSet.clear(R.id.success_bar, ConstraintSet.TOP);
+        targetSet.clear(R.id.fail_bar, ConstraintSet.TOP);
+
+        mSuccessCount.setText(String.valueOf(successCount));
+        mFailCount.setText(String.valueOf(failCount));
+        mSuccessRate.setText(String.valueOf(successRate));
+        mFailRate.setText(String.valueOf(failRate));
+
+        targetSet.applyTo(clLayout);
 
     }
-    private void init(){
+
+    private void init() {
         initLayout();
     }
 
@@ -61,28 +97,6 @@ public class UpgradeRateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        view.post(new Runnable() {
-            @Override
-            public void run() {
-                ConstraintSet targetSet = new ConstraintSet();
-                targetSet.clone(clLayout);
-                int maxHeight = mSuccessBar.getHeight();
-                int height_success = (int)((double)maxHeight * 0.5)+1;
-                int height_fail = maxHeight-height_success;
-                TransitionManager.beginDelayedTransition(clLayout,new AutoTransition().setDuration(1000));
-
-                targetSet.constrainHeight(R.id.success_bar, height_success);
-                targetSet.constrainHeight(R.id.fail_bar, height_fail);
-                targetSet.clear(R.id.success_bar, ConstraintSet.TOP);
-                targetSet.clear(R.id.fail_bar, ConstraintSet.TOP);
-
-                mSuccessCount.setText("50회");
-                mFailCount.setText("50회");
-                mSuccessRate.setText("50%");
-                mFailRate.setText("50%");
-
-                targetSet.applyTo(clLayout);
-            }
-        });
+        initLayout();
     }
 }

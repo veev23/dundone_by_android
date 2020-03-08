@@ -51,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/recommend_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hide_answer">
+        app:layout_constraintTop_toBottomOf="@+id/frameLayout">
 
         <include
             android:id="@+id/iv_neople_openapi"
@@ -66,35 +66,32 @@
         tools:layout_editor_absoluteY="8dp" />
 
     <FrameLayout
-        android:id="@+id/hide_answer"
-        android:layout_width="0dp"
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="250dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/title">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
         <FrameLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/shadow_blur_sky"/>
-        <FrameLayout
+            android:id="@+id/hide_answer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/border_sky"
-            android:layout_marginStart="36dp"
 
-            />
+            tools:background="@drawable/border_sky">
 
-        <ImageView
-            android:id="@+id/iv_scrape"
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            tools:srcCompat="@drawable/scrape1" />
-
+            <ImageView
+                android:id="@+id/iv_scrape"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                tools:srcCompat="@drawable/scrape_sky" />
+        </FrameLayout>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

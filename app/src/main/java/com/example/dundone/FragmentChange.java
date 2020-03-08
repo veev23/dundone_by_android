@@ -5,5 +5,5 @@ import androidx.fragment.app.Fragment;
 public interface FragmentChange {
     void replaceFragment(Fragment fragment, String calleeName);
     void addFragment(Fragment fragment, String calleeName);
-    void backFragment();
+    boolean backFragment();
 }

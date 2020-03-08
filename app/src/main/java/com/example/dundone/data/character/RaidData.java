@@ -1,13 +1,13 @@
 package com.example.dundone.data.character;
 
-public class RaidData {
-    public RaidData(int preyRemain, boolean preyTodayClear, int fiendRemain, boolean fiendTodayClear) {
-        this.preyRemain = preyRemain;
-        this.preyTodayClear = preyTodayClear;
-        this.fiendRemain = fiendRemain;
-        this.fiendTodayClear = fiendTodayClear;
-    }
+import android.util.Log;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+public class RaidData {
+    public static final int PREY_MAX = 2;
+    public static final int FIEND_MAX = 2;
     public int getPreyRemain() {
         return preyRemain;
     }
@@ -24,8 +24,50 @@ public class RaidData {
         return fiendTodayClear;
     }
 
+    public int getEpicWeek() {
+        return epicWeek;
+    }
+
+    public RaidData(){
+    }
+    public void initParsing(){
+        if(freye!=null) {
+            String[] freyes = freye.split("/");
+            if (freyes[0].equals("1")) preyTodayClear = true;
+            else preyTodayClear = false;
+            preyRemain = PREY_MAX - Integer.parseInt(freyes[1]);
+        }
+        if(fienWar!=null) {
+            String[] fiendWars = fienWar.split("/");
+            if (fiendWars[0].equals("1")) fiendTodayClear = true;
+            else fiendTodayClear = false;
+            fiendRemain = FIEND_MAX - Integer.parseInt(fiendWars[1]);
+        }
+        if(epics!=null) {
+            String[] epicCount = epics.split("/");
+            epicWeek = Integer.parseInt(epicCount[1]);
+        }
+    }
+
+    public RaidData(String freye, String fienWar, String epics) {
+        this.freye = freye;
+        this.fienWar = fienWar;
+        this.epics = epics;
+    }
+
+    @SerializedName("freye")
+    @Expose
+    private String freye;
+    @SerializedName("fienWar")
+    @Expose
+    private String fienWar;
+    @SerializedName("epics")
+    @Expose
+    private String epics;
     private int preyRemain;
     private boolean preyTodayClear;
     private int fiendRemain;
     private boolean fiendTodayClear;
+
+    private int epicWeek;
 }

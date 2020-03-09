@@ -96,7 +96,6 @@ implements FragmentChange {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }

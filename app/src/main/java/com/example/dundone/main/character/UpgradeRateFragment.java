@@ -4,10 +4,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dundone.R;
 import com.example.dundone.Singleton;
@@ -41,14 +43,13 @@ public class UpgradeRateFragment extends Fragment {
     @BindView(R.id.constraintlayout)
     ConstraintLayout clLayout;
 
-    private int successCount;
-    private int failCount;
+    private int successCount=0;
+    private int failCount=0;
 
     private void initLayout() {
         Bundle bundle = getArguments();
         if(bundle == null){
-            mSuccessCount.setText("불러오지 못했습니다.");
-            mFailCount.setText("불러오지 못했습니다.");
+            return;
         }
         else {
             successCount = bundle.getInt("successCount");
@@ -61,9 +62,10 @@ public class UpgradeRateFragment extends Fragment {
 
         ConstraintSet targetSet = new ConstraintSet();
         targetSet.clone(clLayout);
-        int maxHeight = mSuccessBar.getHeight();
-        int height_success = (int) ((double) maxHeight * (double)successRate / 100);
-        int height_fail = (int) ((double) maxHeight * (double)failRate / 100);
+        int maxHeight = mSuccessBar.getHeight()-DpToPixel(mContext, 10);
+        int height_success = (int) ((double) maxHeight * (double)successRate / 100.0)+DpToPixel(mContext, 10);
+        int height_fail = (int) ((double) maxHeight * (double)failRate / 100.0)+DpToPixel(mContext, 10);
+        Log.d("height is ",  maxHeight + ", "+height_success + " , " + height_fail);
         TransitionManager.beginDelayedTransition(clLayout, new AutoTransition().setDuration(1000));
 
         targetSet.constrainHeight(R.id.success_bar, height_success);
@@ -71,17 +73,16 @@ public class UpgradeRateFragment extends Fragment {
         targetSet.clear(R.id.success_bar, ConstraintSet.TOP);
         targetSet.clear(R.id.fail_bar, ConstraintSet.TOP);
 
-        mSuccessCount.setText(String.valueOf(successCount));
-        mFailCount.setText(String.valueOf(failCount));
-        mSuccessRate.setText(String.valueOf(successRate));
-        mFailRate.setText(String.valueOf(failRate));
+        mSuccessCount.setText(getString(R.string.count, successCount));
+        mFailCount.setText(getString(R.string.count, failCount));
+        mSuccessRate.setText(getString(R.string.percents,successRate));
+        mFailRate.setText(getString(R.string.percents, failRate));
 
         targetSet.applyTo(clLayout);
 
     }
 
     private void init() {
-        initLayout();
     }
 
     @Override
@@ -97,6 +98,11 @@ public class UpgradeRateFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initLayout();
+        view.post(new Runnable() {
+            @Override
+            public void run() {
+                initLayout();
+            }
+        });
     }
 }

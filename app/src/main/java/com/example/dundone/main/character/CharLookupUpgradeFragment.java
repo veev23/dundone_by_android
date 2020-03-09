@@ -79,7 +79,9 @@ public class CharLookupUpgradeFragment extends Fragment {
             @NonNull
             @Override
             public Fragment createFragment(int position) {
-                Bundle bundle =new Bundle(0);
+                Bundle bundle =new Bundle(2);
+                bundle.putInt("successCount", 1);
+                bundle.putInt("failCount", 0);
                 switch (position){
                     case 0:
                         break;
@@ -91,6 +93,7 @@ public class CharLookupUpgradeFragment extends Fragment {
                             return null;
                 }
                 UpgradeRateFragment fragment = new UpgradeRateFragment();
+                fragment.setArguments(bundle);
                 fragment.setArguments(bundle);
                 return fragment;
             }

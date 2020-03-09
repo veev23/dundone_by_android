@@ -77,7 +77,6 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     public CharacterListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        itemList.get(i).getOthers().initParsing();
         View view = inflater.inflate(R.layout.item_char_raid_state, viewGroup, false) ;
         CharacterListViewHolder vh = new CharacterListViewHolder(view);
         return vh;

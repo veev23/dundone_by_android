@@ -49,11 +49,13 @@ public class RecommendResultFragment extends Fragment {
             ivBackground.setImageResource(R.drawable.recommend_background1);
             tvTitle.setText("많이 먹게 해주세요!!");
             ivScrape.setImageResource(R.drawable.scrape_sky);
+            vHideAnswer.setBackground(mContext.getDrawable(R.drawable.border_sky));
         }
         else{
             ivBackground.setImageResource(R.drawable.recommend_background2);
             tvTitle.setText("신화 먹게 해주세요!!");
             ivScrape.setImageResource(R.drawable.scrape_little_red);
+            vHideAnswer.setBackground(mContext.getDrawable(R.drawable.border_little_red));
         }
     }
     @OnClick(R.id.hide_answer)

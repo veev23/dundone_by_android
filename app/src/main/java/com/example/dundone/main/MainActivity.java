@@ -43,6 +43,9 @@ implements FragmentChange {
     private final Context context = this;
     @BindView(R.id.tl_main_tab)
     TabLayout tlMainTab;
+    @BindView(R.id.main_button)
+    ImageView ivMainButton;
+
     private final int MAIN_TAB_ITEM_SIZE = 4;
     private TabItem tiMainTabItem[] = new TabItem[MAIN_TAB_ITEM_SIZE];
 
@@ -67,15 +70,19 @@ implements FragmentChange {
                 transaction = fragmentManager.beginTransaction();
                 switch (pos) {
                     case 0:
+                        ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
                         replaceFragment(new HomeFragment(), getString(R.string.char_home_fragment));
                         break;
                     case 1:
+                        ivMainButton.setImageDrawable(getDrawable(R.drawable.button_plus));
                         replaceFragment(new CharListFragment(), getString(R.string.char_list_fragment));
                         break;
                     case 2:
+                        ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
                         replaceFragment(new AuctionFragment(), getString(R.string.char_auction_fragment));
                         break;
                     case 3:
+                        ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
                         replaceFragment(new HellRecommendFragment(), getString(R.string.hell_recommend_fragment));
                         break;
                     default:

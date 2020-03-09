@@ -38,6 +38,7 @@ public class CharLookupEpic extends Fragment {
     @BindView(R.id.recyclerview)
     RecyclerView rvEpicViews;
     private ArrayList<EpicData> mEpicList = new ArrayList<>();
+    private ArrayList<EpicData> mEpicListInverse = new ArrayList<>();
     private BaseInfoAdapter<EpicData> baseInfoAdapter;
 
     @OnClick(R.id.back_button)
@@ -62,8 +63,27 @@ public class CharLookupEpic extends Fragment {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
-    @OnClick({R.id.recent, R.id.old})
-    void test(){
+    private boolean isInverse = false;
+    @OnClick(R.id.recent)
+    void listToRecent(){
+        if(isInverse){
+            isInverse = false;
+            inverseList();
+        }
+    }
+    @OnClick(R.id.old)
+    void listToOlder(){
+        if(!isInverse){
+            isInverse = true;
+            inverseList();
+        }
+    }
+
+    private void inverseList(){
+        ArrayList<EpicData> tmp = mEpicList;
+        mEpicList = mEpicListInverse;
+        mEpicListInverse = tmp;
+        baseInfoAdapter.notifyDataSetChanged();
         Toast.makeText(mContext, "클릭", Toast.LENGTH_SHORT).show();
     }
     private void initRecyclerView(){
@@ -73,66 +93,6 @@ public class CharLookupEpic extends Fragment {
         mEpicList.add(new EpicData("4", "2"));
         mEpicList.add(new EpicData("5", "2"));
         mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
-        mEpicList.add(new EpicData("7", "2"));
-        mEpicList.add(new EpicData("8", "2"));
-        mEpicList.add(new EpicData("9", "2"));
-        mEpicList.add(new EpicData("10", "2"));
-        mEpicList.add(new EpicData("11", "2"));
         rvEpicViews.setLayoutManager(new LinearLayoutManager(mContext));
         rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(10));
 

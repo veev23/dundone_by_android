@@ -3,22 +3,26 @@ package com.example.dundone.main.home;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.relex.circleindicator.CircleIndicator2;
+import me.relex.circleindicator.CircleIndicator3;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.dundone.R;
 import com.example.dundone.main.NeopleAPI;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private Context mContext;
@@ -28,6 +32,11 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.ad_view_in_home)
     AdView mAdView;
 
+    @BindView(R.id.event_viewpager_indicator)
+    CircleIndicator3 ciEventIndicator;
+    @BindView(R.id.event_viewpager)
+    ViewPager2 vpEventPager;
+    private ImageViewAdapter eventAdapter;
     /**
      * Called when leaving the activity
      */
@@ -66,8 +75,21 @@ public class HomeFragment extends Fragment {
         mAdView.loadAd(adRequest);
     }
 
+    private void initViewPager() {
+        ArrayList<String> srcList = new ArrayList<>();
+        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
+        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
+        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
+        eventAdapter = new ImageViewAdapter(srcList, mContext);
+        vpEventPager.setAdapter(eventAdapter);
+        ciEventIndicator.setViewPager(vpEventPager);
+    }
+
+    ;
+
     private void init() {
         adViewInit();
+        initViewPager();
         ivNeopleDevSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -19,10 +19,14 @@ import com.example.dundone.main.entities.TabItem;
 import com.example.dundone.main.hell.HellRecommendFragment;
 import com.example.dundone.main.home.HomeFragment;
 import com.example.dundone.onBackPressListener;
+import com.example.dundone.onMainButtonClickListener;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.internal.ParcelableSparseArray;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.HashSet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,15 +39,6 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity
 implements FragmentChange {
-    public interface onKeyBackPressedListener {
-        public void onBack();
-    }
-    private onKeyBackPressedListener mOnKeyBackPressedListener;
-
-    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener) {
-        mOnKeyBackPressedListener = listener;
-    }
-
 
     private final Context context = this;
     @BindView(R.id.tl_main_tab)
@@ -107,8 +102,16 @@ implements FragmentChange {
     }
 
     @OnClick(R.id.main_button)
-    void charAddOnClick(){
-        addFragment(new CharacterAddFragment(), getString(R.string.char_add_fragment));
+    void mainButtonOnClick(){
+        FragmentManager.BackStackEntry backStackEntry =
+                fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1);
+        Fragment fragment = fragmentManager.findFragmentByTag(backStackEntry.getName());
+        if(fragment instanceof onMainButtonClickListener){
+            ((onMainButtonClickListener) fragment).onMainButtonClick();
+        }
+        else{
+            //그 외 경우..
+        }
     }
     private void changeMenuTabView(View tab, int tabIndex, boolean clicked) {
         TextView tabText = tab.findViewById(R.id.tab_text);
@@ -138,7 +141,6 @@ implements FragmentChange {
     }
 
     private void init() {
-
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {}

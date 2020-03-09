@@ -29,6 +29,7 @@ import com.example.dundone.data.character.ResCharStatus;
 import com.example.dundone.data.server.ServerData;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.ResponseCode;
+import com.example.dundone.onMainButtonClickListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
@@ -36,12 +37,23 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static com.example.dundone.Singleton.dundoneService;
 import static com.example.dundone.Singleton.gson;
 
-public class CharListFragment extends Fragment implements AddToAdapterInterface<CharBaseData> {
+public class CharListFragment extends Fragment
+        implements AddToAdapterInterface<CharBaseData>, onMainButtonClickListener {
 
+    private HashSet<CharBaseData> havedCharIds = new HashSet<>();
+    @Override
+    public void onMainButtonClick(){
+        CharacterAddFragment f = new CharacterAddFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("havedCharIds",havedCharIds);
+        f.setArguments(bundle);
+        ((MainActivity)getActivity()).addFragment(f, getString(R.string.char_add_fragment));
+    }
     //sharedpreference string
     public static final String PREF_CHAR_TYPE ="PREF_CHAR_TYPE";
     public static final String CHAR_LIST = "CHAR_LIST";
@@ -95,10 +107,15 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
         editor.putString(CHAR_LIST,json);
         editor.commit();
     }
-    private ArrayList<CharacterData> prefCharDataSearch(){
+    private void prefCharDataSearch(){
         String json = pref.getString(CHAR_LIST, "[]");
-        if(json.equals("null")) return new ArrayList<>();
-        return gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>(){}.getType());
+        if(json.equals("null")){
+            characterDataList = new ArrayList<>();
+        }
+        characterDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>(){}.getType());
+        for(CharacterData ch : characterDataList){
+            havedCharIds.add(new CharBaseData(ch.getCharName(), ch.getCharId(), ch.getServerData()));
+        }
     }
 
     @Override
@@ -112,7 +129,7 @@ public class CharListFragment extends Fragment implements AddToAdapterInterface<
 
         pref = mContext.getSharedPreferences(PREF_CHAR_TYPE, Context.MODE_PRIVATE);
         editor = pref.edit();
-        characterDataList = prefCharDataSearch();
+        prefCharDataSearch();
 
         bindRecyclerView();
     }

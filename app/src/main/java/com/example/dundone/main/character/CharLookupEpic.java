@@ -15,7 +15,9 @@ import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharBaseData;
 import com.example.dundone.data.item.EpicData;
+import com.example.dundone.data.item.ResGetEpicList;
 import com.example.dundone.main.MainActivity;
+import com.example.dundone.main.ResponseCode;
 
 import java.util.ArrayList;
 
@@ -25,11 +27,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.dundone.Singleton.dundoneService;
 
 public class CharLookupEpic extends Fragment {
 
     private Context mContext;
 
+    private String charId;
     @BindView(R.id.char_menu)
     View vCharMenu;
     private TextView tvCharName;
@@ -38,7 +46,6 @@ public class CharLookupEpic extends Fragment {
     @BindView(R.id.recyclerview)
     RecyclerView rvEpicViews;
     private ArrayList<EpicData> mEpicList = new ArrayList<>();
-    private ArrayList<EpicData> mEpicListInverse = new ArrayList<>();
     private BaseInfoAdapter<EpicData> baseInfoAdapter;
 
     @OnClick(R.id.back_button)
@@ -58,6 +65,7 @@ public class CharLookupEpic extends Fragment {
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
+            charId = charData.getCharId();
         }
         else{
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
@@ -81,27 +89,42 @@ public class CharLookupEpic extends Fragment {
 
     private void inverseList(){
         ArrayList<EpicData> tmp = mEpicList;
-        mEpicList = mEpicListInverse;
-        mEpicListInverse = tmp;
         baseInfoAdapter.notifyDataSetChanged();
         Toast.makeText(mContext, "클릭", Toast.LENGTH_SHORT).show();
     }
+    private void reqGetEpicList(){
+        Call<ResGetEpicList> epicListCall = dundoneService.getEpicList(charId);
+        epicListCall.enqueue(new Callback<ResGetEpicList>() {
+            @Override
+            public void onResponse(Call<ResGetEpicList> call, Response<ResGetEpicList> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                        mEpicList.addAll(response.body().getItemList());
+                        baseInfoAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResGetEpicList> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void initRecyclerView(){
-        mEpicList.add(new EpicData("1", "2"));
-        mEpicList.add(new EpicData("2", "2"));
-        mEpicList.add(new EpicData("3", "2"));
-        mEpicList.add(new EpicData("4", "2"));
-        mEpicList.add(new EpicData("5", "2"));
-        mEpicList.add(new EpicData("6", "2"));
         rvEpicViews.setLayoutManager(new LinearLayoutManager(mContext));
         rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(10));
-
-        baseInfoAdapter=new BaseInfoAdapter<>(mContext, mEpicList);
+        baseInfoAdapter=new BaseInfoAdapter<>(mContext, mEpicList, R.layout.item_base_info);
         rvEpicViews.setAdapter(baseInfoAdapter);
     }
     private void init(){
         initCharStatus();
         initRecyclerView();
+        reqGetEpicList();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

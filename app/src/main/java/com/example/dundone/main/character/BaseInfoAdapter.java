@@ -22,6 +22,7 @@ public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.
     private OnItemClickListener mListener = null;
     private Context mContext;
     private ArrayList<E> mItemList;
+    private int mLayoutId;
 
     public interface OnItemClickListener {
         void onItemCilckListener(View v, int p);
@@ -30,21 +31,23 @@ public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.
         this.mListener = listener;
     }
 
-    BaseInfoAdapter(Context context, ArrayList<E> list){
+    BaseInfoAdapter(Context context, ArrayList<E> list, int layoutId){
         mContext = context;
         mItemList=list;
+        mLayoutId = layoutId;
     }
     class BaseInfoViewHolder extends RecyclerView.ViewHolder {
         TextView tvName;
-        TextView tvServer;
+        TextView tvDetail;
         ImageView ivImage;
 
         BaseInfoViewHolder(@NonNull View v) {
             super(v);
             View vCharInfo=v.findViewById(R.id.base_info);
             tvName = vCharInfo.findViewById(R.id.tv_name);
-            tvServer = vCharInfo.findViewById(R.id.tv_detail_info);
+            tvDetail = vCharInfo.findViewById(R.id.tv_detail_info);
             ivImage = vCharInfo.findViewById(R.id.iv_descript_img);
+
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -59,12 +62,11 @@ public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.
         }
 
     }
-
     @NonNull
     @Override
     public BaseInfoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_base_info, parent, false) ;
+        View view = inflater.inflate(mLayoutId, parent, false) ;
         BaseInfoViewHolder vh = new BaseInfoViewHolder(view);
         return vh;
     }
@@ -75,13 +77,16 @@ public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.
         if(itemE instanceof CharBaseData) {
             CharBaseData item = (CharBaseData)itemE;
             holder.tvName.setText(item.getCharName());
-            holder.tvServer.setText(item.getServerData().getServerName());
+            holder.tvDetail.setText(item.getServerData().getServerName());
             String url = "https://img-api.neople.co.kr/df/servers/" + item.getServerData().getServerId() + "/characters/" + item.getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(holder.ivImage);
         }
         else if(itemE instanceof EpicData){
             EpicData item = (EpicData)itemE;
             holder.tvName.setText(item.getName());
+            holder.tvDetail.setText(item.getDate());
+            String url = "https://img-api.neople.co.kr/df/items/"+item.getItemId();
+            Glide.with(mContext).load(url).into(holder.ivImage);
         }
     }
 

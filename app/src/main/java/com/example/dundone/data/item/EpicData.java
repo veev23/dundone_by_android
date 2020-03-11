@@ -14,9 +14,14 @@ public class EpicData {
     @Expose
     private String date;
 
-    public EpicData(String name, String itemId) {
+    public EpicData(String name, String itemId, String date) {
         this.name = name;
         this.itemId = itemId;
+        this.date = date;
+    }
+
+    public String getDate() {
+        return date;
     }
 
     public String getName() {

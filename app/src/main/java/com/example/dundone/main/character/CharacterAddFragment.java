@@ -3,8 +3,6 @@ package com.example.dundone.main.character;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -137,9 +135,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         charSearchList.clear();
-                        response.body().getResult().add(new CharBaseData("[에픽]", "6e610499113920b694fae97231bf1fff", new ServerData("bakal", "바칼")));
-                        response.body().getResult().add(new CharBaseData("여캐", "c269d0beddd7b2ae69be74a127fc0292", new ServerData("bakal", "바칼")));
-                        response.body().getResult().add(new CharBaseData("plnder", "07955eb5e783b7f18a7c0b6bb80c0b98", new ServerData("bakal", "바칼")));
                         removeRedundantCharacter(response.body().getResult());
                         searchAdapter.notifyDataSetChanged();
                         if (charSearchList.isEmpty()) {
@@ -284,7 +279,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     }
 
     private void initRecyclerView() {
-        searchAdapter = new BaseInfoAdapter<>(mContext, charSearchList);
+        searchAdapter = new BaseInfoAdapter<>(mContext, charSearchList, R.layout.item_char_base_info);
         rvCharResult.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharResult.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new BaseInfoAdapter.OnItemClickListener() {

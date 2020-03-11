@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingBottom="15dp"
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     style="@style/RadiusItem">
     <include
         android:id="@+id/base_info"

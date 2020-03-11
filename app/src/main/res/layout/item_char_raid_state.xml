@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     style="@style/RadiusItem"
-
+    android:clickable="true"
+    android:foreground="?android:attr/selectableItemBackground"
     >
 
     <include
@@ -53,7 +54,7 @@
                 android:textColor="@color/colorListBackground"
                 android:layout_marginEnd="14dp"
                 android:textSize="12sp"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/fiend_remain_in_raid_state"
@@ -62,14 +63,8 @@
                 android:lineSpacingExtra="1.5sp"
                 android:textColor="@color/colorListBackground"
                 android:textSize="18sp"
-                tools:text="1" />
-            <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="1.5sp"
-            android:textColor="@color/colorListBackground"
-            android:textSize="18sp"
-            android:text=" / 2" />
+                tools:text="1 / 2" />
+
 
         </LinearLayout>
 
@@ -107,7 +102,7 @@
                 android:text="오늘 클리어!"
                 android:textColor="@color/colorListBackground"
                 android:textSize="12sp"
-                android:visibility="visible" />
+                android:visibility="invisible" />
 
             <TextView
                 android:id="@+id/prey_remain_in_raid_state"
@@ -116,15 +111,7 @@
                 android:lineSpacingExtra="1.5sp"
                 android:textColor="@color/colorListBackground"
                 android:textSize="18sp"
-                tools:text="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingExtra="1.5sp"
-                android:textColor="@color/colorListBackground"
-                android:textSize="18sp"
-                android:text=" / 2" />
+                tools:text="1 / 2" />
         </LinearLayout>
 
         <LinearLayout

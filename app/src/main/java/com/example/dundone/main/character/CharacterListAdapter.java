@@ -20,6 +20,17 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     private ArrayList<CharacterData> itemList;
     private Context context;
 
+    //OnTouch
+    private OnTouchListener mTouchListener = null;
+
+    public interface OnTouchListener {
+        void onTouch(View v, int p);
+    }
+    public void setOnTouchListener(OnTouchListener listener){
+        this.mTouchListener = listener;
+    }
+
+    //OnItemClick
     private OnItemClickListener mListener = null;
 
     public interface OnItemClickListener {
@@ -29,6 +40,8 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         this.mListener = listener;
     }
 
+
+    //OnItemLongClick
     private OnItemLongClickListener mLongListener = null;
 
     public interface OnItemLongClickListener {
@@ -37,6 +50,8 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     public void setOnItemLongClickListener(OnItemLongClickListener listener){
         this.mLongListener = listener;
     }
+
+
 
     public CharacterListAdapter(ArrayList<CharacterData> itemList, Context context) {
         this.itemList = itemList;
@@ -109,12 +124,17 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         CharacterData item = itemList.get(i);
         viewHolder.tvCharName.setText(item.getCharName());
         viewHolder.tvCharServer.setText(item.getServerData().getServerName());
-        viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()));
-        viewHolder.tvFiendRemain.setText(String.valueOf(item.getOthers().getFiendRemain()));
-        viewHolder.tvEpics.setText(String.valueOf(item.getOthers().getEpicWeek()));
-        viewHolder.tvPreyTodayClear.setVisibility(item.getOthers().isPreyTodayClear()?View.VISIBLE:View.INVISIBLE);
-        viewHolder.tvFiendTodayClear.setVisibility(item.getOthers().isFiendTodayClear()?View.VISIBLE:View.INVISIBLE);
-
+        //아직 불러오지 않은 상태
+        if(item.getOthers().getEpicWeek() == -1){
+            viewHolder.tvEpics.setText("불러오는 중..");
+        }
+        else {
+            viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()) + "/ 2");
+            viewHolder.tvFiendRemain.setText(String.valueOf(item.getOthers().getFiendRemain()) + " / 2");
+            viewHolder.tvEpics.setText(String.valueOf(item.getOthers().getEpicWeek()));
+            viewHolder.tvPreyTodayClear.setVisibility(item.getOthers().isPreyTodayClear() ? View.VISIBLE : View.INVISIBLE);
+            viewHolder.tvFiendTodayClear.setVisibility(item.getOthers().isFiendTodayClear() ? View.VISIBLE : View.INVISIBLE);
+        }
         String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+
                 "/characters/"+item.getCharId()+"?zoom=3";
         Glide.with(context).load(url).into(viewHolder.ivCharImg);

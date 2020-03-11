@@ -5,6 +5,8 @@ import android.util.Log;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+
+//epicWeek
 public class RaidData {
     public static final int PREY_MAX = 2;
     public static final int FIEND_MAX = 2;
@@ -26,6 +28,9 @@ public class RaidData {
 
     public int getEpicWeek() {
         return epicWeek;
+    }
+    public void setNotYetLoaded(){
+        epics = "-1/-1";
     }
 
     public RaidData(){

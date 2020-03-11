@@ -194,7 +194,6 @@ public class CharListFragment extends Fragment
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         RaidData rdData = response.body().getOthers();
                         rdData.initParsing();
-                        //TODO : 중복된 이름인지 확인하는 작업 필요
                         characterDataList.add(new CharacterData(charData, rdData));
                         characterListAdapter.notifyItemInserted(characterDataList.size());
                         Toast.makeText(mContext, charData.getCharName(), Toast.LENGTH_SHORT).show();
@@ -235,7 +234,9 @@ public class CharListFragment extends Fragment
     private void bindRecyclerView() {
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
+
         for (int i = 0; i < characterDataList.size(); i++) {
+            characterDataList.get(i).getOthers().setNotYetLoaded();
             reqGetStatus(characterDataList.get(i), i);
         }
 

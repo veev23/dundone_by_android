@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,10 +23,19 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     private OnItemClickListener mListener = null;
 
     public interface OnItemClickListener {
-        void onItemCilckListener(View v, int p);
+        void onItemCilck(View v, int p);
     }
     public void setOnItemClickListener(OnItemClickListener listener){
         this.mListener = listener;
+    }
+
+    private OnItemLongClickListener mLongListener = null;
+
+    public interface OnItemLongClickListener {
+        boolean onItemLongCilck(View v, int p);
+    }
+    public void setOnItemLongClickListener(OnItemLongClickListener listener){
+        this.mLongListener = listener;
     }
 
     public CharacterListAdapter(ArrayList<CharacterData> itemList, Context context) {
@@ -34,7 +44,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     }
 
 
-    public class CharacterListViewHolder extends RecyclerView.ViewHolder {
+    public class CharacterListViewHolder extends RecyclerView.ViewHolder{
 
         TextView tvCharName;
         TextView tvCharServer;
@@ -46,7 +56,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         ImageView ivCharImg;
 
 
-        public CharacterListViewHolder(@NonNull View itemView) {
+        public CharacterListViewHolder (@NonNull View itemView) {
             super(itemView);
             View vCharInfo=itemView.findViewById(R.id.char_info_in_raid_state);
 
@@ -64,9 +74,21 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
                     int pos = getAdapterPosition();
                     if(pos != RecyclerView.NO_POSITION){
                         if(mListener !=null){
-                            mListener.onItemCilckListener(v, pos);
+                            mListener.onItemCilck(v, pos);
                         }
                     }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    int pos = getAdapterPosition();
+                    if(pos != RecyclerView.NO_POSITION){
+                        if(mLongListener !=null){
+                            return mLongListener.onItemLongCilck(v, pos);
+                        }
+                    }
+                    return false;
                 }
             });
         }

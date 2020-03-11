@@ -1,6 +1,9 @@
 package com.example.dundone.main.character;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -46,16 +49,18 @@ public class CharListFragment extends Fragment
         implements AddToAdapterInterface<CharBaseData>, onMainButtonClickListener {
 
     private HashSet<CharBaseData> havedCharIds = new HashSet<>();
+
     @Override
-    public void onMainButtonClick(){
+    public void onMainButtonClick() {
         CharacterAddFragment f = new CharacterAddFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("havedCharIds",havedCharIds);
+        bundle.putSerializable("havedCharIds", havedCharIds);
         f.setArguments(bundle);
-        ((MainActivity)getActivity()).addFragment(f, getString(R.string.char_add_fragment));
+        ((MainActivity) getActivity()).addFragment(f, getString(R.string.char_add_fragment));
     }
+
     //sharedpreference string
-    public static final String PREF_CHAR_TYPE ="PREF_CHAR_TYPE";
+    public static final String PREF_CHAR_TYPE = "PREF_CHAR_TYPE";
     public static final String CHAR_LIST = "CHAR_LIST";
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
@@ -69,7 +74,10 @@ public class CharListFragment extends Fragment
 
     @BindView(R.id.ad_view)
     AdView mAdView;
-    /** Called when leaving the activity */
+
+    /**
+     * Called when leaving the activity
+     */
     @Override
     public void onPause() {
         if (mAdView != null) {
@@ -78,7 +86,9 @@ public class CharListFragment extends Fragment
         super.onPause();
     }
 
-    /** Called when returning to the activity */
+    /**
+     * Called when returning to the activity
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -87,7 +97,9 @@ public class CharListFragment extends Fragment
         }
     }
 
-    /** Called before the activity is destroyed */
+    /**
+     * Called before the activity is destroyed
+     */
     @Override
     public void onDestroy() {
         if (mAdView != null) {
@@ -96,24 +108,26 @@ public class CharListFragment extends Fragment
         super.onDestroy();
     }
 
-    private void adViewInit(){
+    private void adViewInit() {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
     }
 
-    private void prefCharDataSave(ArrayList<CharacterData> arr){
+    private void prefCharDataSave(ArrayList<CharacterData> arr) {
         String json = gson.toJson(arr);
-        if(json.equals("null")) return;
-        editor.putString(CHAR_LIST,json);
+        if (json.equals("null")) return;
+        editor.putString(CHAR_LIST, json);
         editor.commit();
     }
-    private void prefCharDataSearch(){
+
+    private void prefCharDataSearch() {
         String json = pref.getString(CHAR_LIST, "[]");
-        if(json.equals("null")){
+        if (json.equals("null")) {
             characterDataList = new ArrayList<>();
         }
-        characterDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>(){}.getType());
-        for(CharacterData ch : characterDataList){
+        characterDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>() {
+        }.getType());
+        for (CharacterData ch : characterDataList) {
             havedCharIds.add(new CharBaseData(ch.getCharName(), ch.getCharId(), ch.getServerData()));
         }
     }
@@ -124,7 +138,7 @@ public class CharListFragment extends Fragment
         super.onStop();
     }
 
-    private void init(){
+    private void init() {
         adViewInit();
 
         pref = mContext.getSharedPreferences(PREF_CHAR_TYPE, Context.MODE_PRIVATE);
@@ -133,27 +147,28 @@ public class CharListFragment extends Fragment
 
         bindRecyclerView();
     }
-    private void toCharacterDetailFragment(CharBaseData charBaseData){
+
+    private void toCharacterDetailFragment(CharBaseData charBaseData) {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable("CharBaseData", charBaseData);
         CharDetailFragment cdf = new CharDetailFragment();
         cdf.setArguments(bundle);
-        ((MainActivity)getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));
+        ((MainActivity) getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));
     }
-    private void reqGetStatus(CharacterData charData, int i){
+
+    private void reqGetStatus(CharacterData charData, int i) {
         Call<ResCharStatus> charStatusCall =
                 dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
         charStatusCall.enqueue(new Callback<ResCharStatus>() {
             @Override
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().getCode() == ResponseCode.SUCCESS) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
                         RaidData rdData = response.body().getOthers();
                         rdData.initParsing();
                         charData.setOthers(rdData);
                         characterListAdapter.notifyItemChanged(i);
-                    }
-                    else{
+                    } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -168,22 +183,22 @@ public class CharListFragment extends Fragment
         });
 
     }
-    private void reqGetStatus(CharBaseData charData){
+
+    private void reqGetStatus(CharBaseData charData) {
         Call<ResCharStatus> charStatusCall =
                 dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
         charStatusCall.enqueue(new Callback<ResCharStatus>() {
             @Override
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().getCode() == ResponseCode.SUCCESS) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
                         RaidData rdData = response.body().getOthers();
                         rdData.initParsing();
                         //TODO : 중복된 이름인지 확인하는 작업 필요
                         characterDataList.add(new CharacterData(charData, rdData));
                         characterListAdapter.notifyItemInserted(characterDataList.size());
                         Toast.makeText(mContext, charData.getCharName(), Toast.LENGTH_SHORT).show();
-                    }
-                    else{
+                    } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -198,10 +213,29 @@ public class CharListFragment extends Fragment
         });
 
     }
-    private void bindRecyclerView(){
+
+    private void removeConfirmDialog(int pos) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.create();
+        dialog.setTitle(characterDataList.get(pos).getCharName() + "(을)를 삭제합니다.")
+                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        characterDataList.remove(pos);
+                        characterListAdapter.notifyItemRemoved(pos);
+                    }
+                }).show();
+    }
+
+    private void bindRecyclerView() {
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
-        for(int i =0; i<characterDataList.size(); i++) {
+        for (int i = 0; i < characterDataList.size(); i++) {
             reqGetStatus(characterDataList.get(i), i);
         }
 
@@ -209,13 +243,21 @@ public class CharListFragment extends Fragment
         rvCharListView.setAdapter(characterListAdapter);
         characterListAdapter.setOnItemClickListener(new CharacterListAdapter.OnItemClickListener() {
             @Override
-            public void onItemCilckListener(View v, int p) {
+            public void onItemCilck(View v, int p) {
                 toCharacterDetailFragment(characterDataList.get(p));
             }
         });
+        characterListAdapter.setOnItemLongClickListener(new CharacterListAdapter.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongCilck(View v, int p) {
+                removeConfirmDialog(p);
+                return true;
+            }
+        });
     }
+
     @Override
-    public void add(CharBaseData data){
+    public void add(CharBaseData data) {
         reqGetStatus(data);
     }
 

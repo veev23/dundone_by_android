@@ -116,6 +116,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/lookup_raid_record"
                             android:layout_width="0dp"
                             android:layout_height="160dp"
                             android:layout_row="0"

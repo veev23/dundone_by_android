@@ -100,6 +100,11 @@ public class CharDetailFragment extends Fragment {
         CharLookupUpgradeFragment fragment = new CharLookupUpgradeFragment();
         callAddFragment(fragment, getString(R.string.char_lookup_upgrade_fragment));
     }
+    @OnClick(R.id.lookup_raid_record)
+    void toCharLookupUpRaidRecord(){
+        CharLookupRaidRecordFragment fragment = new CharLookupRaidRecordFragment();
+        callAddFragment(fragment, getString(R.string.char_lookup_raid_record_fragment));
+    }
 
     private void init(){
         initCharStatus();

@@ -119,7 +119,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             viewHolder.tvEpics.setText("불러오는 중..");
         }
         else {
-            viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()) + "/ 2");
+            viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()) + " / 2");
             viewHolder.tvFiendRemain.setText(String.valueOf(item.getOthers().getFiendRemain()) + " / 2");
             viewHolder.tvEpics.setText(String.valueOf(item.getOthers().getEpicWeek()));
             viewHolder.tvPreyTodayClear.setVisibility(item.getOthers().isPreyTodayClear() ? View.VISIBLE : View.INVISIBLE);

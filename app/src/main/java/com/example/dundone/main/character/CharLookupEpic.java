@@ -37,62 +37,72 @@ public class CharLookupEpic extends Fragment {
 
     private Context mContext;
 
-    private String charId;
-    @BindView(R.id.char_menu)
-    View vCharMenu;
-    private TextView tvCharName;
-    private TextView tvTitle;
-    private ImageView ivCharImg;
     @BindView(R.id.recyclerview)
     RecyclerView rvEpicViews;
     private ArrayList<EpicData> mEpicList = new ArrayList<>();
     private BaseInfoAdapter<EpicData> baseInfoAdapter;
 
+    @BindView(R.id.noResult)
+    TextView tvNoResult;
+
+
+    @BindView(R.id.char_menu)
+    View vCharMenu;
+    private TextView tvCharName;
+    private TextView tvTitle;
+    private ImageView ivCharImg;
+    private String charId;
     @OnClick(R.id.back_button)
-    void back(){
-        ((MainActivity)getActivity()).backFragment();
+    void back() {
+        ((MainActivity) getActivity()).backFragment();
     }
-    private void initCharStatus(){
+
+    private void initCharStatus() {
         tvCharName = vCharMenu.findViewById(R.id.tv_name);
         tvTitle = vCharMenu.findViewById(R.id.tv_title);
         ivCharImg = vCharMenu.findViewById(R.id.iv_descript_img);
 
         Bundle bundle = getArguments();
-        if(bundle !=null) {
-            CharBaseData charData = (CharBaseData) bundle.getSerializable("CharBaseData");
+        if (bundle != null) {
+            CharBaseData charData = (CharBaseData) bundle.getSerializable(getString(R.string.char_data));
             tvCharName.setText(charData.getCharName());
             tvTitle.setText("에픽 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
             charId = charData.getCharId();
-        }
-        else{
+        } else {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
+
     private boolean isInverse = false;
+
     @OnClick(R.id.recent)
-    void listToRecent(){
-        if(isInverse){
+    void listToRecent() {
+        if (isInverse) {
             isInverse = false;
             inverseList();
         }
     }
+
     @OnClick(R.id.old)
-    void listToOlder(){
-        if(!isInverse){
+    void listToOlder() {
+        if (!isInverse) {
             isInverse = true;
             inverseList();
         }
     }
 
-    private void inverseList(){
+    private void inverseList() {
         ArrayList<EpicData> tmp = mEpicList;
         baseInfoAdapter.notifyDataSetChanged();
         Toast.makeText(mContext, "클릭", Toast.LENGTH_SHORT).show();
     }
-    private void reqGetEpicList(){
+
+    private void reqGetEpicList(boolean recently) {
+        tvNoResult.setText("Loading..");
+        tvNoResult.setVisibility(View.VISIBLE);
         Call<ResGetEpicList> epicListCall = dundoneService.getEpicList(charId);
         epicListCall.enqueue(new Callback<ResGetEpicList>() {
             @Override
@@ -100,7 +110,12 @@ public class CharLookupEpic extends Fragment {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         mEpicList.addAll(response.body().getItemList());
-                        baseInfoAdapter.notifyDataSetChanged();
+                        if (mEpicList.isEmpty()) {
+                            tvNoResult.setText("검색 결과가 없습니다.");
+                        } else {
+                            tvNoResult.setVisibility(View.GONE);
+                            baseInfoAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -115,17 +130,20 @@ public class CharLookupEpic extends Fragment {
             }
         });
     }
-    private void initRecyclerView(){
+
+    private void initRecyclerView() {
         rvEpicViews.setLayoutManager(new LinearLayoutManager(mContext));
         rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(10));
-        baseInfoAdapter=new BaseInfoAdapter<>(mContext, mEpicList, R.layout.item_base_info);
+        baseInfoAdapter = new BaseInfoAdapter<>(mContext, mEpicList, R.layout.item_base_info);
         rvEpicViews.setAdapter(baseInfoAdapter);
     }
-    private void init(){
+
+    private void init() {
         initCharStatus();
         initRecyclerView();
-        reqGetEpicList();
+        reqGetEpicList(true);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -148,9 +148,9 @@ public class CharListFragment extends Fragment
         bindRecyclerView();
     }
 
-    private void toCharacterDetailFragment(CharBaseData charBaseData) {
+    private void toCharacterDetailFragment(CharacterData charData) {
         Bundle bundle = new Bundle(1);
-        bundle.putSerializable("CharBaseData", charBaseData);
+        bundle.putSerializable(getString(R.string.char_data), charData);
         CharDetailFragment cdf = new CharDetailFragment();
         cdf.setArguments(bundle);
         ((MainActivity) getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));

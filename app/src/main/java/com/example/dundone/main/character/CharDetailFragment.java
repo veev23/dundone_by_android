@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
-import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.CharacterData;
 import com.example.dundone.data.character.ResCharBaseDataFromDNF;
 import com.example.dundone.main.MainActivity;
 
@@ -38,7 +38,7 @@ public class CharDetailFragment extends Fragment {
     TextView tvLevel;
     @BindView(R.id.guildname_in_char_detail)
     TextView tvGuildName;
-    private CharBaseData charBaseData;
+    private CharacterData charData;
     @OnClick(R.id.back_button)
     void back(){
         ((MainActivity)getActivity()).backFragment();
@@ -50,16 +50,16 @@ public class CharDetailFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if(bundle !=null) {
-            charBaseData = (CharBaseData) bundle.getSerializable("CharBaseData");
-            tvCharName.setText(charBaseData.getCharName());
-            tvTitle.setText(charBaseData.getServerData().getServerName());
-            String url = "https://img-api.neople.co.kr/df/servers/" + charBaseData.getServerData().getServerId()
-                    + "/characters/" + charBaseData.getCharId() + "?zoom=3";
+            charData = (CharacterData) bundle.getSerializable(getString(R.string.char_data));
+            tvCharName.setText(charData.getCharName());
+            tvTitle.setText(charData.getServerData().getServerName());
+            String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
+                    + "/characters/" + charData.getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
 
             Call<ResCharBaseDataFromDNF> resCharBaseDataFromDNFCall =
-                    dnfService.getCharBaseData(charBaseData.getServerData().getServerId(),
-                            charBaseData.getCharId(),
+                    dnfService.getCharBaseData(charData.getServerData().getServerId(),
+                            charData.getCharId(),
                             getString(R.string.apikey));
             resCharBaseDataFromDNFCall.enqueue(new Callback<ResCharBaseDataFromDNF>() {
                 @Override
@@ -86,7 +86,7 @@ public class CharDetailFragment extends Fragment {
     }
     private void callAddFragment(Fragment fragment, String calleeName){
         Bundle bundle = new Bundle(1);
-        bundle.putSerializable("CharBaseData", charBaseData);
+        bundle.putSerializable(getString(R.string.char_data), charData);
         fragment.setArguments(bundle);
         ((MainActivity)getActivity()).addFragment(fragment, calleeName);
     }

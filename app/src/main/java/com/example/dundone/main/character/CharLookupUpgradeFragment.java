@@ -62,7 +62,7 @@ public class CharLookupUpgradeFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if(bundle !=null) {
-            CharBaseData charData = (CharBaseData) bundle.getSerializable("CharBaseData");
+            CharBaseData charData = (CharBaseData) bundle.getSerializable(getString(R.string.char_data));
             tvCharName.setText(charData.getCharName());
             tvTitle.setText("강화 횟수 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()

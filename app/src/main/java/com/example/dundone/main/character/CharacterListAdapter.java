@@ -20,16 +20,6 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     private ArrayList<CharacterData> itemList;
     private Context context;
 
-    //OnTouch
-    private OnTouchListener mTouchListener = null;
-
-    public interface OnTouchListener {
-        void onTouch(View v, int p);
-    }
-    public void setOnTouchListener(OnTouchListener listener){
-        this.mTouchListener = listener;
-    }
-
     //OnItemClick
     private OnItemClickListener mListener = null;
 

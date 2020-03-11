@@ -26,4 +26,8 @@
     <!--Translation -->
     <string name="count">%1$d회</string>
     <string name="percents">%1$d%%</string>
+
+
+    <!--ArgKey -->
+    <string name="char_data">charData</string>
 </resources>

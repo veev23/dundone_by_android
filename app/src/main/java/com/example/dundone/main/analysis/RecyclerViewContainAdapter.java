@@ -5,6 +5,7 @@ import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.etc.ReinforceData;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
         RecyclerView v = new RecyclerView(mContext);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         v.setLayoutParams(params);
+        v.addItemDecoration(new CustomRecyclerDecoration(10));
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -48,7 +50,7 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         if(holder.adapter == null) {
             holder.rvList.setLayoutManager(new LinearLayoutManager(mContext));
-            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm);
+            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm, mList.get(pos).first);
             holder.rvList.setAdapter(holder.adapter);
         }
     }

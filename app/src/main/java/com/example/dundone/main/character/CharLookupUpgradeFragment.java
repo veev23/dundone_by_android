@@ -6,23 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
-import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.NeopleAPI;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
@@ -62,11 +58,11 @@ public class CharLookupUpgradeFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if(bundle !=null) {
-            CharBaseData charData = (CharBaseData) bundle.getSerializable(getString(R.string.char_data));
-            tvCharName.setText(charData.getCharName());
+            CharInfoData charData = (CharInfoData) bundle.getSerializable(getString(R.string.char_data));
+            tvCharName.setText(charData.getCharData().getCharName());
             tvTitle.setText("강화 횟수 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
-                    + "/characters/" + charData.getCharId() + "?zoom=3";
+                    + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
         }
         else{

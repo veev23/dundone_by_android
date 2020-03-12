@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
-import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.item.EpicData;
 
 import java.util.ArrayList;
@@ -74,11 +74,13 @@ public class BaseInfoAdapter<E> extends RecyclerView.Adapter<BaseInfoAdapter<E>.
     @Override
     public void onBindViewHolder(@NonNull BaseInfoViewHolder holder, int position) {
         E itemE = mItemList.get(position);
-        if(itemE instanceof CharBaseData) {
-            CharBaseData item = (CharBaseData)itemE;
-            holder.tvName.setText(item.getCharName());
+        if(itemE instanceof CharInfoData) {
+            CharInfoData item = (CharInfoData)itemE;
+            holder.tvName.setText(item.getCharData().getCharName());
             holder.tvDetail.setText(item.getServerData().getServerName());
-            String url = "https://img-api.neople.co.kr/df/servers/" + item.getServerData().getServerId() + "/characters/" + item.getCharId() + "?zoom=3";
+            String url = "https://img-api.neople.co.kr/df/servers/"
+                    + item.getServerData().getServerId()
+                    + "/characters/" + item.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(holder.ivImage);
         }
         else if(itemE instanceof EpicData){

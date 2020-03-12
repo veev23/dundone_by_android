@@ -22,8 +22,10 @@ import android.widget.Toast;
 import com.example.dundone.R;
 import com.example.dundone.Singleton;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
-import com.example.dundone.data.character.CharBaseData;
-import com.example.dundone.data.character.CharacterData;
+import com.example.dundone.data.character.CharData;
+import com.example.dundone.data.character.CharInfoData;
+import com.example.dundone.data.character.CharacterOtherData;
+import com.example.dundone.data.character.RaidData;
 import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.server.ResServerList;
 import com.example.dundone.data.server.ServerData;
@@ -66,7 +68,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         }
     }
 
-    ArrayList<CharacterData> charDataAddedList;
+    ArrayList<CharacterOtherData> charDataAddedList;
 
     private Context mContext;
     private ArrayList<ServerData> servers = new ArrayList<>();
@@ -81,8 +83,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     @BindView(R.id.char_search_list_in_char_add)
     RecyclerView rvCharResult;
-    private BaseInfoAdapter<CharBaseData> searchAdapter;
-    private ArrayList<CharBaseData> charSearchList = new ArrayList<>();
+    private BaseInfoAdapter<CharInfoData> searchAdapter;
+    private ArrayList<CharInfoData> charSearchList = new ArrayList<>();
 
     @BindView(R.id.cl_in_char_add)
     ConstraintLayout container;
@@ -95,6 +97,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     private void updateSearchViewBefore() {
         isSearched = false;
+        ivToDevSite.setVisibility(View.VISIBLE);
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
         mBeforeConstSet.applyTo(container);
     }
@@ -102,8 +105,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     private void updateSearchViewAfter() {
         isSearched = true;
         ivToDevSite.setVisibility(View.GONE);
-        charSearchList.clear();
-        searchAdapter.notifyDataSetChanged();
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
         mAfterConstSet.applyTo(container);
     }
@@ -113,16 +114,15 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         im.hideSoftInputFromWindow(etCharSearch.getWindowToken(), 0);
     }
 
-    private void removeRedundantCharacter(ArrayList<CharBaseData> getCharList){
-        for(CharBaseData ch : getCharList){
-            if(!havedCharIds.contains(ch.getCharId())){
+    private void removeRedundantCharacter(ArrayList<CharInfoData> getCharList){
+        for(CharInfoData ch : getCharList){
+            if(!havedCharIds.contains(ch.getCharData().getCharId())){
                 charSearchList.add(ch);
             }
         }
     }
     @OnClick(R.id.search_button_in_char_add)
     void reqCharSearch() {
-
         hideKeyBoard();
         etCharSearch.clearFocus();
         String serverId = servers.get(selectedServer).getServerId();
@@ -135,7 +135,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         charSearchList.clear();
-                        removeRedundantCharacter(response.body().getResult());
+                        ArrayList<CharInfoData> getList = new ArrayList<>(response.body().getResult());
+                        removeRedundantCharacter(getList);
                         searchAdapter.notifyDataSetChanged();
                         if (charSearchList.isEmpty()) {
                             Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
@@ -250,17 +251,21 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         FragmentManager fm = getActivity().getSupportFragmentManager();
         String tag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
         Fragment fragment = fm.findFragmentByTag(tag);
-        Toast.makeText(mContext, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
-        charSearchList.remove(p);
+
         searchAdapter.notifyItemRemoved(p);
-        if (fragment == null | !(fragment instanceof CharListFragment)) return;
+        if (fragment == null | !(fragment instanceof CharListFragment)){
+            Toast.makeText(mContext, getString(R.string.contact_to_dev), Toast.LENGTH_SHORT).show();
+            return;
+        }
         CharListFragment clf = (CharListFragment) fragment;
+        Toast.makeText(mContext, charSearchList.get(p).getCharData().getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
         clf.add(charSearchList.get(p));
+        charSearchList.remove(p);
     }
     private void charAddConfirmDialog(final int p){
-        CharBaseData item = charSearchList.get(p);
+        CharInfoData item = charSearchList.get(p);
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setMessage(item.getServerData().getServerName()+"서버 "+item.getCharName()+" 추가합니다.")
+        builder.setMessage(item.getServerData().getServerName()+"서버 "+item.getCharData().getCharName()+" 추가합니다.")
                 .setPositiveButton("네!", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -280,6 +285,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     private void initRecyclerView() {
         searchAdapter = new BaseInfoAdapter<>(mContext, charSearchList, R.layout.item_char_base_info);
         rvCharResult.setLayoutManager(new LinearLayoutManager(mContext));
+
         rvCharResult.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new BaseInfoAdapter.OnItemClickListener() {
             @Override

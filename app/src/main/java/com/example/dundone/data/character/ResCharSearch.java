@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ResCharSearch {
     @SerializedName("result")
     @Expose
-    private ArrayList<CharBaseData> result;
+    private ArrayList<CharInfoData> result;
     @SerializedName("isSuccess")
     @Expose
     private boolean isSuccess;
@@ -19,14 +19,14 @@ public class ResCharSearch {
     @Expose
     private String message;
 
-    public ResCharSearch(ArrayList<CharBaseData> result, boolean isSuccess, int code, String message) {
+    public ResCharSearch(ArrayList<CharInfoData> result, boolean isSuccess, int code, String message) {
         this.result = result;
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
     }
 
-    public ArrayList<CharBaseData> getResult() {
+    public ArrayList<CharInfoData> getResult() {
         return result;
     }
 

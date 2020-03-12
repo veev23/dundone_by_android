@@ -13,8 +13,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
-import com.example.dundone.data.character.CharBaseData;
-import com.example.dundone.data.character.CharacterData;
+import com.example.dundone.data.character.CharacterOtherData;
 import com.example.dundone.main.MainActivity;
 
 import java.util.ArrayList;
@@ -62,13 +61,13 @@ public class CharLookupRaidRecordFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            CharacterData charData = (CharacterData) bundle.getSerializable(getString(R.string.char_data));
-            tvCharName.setText(charData.getCharName());
+            CharacterOtherData charData = (CharacterOtherData) bundle.getSerializable(getString(R.string.char_data));
+            tvCharName.setText(charData.getCharData().getCharName());
             tvTitle.setText("레이드 기록 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
-                    + "/characters/" + charData.getCharId() + "?zoom=3";
+                    + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
-            charId = charData.getCharId();
+            charId = charData.getCharData().getCharId();
 
             if(charData.getOthers().isFiendTodayClear())
                 tvFiendToday.setVisibility(View.VISIBLE);

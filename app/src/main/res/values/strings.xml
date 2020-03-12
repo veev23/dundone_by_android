@@ -29,8 +29,9 @@
     <!--Translation -->
     <string name="count">%1$d회</string>
     <string name="percents">%1$d%%</string>
-
+    <string name="contact_to_dev">문제가 생겼습니다. 개발자에게 상황과 함께 문의해주세요.</string>
 
     <!--ArgKey -->
     <string name="char_data">charData</string>
+
 </resources>

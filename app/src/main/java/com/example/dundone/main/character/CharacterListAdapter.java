@@ -6,18 +6,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
-import com.example.dundone.data.character.CharacterData;
+import com.example.dundone.data.character.CharacterOtherData;
 
 import java.util.ArrayList;
 
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdapter.CharacterListViewHolder> {
-    private ArrayList<CharacterData> itemList;
+    private ArrayList<CharacterOtherData> itemList;
     private Context context;
 
     //OnItemClick
@@ -43,7 +42,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
 
 
-    public CharacterListAdapter(ArrayList<CharacterData> itemList, Context context) {
+    public CharacterListAdapter(ArrayList<CharacterOtherData> itemList, Context context) {
         this.itemList = itemList;
         this.context = context;
     }
@@ -111,8 +110,8 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     @Override
     public void onBindViewHolder(@NonNull CharacterListViewHolder viewHolder, int i) {
-        CharacterData item = itemList.get(i);
-        viewHolder.tvCharName.setText(item.getCharName());
+        CharacterOtherData item = itemList.get(i);
+        viewHolder.tvCharName.setText(item.getCharData().getCharName());
         viewHolder.tvCharServer.setText(item.getServerData().getServerName());
         //아직 불러오지 않은 상태
         if(item.getOthers().getEpicWeek() == -1){
@@ -126,7 +125,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             viewHolder.tvFiendTodayClear.setVisibility(item.getOthers().isFiendTodayClear() ? View.VISIBLE : View.INVISIBLE);
         }
         String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+
-                "/characters/"+item.getCharId()+"?zoom=3";
+                "/characters/"+item.getCharData().getCharId()+"?zoom=3";
         Glide.with(context).load(url).into(viewHolder.ivCharImg);
     }
 

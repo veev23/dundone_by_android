@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,7 +12,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
-import com.example.dundone.data.character.CharBaseData;
+import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.item.EpicData;
 import com.example.dundone.data.item.ResGetEpicList;
 import com.example.dundone.main.MainActivity;
@@ -64,13 +63,13 @@ public class CharLookupEpic extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            CharBaseData charData = (CharBaseData) bundle.getSerializable(getString(R.string.char_data));
-            tvCharName.setText(charData.getCharName());
+            CharInfoData charData = (CharInfoData) bundle.getSerializable(getString(R.string.char_data));
+            tvCharName.setText(charData.getCharData().getCharName());
             tvTitle.setText("에픽 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
-                    + "/characters/" + charData.getCharId() + "?zoom=3";
+                    + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
-            charId = charData.getCharId();
+            charId = charData.getCharData().getCharId();
         } else {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }

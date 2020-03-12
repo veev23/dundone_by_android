@@ -1,7 +1,6 @@
 package com.example.dundone.main.character;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -16,7 +15,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,18 +23,15 @@ import android.widget.Toast;
 import com.example.dundone.AddToAdapterInterface;
 import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
-import com.example.dundone.data.character.CharBaseData;
-import com.example.dundone.data.character.CharacterData;
+import com.example.dundone.data.character.CharInfoData;
+import com.example.dundone.data.character.CharacterOtherData;
 import com.example.dundone.data.character.RaidData;
 import com.example.dundone.data.character.ResCharStatus;
-import com.example.dundone.data.server.ServerData;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.ResponseCode;
 import com.example.dundone.onMainButtonClickListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -46,9 +41,9 @@ import static com.example.dundone.Singleton.dundoneService;
 import static com.example.dundone.Singleton.gson;
 
 public class CharListFragment extends Fragment
-        implements AddToAdapterInterface<CharBaseData>, onMainButtonClickListener {
+        implements AddToAdapterInterface<CharInfoData>, onMainButtonClickListener {
 
-    private HashSet<CharBaseData> havedCharIds = new HashSet<>();
+    private HashSet<CharInfoData> havedCharIds = new HashSet<>();
 
     @Override
     public void onMainButtonClick() {
@@ -65,7 +60,7 @@ public class CharListFragment extends Fragment
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
     private Context mContext;
-    private ArrayList<CharacterData> characterDataList;
+    private ArrayList<CharacterOtherData> characterOtherDataList;
     private CharacterListAdapter characterListAdapter;
 
 
@@ -113,7 +108,7 @@ public class CharListFragment extends Fragment
         mAdView.loadAd(adRequest);
     }
 
-    private void prefCharDataSave(ArrayList<CharacterData> arr) {
+    private void prefCharDataSave(ArrayList<CharacterOtherData> arr) {
         String json = gson.toJson(arr);
         if (json.equals("null")) return;
         editor.putString(CHAR_LIST, json);
@@ -123,18 +118,18 @@ public class CharListFragment extends Fragment
     private void prefCharDataSearch() {
         String json = pref.getString(CHAR_LIST, "[]");
         if (json.equals("null")) {
-            characterDataList = new ArrayList<>();
+            characterOtherDataList = new ArrayList<>();
         }
-        characterDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterData>>() {
+        characterOtherDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterOtherData>>() {
         }.getType());
-        for (CharacterData ch : characterDataList) {
-            havedCharIds.add(new CharBaseData(ch.getCharName(), ch.getCharId(), ch.getServerData()));
+        for (CharacterOtherData ch : characterOtherDataList) {
+            havedCharIds.add(new CharInfoData(ch.getCharData(), ch.getServerData()));
         }
     }
 
     @Override
     public void onStop() {
-        prefCharDataSave(characterDataList);
+        prefCharDataSave(characterOtherDataList);
         super.onStop();
     }
 
@@ -148,7 +143,7 @@ public class CharListFragment extends Fragment
         bindRecyclerView();
     }
 
-    private void toCharacterDetailFragment(CharacterData charData) {
+    private void toCharacterDetailFragment(CharacterOtherData charData) {
         Bundle bundle = new Bundle(1);
         bundle.putSerializable(getString(R.string.char_data), charData);
         CharDetailFragment cdf = new CharDetailFragment();
@@ -156,9 +151,9 @@ public class CharListFragment extends Fragment
         ((MainActivity) getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));
     }
 
-    private void reqGetStatus(CharacterData charData, int i) {
+    private void reqGetStatus(CharacterOtherData charData, int i) {
         Call<ResCharStatus> charStatusCall =
-                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
+                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharData().getCharId());
         charStatusCall.enqueue(new Callback<ResCharStatus>() {
             @Override
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
@@ -184,9 +179,9 @@ public class CharListFragment extends Fragment
 
     }
 
-    private void reqGetStatus(CharBaseData charData) {
+    private void reqGetStatus(CharInfoData charData) {
         Call<ResCharStatus> charStatusCall =
-                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharId());
+                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharData().getCharId());
         charStatusCall.enqueue(new Callback<ResCharStatus>() {
             @Override
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
@@ -194,9 +189,9 @@ public class CharListFragment extends Fragment
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         RaidData rdData = response.body().getOthers();
                         rdData.initParsing();
-                        characterDataList.add(new CharacterData(charData, rdData));
-                        characterListAdapter.notifyItemInserted(characterDataList.size());
-                        Toast.makeText(mContext, charData.getCharName(), Toast.LENGTH_SHORT).show();
+                        characterOtherDataList.add(new CharacterOtherData(charData, rdData));
+                        characterListAdapter.notifyItemInserted(characterOtherDataList.size());
+                        Toast.makeText(mContext, charData.getCharData().getCharName(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -216,7 +211,7 @@ public class CharListFragment extends Fragment
     private void removeConfirmDialog(int pos) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.create();
-        dialog.setTitle(characterDataList.get(pos).getCharName() + "(을)를 삭제합니다.")
+        dialog.setTitle(characterOtherDataList.get(pos).getCharData().getCharName() + "(을)를 삭제합니다.")
                 .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -225,7 +220,7 @@ public class CharListFragment extends Fragment
                 .setPositiveButton("네", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        characterDataList.remove(pos);
+                        characterOtherDataList.remove(pos);
                         characterListAdapter.notifyItemRemoved(pos);
                     }
                 }).show();
@@ -235,17 +230,17 @@ public class CharListFragment extends Fragment
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
 
-        for (int i = 0; i < characterDataList.size(); i++) {
-            characterDataList.get(i).getOthers().setNotYetLoaded();
-            reqGetStatus(characterDataList.get(i), i);
+        for (int i = 0; i < characterOtherDataList.size(); i++) {
+            characterOtherDataList.get(i).getOthers().setNotYetLoaded();
+            reqGetStatus(characterOtherDataList.get(i), i);
         }
 
-        characterListAdapter = new CharacterListAdapter(characterDataList, mContext);
+        characterListAdapter = new CharacterListAdapter(characterOtherDataList, mContext);
         rvCharListView.setAdapter(characterListAdapter);
         characterListAdapter.setOnItemClickListener(new CharacterListAdapter.OnItemClickListener() {
             @Override
             public void onItemCilck(View v, int p) {
-                toCharacterDetailFragment(characterDataList.get(p));
+                toCharacterDetailFragment(characterOtherDataList.get(p));
             }
         });
         characterListAdapter.setOnItemLongClickListener(new CharacterListAdapter.OnItemLongClickListener() {
@@ -258,7 +253,7 @@ public class CharListFragment extends Fragment
     }
 
     @Override
-    public void add(CharBaseData data) {
+    public void add(CharInfoData data) {
         reqGetStatus(data);
     }
 

@@ -17,12 +17,12 @@ public class AnalysisFragment extends Fragment {
     private Context mContext;
     @OnClick(R.id.epic_analysys)
     void toAnalysysEpicFragment(){
-        ((MainActivity)getActivity()).addFragment(new AnalysysEpicFragment(), getString(R.string.analysys_epic_fragment));
+        ((MainActivity)getActivity()).addFragment(new AnalysysEpicFragment(), getString(R.string.analysis_epic_fragment));
     }
 
     @OnClick(R.id.rainforce_analysys)
     void toAnalysysRainforceFragment(){
-        ((MainActivity)getActivity()).addFragment(new AnalysysRainforceFragment(), getString(R.string.analysys_rainforce_fragment));
+        ((MainActivity)getActivity()).addFragment(new AnalysysReinforceFragment(), getString(R.string.analysis_reinforce_fragment));
     }
     private void init(){
 

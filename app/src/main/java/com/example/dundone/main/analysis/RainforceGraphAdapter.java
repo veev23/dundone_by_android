@@ -9,10 +9,9 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.example.dundone.R;
-import com.example.dundone.data.etc.RainforceData;
+import com.example.dundone.data.etc.ReinforceData;
 import com.example.dundone.main.character.UpgradeRateFragment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -24,9 +23,9 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
 
         private FragmentManager fmManager;
     private Context mContext;
-    private ArrayList<RainforceData> mList;
+    private ArrayList<ReinforceData> mList;
 
-    public RainforceGraphAdapter(Context mContext, ArrayList<RainforceData> mList, FragmentManager fm) {
+    public RainforceGraphAdapter(Context mContext, ArrayList<ReinforceData> mList, FragmentManager fm) {
         this.mContext = mContext;
         this.mList = mList;
         this.fmManager = fm;
@@ -79,7 +78,7 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
-        RainforceData item = mList.get(pos);
+        ReinforceData item = mList.get(pos);
         holder.tvLevel.setText(String.valueOf(item.getLevel()));
         int sum = item.getSuccessCount() + item.getFailCount();
         int successRate = (int)((double)item.getSuccessCount() * 100 / (double)sum);

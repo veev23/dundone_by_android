@@ -3,19 +3,15 @@ package com.example.dundone.main;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
 import com.example.dundone.main.analysis.AnalysisFragment;
-import com.example.dundone.main.auction.AuctionFragment;
 import com.example.dundone.main.character.CharListFragment;
-import com.example.dundone.main.character.CharacterAddFragment;
 import com.example.dundone.main.entities.TabItem;
 import com.example.dundone.main.hell.HellRecommendFragment;
 import com.example.dundone.main.home.HomeFragment;
@@ -24,10 +20,7 @@ import com.example.dundone.onMainButtonClickListener;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.material.internal.ParcelableSparseArray;
 import com.google.android.material.tabs.TabLayout;
-
-import java.util.HashSet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,7 +73,7 @@ implements FragmentChange {
                         break;
                     case 2:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
-                        replaceFragment(new AnalysisFragment(), getString(R.string.analysys_fragment));
+                        replaceFragment(new AnalysisFragment(), getString(R.string.analysis_fragment));
                         break;
                     case 3:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));

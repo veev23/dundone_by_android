@@ -253,7 +253,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         Toast.makeText(mContext, charSearchList.get(p).getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
         charSearchList.remove(p);
         searchAdapter.notifyItemRemoved(p);
-        //TODO: 다른 화면에서 온 경우는 막아야함. + 다른 화면에서는 못오게 막아야함.
         if (fragment == null | !(fragment instanceof CharListFragment)) return;
         CharListFragment clf = (CharListFragment) fragment;
         clf.add(charSearchList.get(p));

@@ -80,8 +80,8 @@ public class CharLookupUpgradeFragment extends Fragment {
             @Override
             public Fragment createFragment(int position) {
                 Bundle bundle =new Bundle(2);
-                bundle.putInt("successCount", 0);
-                bundle.putInt("failCount", 1);
+                bundle.putInt("successCount", 1);
+                bundle.putInt("failCount", 3);
                 switch (position){
                     case 0:
                         break;

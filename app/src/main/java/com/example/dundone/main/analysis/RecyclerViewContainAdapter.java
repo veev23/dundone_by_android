@@ -4,9 +4,8 @@ import android.content.Context;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.example.dundone.data.etc.RainforceData;
+import com.example.dundone.data.etc.ReinforceData;
 
 import java.util.ArrayList;
 
@@ -18,10 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerViewContainAdapter.ViewHolder> {
     private Context mContext;
     //Pair<Tab name, Rainforce list>
-    private ArrayList<Pair<String, ArrayList<RainforceData>>> mList;
+    private ArrayList<Pair<String, ArrayList<ReinforceData>>> mList;
     private FragmentManager fm;
 
-    public RecyclerViewContainAdapter(Context mContext, ArrayList<Pair<String, ArrayList<RainforceData>>> mList, FragmentManager fm) {
+    public RecyclerViewContainAdapter(Context mContext, ArrayList<Pair<String, ArrayList<ReinforceData>>> mList, FragmentManager fm) {
         this.mContext = mContext;
         this.mList = mList;
         this.fm = fm;
@@ -32,10 +31,7 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
         private RainforceGraphAdapter adapter;
         ViewHolder(@NonNull View v){
             super(v);
-            int pos = getAdapterPosition();
             rvList = (RecyclerView)v;
-            rvList.setLayoutManager(new LinearLayoutManager(mContext));
-            adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second,fm);
         }
     }
     @NonNull
@@ -49,8 +45,12 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+    public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
+        if(holder.adapter == null) {
+            holder.rvList.setLayoutManager(new LinearLayoutManager(mContext));
+            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm);
+            holder.rvList.setAdapter(holder.adapter);
+        }
     }
 
     @Override

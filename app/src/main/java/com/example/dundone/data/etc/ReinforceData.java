@@ -1,6 +1,6 @@
 package com.example.dundone.data.etc;
 
-public class RainforceData {
+public class ReinforceData {
     private int level;
     private int successCount;
     private int failCount;
@@ -17,7 +17,7 @@ public class RainforceData {
         return failCount;
     }
 
-    public RainforceData(int level, int successCount, int failCount) {
+    public ReinforceData(int level, int successCount, int failCount) {
         this.level = level;
         this.successCount = successCount;
         this.failCount = failCount;

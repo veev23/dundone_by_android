@@ -9,6 +9,6 @@
     <stroke
         />
 
-    <corners android:radius="20dp" />
+    <corners android:radius="15dp" />
 
 </shape>

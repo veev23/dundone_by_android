@@ -87,6 +87,7 @@ public class CharLookupRaidRecordFragment extends Fragment {
     }
 
     private void initRecyclerView(){
+        mNameAndValueList = new ArrayList<>();
         rvRaidSumList.setLayoutManager(new LinearLayoutManager(mContext));
         rvRaidSumList.addItemDecoration(new CustomRecyclerDecoration(10));
         mResultAdapter = new PairAdapter<>(mContext,mNameAndValueList);

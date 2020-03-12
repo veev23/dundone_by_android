@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
+import com.example.dundone.main.analysis.AnalysisFragment;
 import com.example.dundone.main.auction.AuctionFragment;
 import com.example.dundone.main.character.CharListFragment;
 import com.example.dundone.main.character.CharacterAddFragment;
@@ -55,7 +56,7 @@ implements FragmentChange {
     private void tabSetting() {
         tiMainTabItem[0] = new TabItem(R.drawable.home_off, R.drawable.home_on, "홈");
         tiMainTabItem[1] = new TabItem(R.drawable.character_off2, R.drawable.character_on, "캐릭터");
-        tiMainTabItem[2] = new TabItem(R.drawable.market_off, R.drawable.market_on, "경매장");
+        tiMainTabItem[2] = new TabItem(R.drawable.market_off, R.drawable.market_on, "통계");
         tiMainTabItem[3] = new TabItem(R.drawable.hcr_off, R.drawable.hcr_on, "헬추첨");
         final boolean clicked[] = {true, false, false, false};
         for (int i = 0; i < MAIN_TAB_ITEM_SIZE; i++) {
@@ -79,7 +80,7 @@ implements FragmentChange {
                         break;
                     case 2:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
-                        replaceFragment(new AuctionFragment(), getString(R.string.char_auction_fragment));
+                        replaceFragment(new AnalysisFragment(), getString(R.string.analysys_fragment));
                         break;
                     case 3:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));

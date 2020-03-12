@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.example.dundone.R;
 import com.example.dundone.main.MainActivity;
@@ -13,16 +14,11 @@ import androidx.fragment.app.Fragment;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AnalysisFragment extends Fragment {
+public class AnalysysEpicFragment extends Fragment {
     private Context mContext;
-    @OnClick(R.id.epic_analysys)
-    void toAnalysysEpicFragment(){
-        ((MainActivity)getActivity()).addFragment(new AnalysysEpicFragment(), getString(R.string.analysys_epic_fragment));
-    }
-
-    @OnClick(R.id.rainforce_analysys)
-    void toAnalysysRainforceFragment(){
-        ((MainActivity)getActivity()).addFragment(new AnalysysRainforceFragment(), getString(R.string.analysys_rainforce_fragment));
+    @OnClick(R.id.back_button)
+    void back(){
+        ((MainActivity)getActivity()).backFragment();
     }
     private void init(){
 

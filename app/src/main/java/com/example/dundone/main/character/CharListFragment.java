@@ -25,7 +25,7 @@ import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.character.CharacterOtherData;
-import com.example.dundone.data.character.RaidData;
+import com.example.dundone.data.character.RaidRemainData;
 import com.example.dundone.data.character.ResCharStatus;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.ResponseCode;
@@ -159,7 +159,7 @@ public class CharListFragment extends Fragment
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
-                        RaidData rdData = response.body().getOthers();
+                        RaidRemainData rdData = response.body().getOthers();
                         rdData.initParsing();
                         charData.setOthers(rdData);
                         characterListAdapter.notifyItemChanged(i);
@@ -187,7 +187,7 @@ public class CharListFragment extends Fragment
             public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
-                        RaidData rdData = response.body().getOthers();
+                        RaidRemainData rdData = response.body().getOthers();
                         rdData.initParsing();
                         characterOtherDataList.add(new CharacterOtherData(charData, rdData));
                         characterListAdapter.notifyItemInserted(characterOtherDataList.size());

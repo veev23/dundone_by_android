@@ -12,9 +12,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
+import com.example.dundone.Singleton;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharacterOtherData;
+import com.example.dundone.data.character.ResRaidClearCounts;
 import com.example.dundone.main.MainActivity;
+import com.example.dundone.main.ResponseCode;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CharLookupRaidRecordFragment extends Fragment {
     private Context mContext;
@@ -47,7 +53,7 @@ public class CharLookupRaidRecordFragment extends Fragment {
     private TextView tvCharName;
     private TextView tvTitle;
     private ImageView ivCharImg;
-    private String charId;
+    private CharacterOtherData charData;
 
     @OnClick(R.id.back_button)
     void back() {
@@ -61,13 +67,13 @@ public class CharLookupRaidRecordFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            CharacterOtherData charData = (CharacterOtherData) bundle.getSerializable(getString(R.string.char_data));
+            charData = (CharacterOtherData) bundle.getSerializable(getString(R.string.char_data));
             tvCharName.setText(charData.getCharData().getCharName());
             tvTitle.setText("레이드 기록 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
-            charId = charData.getCharData().getCharId();
+            String charId = charData.getCharData().getCharId();
 
             if(charData.getOthers().isFiendTodayClear())
                 tvFiendToday.setVisibility(View.VISIBLE);
@@ -82,7 +88,31 @@ public class CharLookupRaidRecordFragment extends Fragment {
     }
 
     private void reqGetRaidRecords(){
+        if(charData == null) return;
+        String charId = charData.getCharData().getCharId();
+        String serverId = charData.getServerData().getServerId();
+        Call<ResRaidClearCounts> call= Singleton.dundoneService.getRaidClearCounts(serverId, charId);
+        call.enqueue(new Callback<ResRaidClearCounts>() {
+            @Override
+            public void onResponse(Call<ResRaidClearCounts> call, Response<ResRaidClearCounts> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                        for(ResRaidClearCounts.RaidData i : response.body().getResult()) {
+                            mNameAndValueList.add(new Pair<>(i.getRaidName(), i.getCnt()));
+                        }
+                    } else {
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResRaidClearCounts> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void initRecyclerView(){

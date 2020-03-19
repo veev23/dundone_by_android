@@ -3,15 +3,39 @@ package com.example.dundone.data.character;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ResCharStatus {
-    public ResCharStatus(RaidRemainData result, boolean isSuccess, int code, String message) {
+import java.util.ArrayList;
+
+public class ResRaidClearCounts {
+    public class RaidData{
+        @SerializedName("raidName")
+        @Expose
+        private String raidName;
+        @SerializedName("cnt")
+        @Expose
+        private int cnt;
+
+        public String getRaidName() {
+            return raidName;
+        }
+
+        public int getCnt() {
+            return cnt;
+        }
+
+        public RaidData(String raidName, int cnt) {
+            this.raidName = raidName;
+            this.cnt = cnt;
+        }
+    }
+
+    public ResRaidClearCounts(ArrayList<RaidData> result, boolean isSuccess, int code, String message) {
         this.result = result;
         this.isSuccess = isSuccess;
         this.code = code;
         this.message = message;
     }
 
-    public RaidRemainData getOthers() {
+    public ArrayList<RaidData> getResult() {
         return result;
     }
 
@@ -29,7 +53,7 @@ public class ResCharStatus {
 
     @SerializedName("result")
     @Expose
-    private RaidRemainData result;
+    private ArrayList<RaidData> result;
     @SerializedName("isSuccess")
     @Expose
     private boolean isSuccess;

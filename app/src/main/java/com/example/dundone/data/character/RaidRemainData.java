@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 
 //epicWeek
-public class RaidData {
+public class RaidRemainData {
     public static final int PREY_MAX = 2;
     public static final int FIEND_MAX = 2;
     public int getPreyRemain() {
@@ -33,8 +33,6 @@ public class RaidData {
         epics = "-1/-1";
     }
 
-    public RaidData(){
-    }
     public void initParsing(){
         if(freye!=null) {
             String[] freyes = freye.split("/");
@@ -54,7 +52,7 @@ public class RaidData {
         }
     }
 
-    public RaidData(String freye, String fienWar, String epics) {
+    public RaidRemainData(String freye, String fienWar, String epics) {
         this.freye = freye;
         this.fienWar = fienWar;
         this.epics = epics;

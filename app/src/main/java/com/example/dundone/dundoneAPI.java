@@ -2,6 +2,7 @@ package com.example.dundone;
 
 import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.character.ResCharStatus;
+import com.example.dundone.data.character.ResRaidClearCounts;
 import com.example.dundone.data.etc.ResRecommendHellCh;
 import com.example.dundone.data.item.ResGetEpicList;
 
@@ -26,4 +27,6 @@ public interface dundoneAPI {
     @GET("/character")
     Call<ResCharSearch> getCharSearchRes(@Query("serverId")String serverId, @Query("characterName")String charName);
 
+    @GET("/raid")
+    Call<ResRaidClearCounts> getRaidClearCounts(@Query("serverId")String serverId, @Query("characterId") String charId);
 }

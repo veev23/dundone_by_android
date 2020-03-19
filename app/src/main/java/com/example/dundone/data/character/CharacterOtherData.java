@@ -1,18 +1,17 @@
 package com.example.dundone.data.character;
 
-import com.example.dundone.data.server.ServerData;
 public class CharacterOtherData extends CharInfoData {
-    public CharacterOtherData(CharInfoData cbd, RaidData others){
+    public CharacterOtherData(CharInfoData cbd, RaidRemainData others){
         super(cbd);
         this.others =others;
     }
-    public RaidData getOthers() {
+    public RaidRemainData getOthers() {
         return others;
     }
 
-    public void setOthers(RaidData others) {
+    public void setOthers(RaidRemainData others) {
         this.others = others;
     }
 
-    private RaidData others;
+    private RaidRemainData others;
 }

@@ -17,9 +17,8 @@ import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.etc.ReinforceData;
 import com.example.dundone.data.etc.ResUpgradeCounts;
 import com.example.dundone.main.MainActivity;
-import com.example.dundone.main.NeopleAPI;
 import com.example.dundone.main.ResponseCode;
-import com.example.dundone.main.analysis.RecyclerViewContainAdapter;
+import com.example.dundone.main.analysis.UpgradeRVinRVAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,7 +50,7 @@ public class CharLookupUpgradeFragment extends Fragment {
     private ArrayList<ReinforceData>[] mReinforceList = new ArrayList[3];
     @BindView(R.id.viewpager)
     ViewPager2 vpList;
-    private RecyclerViewContainAdapter mViewpagerAdapter;
+    private UpgradeRVinRVAdapter mViewpagerAdapter;
     @BindView(R.id.tablayout)
     TabLayout tlTabLayout;
 
@@ -112,7 +110,7 @@ public class CharLookupUpgradeFragment extends Fragment {
 
     private void initViewPager(){
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        mViewpagerAdapter= new RecyclerViewContainAdapter(mContext, mTabList, fm);
+        mViewpagerAdapter= new UpgradeRVinRVAdapter(mContext, mTabList, fm);
         vpList.setAdapter(mViewpagerAdapter);
 
         new TabLayoutMediator(tlTabLayout, vpList, new TabLayoutMediator.TabConfigurationStrategy() {

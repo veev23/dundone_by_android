@@ -32,7 +32,7 @@ import retrofit2.Response;
 
 import static com.example.dundone.Singleton.dundoneService;
 
-public class CharLookupEpic extends Fragment {
+public class CharLookupEpicFragment extends Fragment {
 
     private Context mContext;
 

@@ -92,7 +92,7 @@ public class CharDetailFragment extends Fragment {
     }
     @OnClick(R.id.lookup_epic_button)
     void toCharLookupEpic(){
-        CharLookupEpic fragment = new CharLookupEpic();
+        CharLookupEpicFragment fragment = new CharLookupEpicFragment();
         callAddFragment(fragment, getString(R.string.char_lookup_epic_fragment));
     }
     @OnClick(R.id.lookup_upgrade_button)

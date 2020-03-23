@@ -46,7 +46,7 @@ public class PairAdapter<K,V> extends RecyclerView.Adapter<PairAdapter<K,V>.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         Pair<K,V> item = list.get(pos);
         holder.tvName.setText(String.valueOf(item.first));
-        holder.tvInfo.setText(String.valueOf(item.second));
+        holder.tvInfo.setText(mContext.getString(R.string.count, (Integer)item.second));
     }
 
     @Override

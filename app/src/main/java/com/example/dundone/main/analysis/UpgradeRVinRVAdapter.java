@@ -15,13 +15,13 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerViewContainAdapter.ViewHolder> {
+public class UpgradeRVinRVAdapter extends RecyclerView.Adapter<UpgradeRVinRVAdapter.ViewHolder> {
     private Context mContext;
     //Pair<Tab name, Rainforce list>
     private ArrayList<Pair<String, ArrayList<ReinforceData>>> mList;
     private FragmentManager fm;
 
-    public RecyclerViewContainAdapter(Context mContext, ArrayList<Pair<String, ArrayList<ReinforceData>>> mList, FragmentManager fm) {
+    public UpgradeRVinRVAdapter(Context mContext, ArrayList<Pair<String, ArrayList<ReinforceData>>> mList, FragmentManager fm) {
         this.mContext = mContext;
         this.mList = mList;
         this.fm = fm;
@@ -50,9 +50,8 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         if(holder.adapter == null) {
             holder.rvList.setLayoutManager(new LinearLayoutManager(mContext));
-            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm, mList.get(pos).first, holder.rvList);
+            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos), fm, holder.rvList);
             holder.rvList.setAdapter(holder.adapter);
-
         }
     }
 

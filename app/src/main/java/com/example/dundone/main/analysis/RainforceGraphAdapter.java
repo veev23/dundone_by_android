@@ -3,6 +3,7 @@ package com.example.dundone.main.analysis;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +33,11 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
     private int activeIdx = -1;
     private FrameLayout activeFL = null;
 
-    public RainforceGraphAdapter(Context mContext, ArrayList<ReinforceData> mList, FragmentManager fm, String type, RecyclerView bindedRV) {
+    public RainforceGraphAdapter(Context mContext,Pair<String, ArrayList<ReinforceData>> mList, FragmentManager fm, RecyclerView bindedRV) {
         this.mContext = mContext;
-        this.mList = mList;
+        this.mList = mList.second;
         this.fmManager = fm;
-        this.type = type;
+        this.type = mList.first;
         this.rvBinded = bindedRV;
     }
 

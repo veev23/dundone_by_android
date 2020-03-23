@@ -7,7 +7,6 @@
     android:background="@drawable/gradation_dark_to_light"
     android:clickable="true"
     android:focusable="true"
-    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <ScrollView
@@ -19,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:descendantFocusability="blocksDescendants"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -174,7 +174,6 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginTop="20dp"
-                        android:layout_marginBottom="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="레이드 누적 횟수"
@@ -182,7 +181,7 @@
                         android:textSize="28sp" />
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerview"
-                        android:layout_margin="8dp"
+                        android:layout_margin="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                     </androidx.recyclerview.widget.RecyclerView>

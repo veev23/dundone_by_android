@@ -59,5 +59,24 @@
                 android:layout_marginTop="6dp"
                 tools:text="서버" />
         </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/radius_grey_rect"
+            android:padding="10dp"
+            android:textColor="@color/colorButtonBackgorund"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.5%" />
     </LinearLayout>
 </LinearLayout>

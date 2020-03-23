@@ -37,7 +37,7 @@ public class AnalysysReinforceFragment extends Fragment {
     private ArrayList<ReinforceData>[] mReinforceList = new ArrayList[3];
     @BindView(R.id.viewpager)
     ViewPager2 vpList;
-    private RecyclerViewContainAdapter mViewpagerAdapter;
+    private UpgradeRVinRVAdapter mViewpagerAdapter;
     @BindView(R.id.tablayout)
     TabLayout tlTabLayout;
 
@@ -75,7 +75,7 @@ public class AnalysysReinforceFragment extends Fragment {
 
     private void initViewPager(){
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        mViewpagerAdapter= new RecyclerViewContainAdapter(mContext, mTabList, fm);
+        mViewpagerAdapter= new UpgradeRVinRVAdapter(mContext, mTabList, fm);
         vpList.setAdapter(mViewpagerAdapter);
 
         new TabLayoutMediator(tlTabLayout, vpList, new TabLayoutMediator.TabConfigurationStrategy() {

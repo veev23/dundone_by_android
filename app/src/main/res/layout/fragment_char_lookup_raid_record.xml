@@ -85,7 +85,7 @@
                             android:text="오늘 클리어!"
                             android:textColor="@color/colorListBackground"
                             android:textSize="8sp"
-                            android:visibility="invisible"
+                            android:visibility="gone"
                             tools:visibility="visible" />
 
                         <TextView
@@ -138,8 +138,8 @@
                             android:text="오늘 클리어!"
                             android:textColor="@color/colorListBackground"
                             android:textSize="8sp"
-                            android:visibility="invisible"
-                            tools:visibility="visible" />
+                            android:visibility="gone"
+                            tools:visibility="gone" />
 
                         <TextView
                             android:id="@+id/prey_remain"

@@ -9,12 +9,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +43,8 @@ import static com.example.dundone.Singleton.dundoneService;
 import static com.example.dundone.Singleton.gson;
 
 public class CharListFragment extends Fragment
-        implements AddToAdapterInterface<CharInfoData>, onMainButtonClickListener {
+        implements AddToAdapterInterface<CharInfoData>, onMainButtonClickListener,
+SwipeRefreshLayout.OnRefreshListener {
 
     private HashSet<CharInfoData> havedCharIds = new HashSet<>();
 
@@ -63,6 +66,8 @@ public class CharListFragment extends Fragment
     private ArrayList<CharacterOtherData> characterOtherDataList;
     private CharacterListAdapter characterListAdapter;
 
+    @BindView(R.id.swiperefreshlayout)
+    SwipeRefreshLayout srlRefresh;
 
     @BindView(R.id.recylerview_char_list)
     RecyclerView rvCharListView;
@@ -129,7 +134,7 @@ public class CharListFragment extends Fragment
 
     @Override
     public void onStop() {
-        prefCharDataSave(characterOtherDataList);
+       // prefCharDataSave(characterOtherDataList);
         super.onStop();
     }
 
@@ -139,6 +144,7 @@ public class CharListFragment extends Fragment
         pref = mContext.getSharedPreferences(PREF_CHAR_TYPE, Context.MODE_PRIVATE);
         editor = pref.edit();
         prefCharDataSearch();
+        srlRefresh.setOnRefreshListener(this);
 
         bindRecyclerView();
     }
@@ -169,11 +175,15 @@ public class CharListFragment extends Fragment
                 } else {
                     Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
                 }
+                refreshCount++;
+                if(refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<ResCharStatus> call, Throwable t) {
                 Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+                refreshCount++;
+                if(refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
             }
         });
 
@@ -226,14 +236,19 @@ public class CharListFragment extends Fragment
                 }).show();
     }
 
-    private void bindRecyclerView() {
-        rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
-        rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
-
+    private int refreshCount;
+    private void UpdateStatusList(){
+        refreshCount = 0;
         for (int i = 0; i < characterOtherDataList.size(); i++) {
             characterOtherDataList.get(i).getOthers().setNotYetLoaded();
             reqGetStatus(characterOtherDataList.get(i), i);
         }
+    }
+    private void bindRecyclerView() {
+        rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
+        rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
+
+        UpdateStatusList();
 
         characterListAdapter = new CharacterListAdapter(characterOtherDataList, mContext);
         rvCharListView.setAdapter(characterListAdapter);
@@ -255,6 +270,12 @@ public class CharListFragment extends Fragment
     @Override
     public void add(CharInfoData data) {
         reqGetStatus(data);
+    }
+
+    @Override
+    public void onRefresh() {
+        UpdateStatusList();
+        Log.d("리프레쉬", "실행");
     }
 
     @Override

@@ -3,7 +3,9 @@ package com.example.dundone.data.server;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ServerData {
+import java.io.Serializable;
+
+public class ServerData implements Serializable {
     @SerializedName("serverId")
     @Expose
     private String serverId;

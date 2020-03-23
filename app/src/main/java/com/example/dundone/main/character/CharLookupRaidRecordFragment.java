@@ -73,7 +73,6 @@ public class CharLookupRaidRecordFragment extends Fragment {
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
-            String charId = charData.getCharData().getCharId();
 
             if(charData.getOthers().isFiendTodayClear())
                 tvFiendToday.setVisibility(View.VISIBLE);

@@ -1,6 +1,10 @@
 package com.example.dundone.data.character;
 
-public class CharacterOtherData extends CharInfoData {
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class CharacterOtherData extends CharInfoData implements Serializable {
     public CharacterOtherData(CharInfoData cbd, RaidRemainData others){
         super(cbd);
         this.others =others;

@@ -5,9 +5,11 @@ import android.util.Log;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 
 //epicWeek
-public class RaidRemainData {
+public class RaidRemainData implements Serializable {
     public static final int PREY_MAX = 2;
     public static final int FIEND_MAX = 2;
     public int getPreyRemain() {

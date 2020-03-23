@@ -2,7 +2,9 @@ package com.example.dundone.data.character;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CharData {
+import java.io.Serializable;
+
+public class CharData implements Serializable {
     public String getCharName() {
         return charName;
     }

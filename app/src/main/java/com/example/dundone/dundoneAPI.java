@@ -3,6 +3,7 @@ package com.example.dundone;
 import com.example.dundone.data.character.ResCharSearch;
 import com.example.dundone.data.character.ResCharStatus;
 import com.example.dundone.data.character.ResRaidClearCounts;
+import com.example.dundone.data.etc.ResUpgradeCounts;
 import com.example.dundone.data.etc.ResRecommendHellCh;
 import com.example.dundone.data.item.ResGetEpicList;
 
@@ -17,7 +18,7 @@ public interface dundoneAPI {
 
     //1번 : 획득 에픽 리스트 반환
     @GET("/epics")
-    Call<ResGetEpicList> getEpicList(@Query("characterId")String charId);
+    Call<ResGetEpicList> getEpicList(@Query("serverId")String serverId, @Query("characterId")String charId);
 
     //2번 : 헬 채널 추천
     @GET("/hellch")
@@ -29,4 +30,26 @@ public interface dundoneAPI {
 
     @GET("/raid")
     Call<ResRaidClearCounts> getRaidClearCounts(@Query("serverId")String serverId, @Query("characterId") String charId);
+
+    /*
+    //캐릭터 강화 통계
+    @GET("/reinforce")
+    Call<ResUpgradeCounts> getUpgradeCounts(@Query("serverId")String serverId, @Query("characterId") String charId);
+
+    //총 강화 통계
+    @GET("/reinforce/{grade}")
+    Call<ResUpgradeCounts> getUpgradeCounts(@Path("grade") int grade);
+    */
+    //캐릭터 강화 통계
+    @GET("/reinforce/reinforcement")
+    Call<ResUpgradeCounts> getUpgradeCountsReinforce(@Query("serverId")String serverId, @Query("characterId") String charId);
+
+    //캐릭터 강화 통계
+    @GET("/reinforce/amplify")
+    Call<ResUpgradeCounts> getUpgradeCountsAmplify(@Query("serverId")String serverId, @Query("characterId") String charId);
+
+    //캐릭터 강화 통계
+    @GET("/reinforce/refine")
+    Call<ResUpgradeCounts> getUpgradeCountsRefine(@Query("serverId")String serverId, @Query("characterId") String charId);
+
 }

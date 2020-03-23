@@ -65,7 +65,6 @@ public class UpgradeRateFragment extends Fragment {
         int maxHeight = mSuccessBar.getHeight()-DpToPixel(mContext, 10);
         int height_success = (int) ((double) maxHeight * (double)successRate / 100.0)+DpToPixel(mContext, 10);
         int height_fail = (int) ((double) maxHeight * (double)failRate / 100.0)+DpToPixel(mContext, 10);
-        Log.d("height is ",  maxHeight + ", "+height_success + " , " + height_fail);
         TransitionManager.beginDelayedTransition(clLayout, new AutoTransition().setDuration(1000));
 
         targetSet.constrainHeight(R.id.success_bar, height_success);

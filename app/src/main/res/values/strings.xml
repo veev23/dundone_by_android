@@ -20,7 +20,7 @@
     <string name="hell_recommend_fragment">HellRecommendFragment</string>
     <string name="recommend_result_fragment">RecommendResultFragment</string>
     <string name="analysis_fragment">AnalysisFragment</string>
-    <string name="analysis_epic_fragment">AnalysisEpicFragment</string>
+    <string name="analysis_epics_fragment">AnalysisEpicFragment</string>
     <string name="analysis_reinforce_fragment">AnalysisReinforceFragment</string>
     <!--Admob -->
     <string name="home_fragment_ad_unit">ca-app-pub-3940256099942544/6300978111</string>

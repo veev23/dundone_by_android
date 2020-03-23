@@ -2,6 +2,7 @@ package com.example.dundone.main.character;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,26 +12,35 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.dundone.R;
+import com.example.dundone.Singleton;
 import com.example.dundone.data.character.CharInfoData;
+import com.example.dundone.data.etc.ReinforceData;
+import com.example.dundone.data.etc.ResUpgradeCounts;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.NeopleAPI;
+import com.example.dundone.main.ResponseCode;
+import com.example.dundone.main.analysis.RecyclerViewContainAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CharLookupUpgradeFragment extends Fragment {
 
     private Context mContext;
-
-    @BindView(R.id.iv_neople_openapi)
-    View ivToDevStie;
+    final private String[] tabTexts = {"강화", "증폭", "재련"};
 
     @BindView(R.id.char_menu)
     View vCharMenu;
@@ -38,18 +48,24 @@ public class CharLookupUpgradeFragment extends Fragment {
     private TextView tvTitle;
     private ImageView ivCharImg;
 
+    private ArrayList<Pair<String, ArrayList<ReinforceData>>> mTabList = new ArrayList<>();
+    private ArrayList<ReinforceData>[] mReinforceList = new ArrayList[3];
+    @BindView(R.id.viewpager)
+    ViewPager2 vpList;
+    private RecyclerViewContainAdapter mViewpagerAdapter;
     @BindView(R.id.tablayout)
     TabLayout tlTabLayout;
-    @BindView(R.id.viewpager)
-    ViewPager2 vpRateViewPager;
-    private FragmentStateAdapter mPagerAdapter;
+
     private final int mUpgradeCase = 3;
 
+    private CharInfoData charData;
+
     @OnClick(R.id.back_button)
-    void back(){
-        ((MainActivity)getActivity()).backFragment();
+    void back() {
+        ((MainActivity) getActivity()).backFragment();
     }
-    private void initCharStatus(){
+
+    private void initCharStatus() {
 
 
         tvCharName = vCharMenu.findViewById(R.id.tv_name);
@@ -57,76 +73,75 @@ public class CharLookupUpgradeFragment extends Fragment {
         ivCharImg = vCharMenu.findViewById(R.id.iv_descript_img);
 
         Bundle bundle = getArguments();
-        if(bundle !=null) {
-            CharInfoData charData = (CharInfoData) bundle.getSerializable(getString(R.string.char_data));
+        if (bundle != null) {
+            charData = (CharInfoData) bundle.getSerializable(getString(R.string.char_data));
             tvCharName.setText(charData.getCharData().getCharName());
             tvTitle.setText("강화 횟수 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
-        }
-        else{
+        } else {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void initViewPager(){
-        mPagerAdapter =new FragmentStateAdapter(getActivity()) {
-            @NonNull
+
+    private void reqGetUpgradeCounts(final int idx, final Call<ResUpgradeCounts> call, final ArrayList<ReinforceData> list){
+        call.enqueue(new Callback<ResUpgradeCounts>() {
             @Override
-            public Fragment createFragment(int position) {
-                Bundle bundle =new Bundle(2);
-                bundle.putInt("successCount", 1);
-                bundle.putInt("failCount", 3);
-                switch (position){
-                    case 0:
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    default:
-                        return null;
+            public void onResponse(Call<ResUpgradeCounts> call, Response<ResUpgradeCounts> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                        list.addAll(response.body().getmUpgradeCounts());
+                        mViewpagerAdapter.notifyDataSetChanged();
+
+                    } else {
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
                 }
-                UpgradeRateFragment fragment = new UpgradeRateFragment();
-                fragment.setArguments(bundle);
-                fragment.setArguments(bundle);
-                return fragment;
             }
 
             @Override
-            public int getItemCount() {
-                return mUpgradeCase;
-            }
-        };
-        vpRateViewPager.setAdapter(mPagerAdapter);
-        new TabLayoutMediator(tlTabLayout, vpRateViewPager, new TabLayoutMediator.TabConfigurationStrategy() {
-            @Override
-            public void onConfigureTab(@NonNull TabLayout.Tab tab, int position) {
-            }
-        }).attach();
-        String[] tabTexts = {"강화", "재련", "증폭"};
-        for(int i=0; i<mUpgradeCase; i++){
-            TabLayout.Tab tab = tlTabLayout.getTabAt(i);
-            if(tab ==null) break;
-            tab.setText(tabTexts[i]);
-        }
-    }
-    private void reqGetStatus(){
-
-        initViewPager();
-    }
-    private void init(){
-        initCharStatus();
-reqGetStatus();
-        ivToDevStie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NeopleAPI neopleAPI =new NeopleAPI(mContext);
-                neopleAPI.toNeopleDeveloperSite();
+            public void onFailure(Call<ResUpgradeCounts> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }
+
+    private void initViewPager(){
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        mViewpagerAdapter= new RecyclerViewContainAdapter(mContext, mTabList, fm);
+        vpList.setAdapter(mViewpagerAdapter);
+
+        new TabLayoutMediator(tlTabLayout, vpList, new TabLayoutMediator.TabConfigurationStrategy() {
+            @Override
+            public void onConfigureTab(@NonNull TabLayout.Tab tab, int pos) {
+                tab.setText(tabTexts[pos]);
+            }
+        }).attach();
+    }
+    private void initRequest(){
+        String charId = charData.getCharData().getCharId();
+        String serverId = charData.getServerData().getServerId();
+        Call<ResUpgradeCounts>[] call = new Call[tabTexts.length];
+        call[0] = Singleton.dundoneService.getUpgradeCountsReinforce(serverId, charId);
+        call[1] = Singleton.dundoneService.getUpgradeCountsAmplify(serverId, charId);
+        call[2] = Singleton.dundoneService.getUpgradeCountsRefine(serverId, charId);
+        for(int i=0; i<tabTexts.length; i++) {
+            mReinforceList[i] = new ArrayList<>();
+            Pair<String, ArrayList<ReinforceData>> dat = new Pair<>(tabTexts[i], mReinforceList[i]);
+            mTabList.add(dat);
+            reqGetUpgradeCounts(i, call[i], mTabList.get(i).second);
+        }
+    }
+    private void init() {
+        initCharStatus();
+        initRequest();
+        initViewPager();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

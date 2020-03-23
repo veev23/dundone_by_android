@@ -36,11 +36,14 @@
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
+
     <FrameLayout
-        tools:visibility="visible"
-        android:visibility="gone"
-        android:layout_margin="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp"
         android:id="@+id/fragment_graph"
         android:layout_width="match_parent"
-        android:layout_height="350dp"/>
+        android:layout_height="350dp"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </LinearLayout>

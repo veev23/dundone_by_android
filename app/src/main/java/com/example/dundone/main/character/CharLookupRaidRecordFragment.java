@@ -100,6 +100,7 @@ public class CharLookupRaidRecordFragment extends Fragment {
                         for(ResRaidClearCounts.RaidData i : response.body().getResult()) {
                             mNameAndValueList.add(new Pair<>(i.getRaidName(), i.getCnt()));
                         }
+                        mResultAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }

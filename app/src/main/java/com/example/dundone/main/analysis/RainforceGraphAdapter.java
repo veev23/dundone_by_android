@@ -2,6 +2,7 @@ package com.example.dundone.main.analysis;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,61 +23,71 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAdapter.ViewHolder> {
 
-        private FragmentManager fmManager;
+    private FragmentManager fmManager;
     private Context mContext;
     private ArrayList<ReinforceData> mList;
     private String type;
+    private RecyclerView rvBinded;
+    private ArrayList<Integer> mViewIds = new ArrayList<>();
+    private int activeIdx = -1;
+    private FrameLayout activeFL = null;
 
-    public RainforceGraphAdapter(Context mContext, ArrayList<ReinforceData> mList, FragmentManager fm, String type) {
+    public RainforceGraphAdapter(Context mContext, ArrayList<ReinforceData> mList, FragmentManager fm, String type, RecyclerView bindedRV) {
         this.mContext = mContext;
         this.mList = mList;
         this.fmManager = fm;
         this.type = type;
+        this.rvBinded = bindedRV;
     }
-    class ViewHolder extends RecyclerView.ViewHolder{
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvLevel;
         private TextView tvPercent;
         private FrameLayout flGrapeFragment;
-        private boolean isVisible;
-        private boolean isFragmentCreated;
-        ViewHolder(@NonNull View v){
+
+        private void showGraph(ReinforceData reinforceData) {
+            FragmentTransaction transaction = fmManager.beginTransaction();
+            UpgradeRateFragment fragment = new UpgradeRateFragment();
+            Bundle bundle = new Bundle(2);
+            bundle.putInt("successCount", reinforceData.getSuccess());
+            bundle.putInt("failCount", reinforceData.getFail());
+            fragment.setArguments(bundle);
+            transaction.replace(flGrapeFragment.getId(), fragment);
+            transaction.commit();
+        }
+
+        ViewHolder(@NonNull View v) {
             super(v);
-            isVisible = false;
-            isFragmentCreated = false;
             tvLevel = v.findViewById(R.id.rainforce_level);
             tvPercent = v.findViewById(R.id.rainforce_percent);
             flGrapeFragment = v.findViewById(R.id.fragment_graph);
+
+            int newId = View.generateViewId();
+            flGrapeFragment.setId(newId);// Set container id
             v.findViewById(R.id.rainforce_mini).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!isVisible) {
-                        isVisible = true;
-                        flGrapeFragment.setVisibility(View.VISIBLE);
-                    }
-                    else{
-                        isVisible = false;
-                        flGrapeFragment.setVisibility(View.GONE);
-                    }
-                    if(!isFragmentCreated){
-                        isFragmentCreated=true;
+                    int pos = getAdapterPosition();
+                    if (pos == RecyclerView.NO_POSITION) return;
+                    if(activeFL !=null) {
+                        activeFL.setVisibility(View.GONE);
                         // Delete old fragment
-                        int containerId = flGrapeFragment.getId();// Get container id
-                        Fragment oldFragment = fmManager.findFragmentById(containerId);
-                        if(oldFragment != null) {
+                        /*Fragment oldFragment = fmManager.findFragmentById(activeFL.getId());
+                        if (oldFragment != null) {
                             fmManager.beginTransaction().remove(oldFragment).commit();
                         }
-                        int newContainerId = View.generateViewId();// My method
-                        flGrapeFragment.setId(newContainerId);// Set container id
-
-                        int pos = getAdapterPosition();
-                        FragmentTransaction transaction = fmManager.beginTransaction();
-                        UpgradeRateFragment fragment = new UpgradeRateFragment();
-                        Bundle bundle=new Bundle(2);
-                        bundle.putInt("successCount", mList.get(pos).getSuccessCount());
-                        bundle.putInt("failCount", mList.get(pos).getFailCount());
-                        fragment.setArguments(bundle);
-                        transaction.replace(flGrapeFragment.getId(), fragment);
-                        transaction.commit();
+                        */
+                    }
+                    if (activeIdx != pos) {
+                        flGrapeFragment.setVisibility(View.VISIBLE);
+                        activeIdx = pos;
+                        activeFL = flGrapeFragment;
+                        showGraph(mList.get(pos));
+                        rvBinded.smoothScrollToPosition(pos);
+                    } else {
+                        activeIdx = -1;
+                        activeFL = null;
+                        flGrapeFragment.setVisibility(View.GONE);
                     }
                 }
             });
@@ -89,17 +100,22 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View view = inflater.inflate(R.layout.item_graph, parent, false) ;
+        View view = inflater.inflate(R.layout.item_graph, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
+        if (activeIdx == pos) {
+            holder.flGrapeFragment.setVisibility(View.VISIBLE);
+        } else {
+            holder.flGrapeFragment.setVisibility(View.GONE);
+        }
         ReinforceData item = mList.get(pos);
-        holder.tvLevel.setText(item.getLevel()+type);
-        int sum = item.getSuccessCount() + item.getFailCount();
-        int successRate = (int)((double)item.getSuccessCount() * 100 / (double)sum);
+        holder.tvLevel.setText(item.getLevel() + type);
+        int sum = item.getSuccess() + item.getFail();
+        int successRate = (int) ((double) item.getSuccess() * 100 / (double) sum);
         holder.tvPercent.setText(mContext.getString(R.string.percents, successRate));
     }
 

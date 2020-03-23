@@ -50,8 +50,9 @@ public class RecyclerViewContainAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
         if(holder.adapter == null) {
             holder.rvList.setLayoutManager(new LinearLayoutManager(mContext));
-            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm, mList.get(pos).first);
+            holder.adapter = new RainforceGraphAdapter(mContext, mList.get(pos).second, fm, mList.get(pos).first, holder.rvList);
             holder.rvList.setAdapter(holder.adapter);
+
         }
     }
 

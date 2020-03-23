@@ -125,7 +125,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         etCharSearch.clearFocus();
         String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
-        Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색", Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색합니다.", Toast.LENGTH_LONG).show();
         Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
         resCharSearchCall.enqueue(new Callback<ResCharSearch>() {
             @Override
@@ -222,7 +222,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                     c = 0;
                 }
             }
-            tvServer[i] = (TextView) inflater.inflate(R.layout.item_server_button, null, false);
+            tvServer[i] = (TextView) inflater.inflate(R.layout.item_select_button, null, false);
             tvServer[i].setText(servers.get(i).getServerName());
             GridLayout.LayoutParams param = new GridLayout.LayoutParams();
             param.width = DpToPixel(mContext, 72);
@@ -256,8 +256,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
             return;
         }
         CharListFragment clf = (CharListFragment) fragment;
-        Toast.makeText(mContext, charSearchList.get(p).getCharData().getCharName() + " 추가!", Toast.LENGTH_SHORT).show();
         clf.add(charSearchList.get(p));
+        havedCharIds.add(charSearchList.get(p).getCharData().getCharId());
         charSearchList.remove(p);
     }
     private void charAddConfirmDialog(final int p){

@@ -51,6 +51,7 @@ public class CharLookupEpic extends Fragment {
     private TextView tvTitle;
     private ImageView ivCharImg;
     private String charId;
+    private String serverId;
     @OnClick(R.id.back_button)
     void back() {
         ((MainActivity) getActivity()).backFragment();
@@ -70,6 +71,7 @@ public class CharLookupEpic extends Fragment {
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
             charId = charData.getCharData().getCharId();
+            serverId = charData.getServerData().getServerId();
         } else {
             Toast.makeText(mContext, "화면 전환중에 무언가 잘못되었습니다.", Toast.LENGTH_SHORT).show();
         }
@@ -102,7 +104,7 @@ public class CharLookupEpic extends Fragment {
     private void reqGetEpicList(boolean recently) {
         tvNoResult.setText("Loading..");
         tvNoResult.setVisibility(View.VISIBLE);
-        Call<ResGetEpicList> epicListCall = dundoneService.getEpicList(charId);
+        Call<ResGetEpicList> epicListCall = dundoneService.getEpicList(serverId,charId);
         epicListCall.enqueue(new Callback<ResGetEpicList>() {
             @Override
             public void onResponse(Call<ResGetEpicList> call, Response<ResGetEpicList> response) {

@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dundone.R;
+import com.example.dundone.data.etc.ResDungeonList;
 import com.example.dundone.data.item.EpicCountData;
-import com.example.dundone.data.item.EpicData;
 import com.example.dundone.main.MainActivity;
+import com.example.dundone.main.ResponseCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,8 +24,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.dundone.Singleton.DpToPixel;
+import static com.example.dundone.Singleton.dundoneService;
 
 public class AnalysisEpicsFragment extends Fragment {
     private Context mContext;
@@ -36,12 +42,12 @@ public class AnalysisEpicsFragment extends Fragment {
     LinearLayout llDungeonLayout;
     @BindView(R.id.viewpager)
     ViewPager2 vpEpicViewPager;
-    private ArrayList<ArrayList<EpicCountData>> mTabDataList = new ArrayList<>();
-    private ArrayList<EpicCountData>[] mDataList;
+    private ArrayList<ArrayList<EpicCountData>> mDataList;
     private EpicsRVinRVAdapter mAdapter;
 
     private int mSelectedDungeon = 0;
     private TextView[] tvDungeons;
+    private ArrayList<ResDungeonList.DungeonEpic> mDungeonEpics;
 
     private void dungeonTabOnClick(final int pos) {
         vpEpicViewPager.setCurrentItem(pos);
@@ -52,10 +58,10 @@ public class AnalysisEpicsFragment extends Fragment {
         mSelectedDungeon = pos;
     }
     private void initLayout() {
-        tvDungeons = new TextView[5];
-        for(int pos=0; pos<5;pos++) {
+        tvDungeons = new TextView[mDungeonEpics.size()];
+        for(int pos = 0; pos< mDungeonEpics.size(); pos++) {
             tvDungeons[pos] = (TextView) LayoutInflater.from(mContext).inflate(R.layout.item_select_button, llDungeonLayout, false);
-            tvDungeons[pos].setText(pos + "");
+            tvDungeons[pos].setText(mDungeonEpics.get(pos).getDungeonName());
             LinearLayout.LayoutParams param =
                     new LinearLayout.LayoutParams(DpToPixel(mContext, 180), DpToPixel(mContext, 36));
             param.leftMargin = DpToPixel(mContext, 8);
@@ -76,17 +82,7 @@ public class AnalysisEpicsFragment extends Fragment {
         initViewPager();
     }
     private void initViewPager(){
-        int dungeonSize = 2;
-        mDataList= new ArrayList[dungeonSize];
-        mDataList[0] = new ArrayList<>();
-        mDataList[1] = new ArrayList<>();
-        for(int i=0; i<10; i++) {
-            mDataList[0].add(new EpicCountData("다크플레임리퍼", "e48cb4d290e09622cb4434637b8b80b6", i));
-            mDataList[1].add(new EpicCountData("asd", "e48cb4d290e09622cb4434637b8b80b6", 1));
-        }
-        mTabDataList.addAll(Arrays.asList(mDataList).subList(0, dungeonSize));
-
-        mAdapter = new EpicsRVinRVAdapter(mContext, mTabDataList);
+        mAdapter = new EpicsRVinRVAdapter(mContext, mDungeonEpics);
         vpEpicViewPager.setAdapter(mAdapter);
 
         vpEpicViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -97,8 +93,37 @@ public class AnalysisEpicsFragment extends Fragment {
             }
         });
     }
+
+    private void reqGetDungeons(){
+        Call<ResDungeonList> call = dundoneService.getDungeonEpics();
+        call.enqueue(new Callback<ResDungeonList>() {
+            @Override
+            public void onResponse(Call<ResDungeonList> call, Response<ResDungeonList> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                        mDungeonEpics = response.body().getDungeonEpicList();
+                        if(mDungeonEpics == null) {
+                            Toast.makeText(mContext, getString(R.string.contact_to_dev), Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            initLayout();
+                        }
+                    } else {
+                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResDungeonList> call, Throwable t) {
+                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
     private void init(){
-        initLayout();
+        reqGetDungeons();
     }
 
 

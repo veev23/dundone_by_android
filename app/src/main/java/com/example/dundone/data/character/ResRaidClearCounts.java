@@ -1,11 +1,12 @@
 package com.example.dundone.data.character;
 
+import com.example.dundone.data.BaseDundoneResponse;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class ResRaidClearCounts {
+public class ResRaidClearCounts extends BaseDundoneResponse {
     public class RaidData{
         @SerializedName("raidName")
         @Expose
@@ -28,39 +29,16 @@ public class ResRaidClearCounts {
         }
     }
 
-    public ResRaidClearCounts(ArrayList<RaidData> result, boolean isSuccess, int code, String message) {
+    public ResRaidClearCounts(boolean isSuccess, int code, String message, ArrayList<RaidData> result) {
+        super(isSuccess, code, message);
         this.result = result;
-        this.isSuccess = isSuccess;
-        this.code = code;
-        this.message = message;
     }
 
     public ArrayList<RaidData> getResult() {
         return result;
     }
 
-    public boolean isSuccess() {
-        return isSuccess;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     @SerializedName("result")
     @Expose
     private ArrayList<RaidData> result;
-    @SerializedName("isSuccess")
-    @Expose
-    private boolean isSuccess;
-    @SerializedName("code")
-    @Expose
-    private int code;
-    @SerializedName("message")
-    @Expose
-    private String message;
 }

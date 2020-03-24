@@ -2,7 +2,6 @@ package com.example.dundone.main.analysis;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import com.example.dundone.main.character.UpgradeRateFragment;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,17 +26,24 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
     private Context mContext;
     private ArrayList<ReinforceData> mList;
     private String type;
-    private RecyclerView rvBinded;
-    private ArrayList<Integer> mViewIds = new ArrayList<>();
     private int activeIdx = -1;
     private FrameLayout activeFL = null;
 
-    public RainforceGraphAdapter(Context mContext,Pair<String, ArrayList<ReinforceData>> mList, FragmentManager fm, RecyclerView bindedRV) {
+    private OnItemActiveListener mListener;
+    public interface OnItemActiveListener {
+        void onItemActiveListener(View v, int p);
+    }
+
+    public void setOnItemActiveListener(OnItemActiveListener listener) {
+        this.mListener = listener;
+    }
+
+
+    public RainforceGraphAdapter(Context mContext,Pair<String, ArrayList<ReinforceData>> mList, FragmentManager fm) {
         this.mContext = mContext;
         this.mList = mList.second;
         this.fmManager = fm;
         this.type = mList.first;
-        this.rvBinded = bindedRV;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -84,7 +89,9 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
                         activeIdx = pos;
                         activeFL = flGrapeFragment;
                         showGraph(mList.get(pos));
-                        rvBinded.smoothScrollToPosition(pos);
+                        if(mListener !=null) {
+                            mListener.onItemActiveListener(v, pos);
+                        }
                     } else {
                         activeIdx = -1;
                         activeFL = null;
@@ -122,6 +129,6 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
 
     @Override
     public int getItemCount() {
-        return mList.size();
+        return mList==null?0:mList.size();
     }
 }

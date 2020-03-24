@@ -31,6 +31,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.dundone.main.ResponseCode.SUCCESS;
+import static com.example.dundone.main.ResponseCode.SUCCESS_PATCH;
+
 public class CharLookupRaidRecordFragment extends Fragment {
     private Context mContext;
 
@@ -95,7 +98,8 @@ public class CharLookupRaidRecordFragment extends Fragment {
             @Override
             public void onResponse(Call<ResRaidClearCounts> call, Response<ResRaidClearCounts> response) {
                 if (response.isSuccessful()) {
-                    if (response.body().getCode() == ResponseCode.SUCCESS) {
+                    int code = response.body().getCode();
+                    if (code ==SUCCESS || code == SUCCESS_PATCH) {
                         for(ResRaidClearCounts.RaidData i : response.body().getResult()) {
                             mNameAndValueList.add(new Pair<>(i.getRaidName(), i.getCnt()));
                         }

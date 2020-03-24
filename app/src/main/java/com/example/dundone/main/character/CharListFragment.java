@@ -16,7 +16,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import android.widget.Toast;
 import com.example.dundone.AddToAdapterInterface;
 import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
+import com.example.dundone.data.BaseDundoneResponse;
 import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.character.CharacterOtherData;
 import com.example.dundone.data.character.RaidRemainData;
@@ -146,7 +146,7 @@ SwipeRefreshLayout.OnRefreshListener {
         prefCharDataSearch();
         srlRefresh.setOnRefreshListener(this);
 
-        bindRecyclerView();
+        initRecyclerView();
     }
 
     private void toCharacterDetailFragment(CharacterOtherData charData) {
@@ -201,7 +201,6 @@ SwipeRefreshLayout.OnRefreshListener {
                         rdData.initParsing();
                         characterOtherDataList.add(new CharacterOtherData(charData, rdData));
                         characterListAdapter.notifyItemInserted(characterOtherDataList.size());
-                        Toast.makeText(mContext, charData.getCharData().getCharName(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -244,7 +243,7 @@ SwipeRefreshLayout.OnRefreshListener {
             reqGetStatus(characterOtherDataList.get(i), i);
         }
     }
-    private void bindRecyclerView() {
+    private void initRecyclerView() {
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
 
@@ -267,15 +266,32 @@ SwipeRefreshLayout.OnRefreshListener {
         });
     }
 
+    public void reqCharStatusUpdate(CharInfoData data){
+        String serverId=data.getServerData().getServerId();
+        String charId=data.getCharData().getCharId();
+        Call<BaseDundoneResponse> call = dundoneService.Update(serverId, charId);
+        call.enqueue(new Callback<BaseDundoneResponse>() {
+            @Override
+            public void onResponse(Call<BaseDundoneResponse> call, Response<BaseDundoneResponse> response) {
+                reqGetStatus(data);
+            }
+
+            @Override
+            public void onFailure(Call<BaseDundoneResponse> call, Throwable t) {
+
+                reqGetStatus(data);
+            }
+        });
+    }
+
     @Override
     public void add(CharInfoData data) {
-        reqGetStatus(data);
+        reqCharStatusUpdate(data);
     }
 
     @Override
     public void onRefresh() {
         UpdateStatusList();
-        Log.d("리프레쉬", "실행");
     }
 
     @Override

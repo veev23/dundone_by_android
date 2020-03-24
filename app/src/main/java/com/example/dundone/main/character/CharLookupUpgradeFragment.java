@@ -124,9 +124,9 @@ public class CharLookupUpgradeFragment extends Fragment {
         String charId = charData.getCharData().getCharId();
         String serverId = charData.getServerData().getServerId();
         Call<ResUpgradeCounts>[] call = new Call[tabTexts.length];
-        call[0] = Singleton.dundoneService.getUpgradeCountsReinforce(serverId, charId);
-        call[1] = Singleton.dundoneService.getUpgradeCountsAmplify(serverId, charId);
-        call[2] = Singleton.dundoneService.getUpgradeCountsRefine(serverId, charId);
+        call[0] = Singleton.dundoneService.getUpgradeCountsReinforce(serverId, charId, 12, 20);
+        call[1] = Singleton.dundoneService.getUpgradeCountsAmplify(serverId, charId, 12, 20);
+        call[2] = Singleton.dundoneService.getUpgradeCountsRefine(serverId, charId, 6, 8);
         for(int i=0; i<tabTexts.length; i++) {
             mReinforceList[i] = new ArrayList<>();
             Pair<String, ArrayList<ReinforceData>> dat = new Pair<>(tabTexts[i], mReinforceList[i]);

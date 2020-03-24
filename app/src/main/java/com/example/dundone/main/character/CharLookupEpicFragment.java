@@ -14,7 +14,7 @@ import com.example.dundone.R;
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.character.CharInfoData;
 import com.example.dundone.data.item.EpicData;
-import com.example.dundone.data.item.ResGetEpicList;
+import com.example.dundone.data.item.ResGetCharEpicList;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.ResponseCode;
 
@@ -104,10 +104,10 @@ public class CharLookupEpicFragment extends Fragment {
     private void reqGetEpicList(boolean recently) {
         tvNoResult.setText("Loading..");
         tvNoResult.setVisibility(View.VISIBLE);
-        Call<ResGetEpicList> epicListCall = dundoneService.getEpicList(serverId,charId);
-        epicListCall.enqueue(new Callback<ResGetEpicList>() {
+        Call<ResGetCharEpicList> epicListCall = dundoneService.getEpicList(serverId,charId);
+        epicListCall.enqueue(new Callback<ResGetCharEpicList>() {
             @Override
-            public void onResponse(Call<ResGetEpicList> call, Response<ResGetEpicList> response) {
+            public void onResponse(Call<ResGetCharEpicList> call, Response<ResGetCharEpicList> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                         mEpicList.addAll(response.body().getItemList());
@@ -126,7 +126,7 @@ public class CharLookupEpicFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ResGetEpicList> call, Throwable t) {
+            public void onFailure(Call<ResGetCharEpicList> call, Throwable t) {
                 Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });

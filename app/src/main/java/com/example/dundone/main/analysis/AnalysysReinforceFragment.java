@@ -87,9 +87,9 @@ public class AnalysysReinforceFragment extends Fragment {
     }
     private void initRequest(){
         Call<ResUpgradeCounts>[] call = new Call[tabTexts.length];
-        call[0] = Singleton.dundoneService.getUpgradeCountsReinforce(null, null);
-        call[1] = Singleton.dundoneService.getUpgradeCountsAmplify(null, null);
-        call[2] = Singleton.dundoneService.getUpgradeCountsRefine(null, null);
+        call[0] = Singleton.dundoneService.getUpgradeCountsReinforce(null, null, 12, 20);
+        call[1] = Singleton.dundoneService.getUpgradeCountsAmplify(null, null, 12, 20);
+        call[2] = Singleton.dundoneService.getUpgradeCountsRefine(null, null, 6, 8);
         for(int i=0; i<tabTexts.length; i++) {
             mReinforceList[i] = new ArrayList<>();
             Pair<String, ArrayList<ReinforceData>> dat = new Pair<>(tabTexts[i], mReinforceList[i]);

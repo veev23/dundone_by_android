@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +51,10 @@ public class AnalysisEpicsFragment extends Fragment {
     private TextView[] tvDungeons;
     private ArrayList<ResDungeonList.DungeonEpic> mDungeonEpics;
 
+    @BindView(R.id.scrollView)
+    HorizontalScrollView svScrollView;
     private void dungeonTabOnClick(final int pos) {
+        svScrollView.scrollTo(tvDungeons[pos].getLeft(),0);
         vpEpicViewPager.setCurrentItem(pos);
         tvDungeons[mSelectedDungeon].setTextColor(ContextCompat.getColor(mContext, R.color.colorLittleRed));
         tvDungeons[mSelectedDungeon].setBackgroundResource(R.drawable.radius_empty_little_red_rect);

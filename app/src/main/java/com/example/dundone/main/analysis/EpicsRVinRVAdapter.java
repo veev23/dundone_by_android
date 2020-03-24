@@ -24,9 +24,8 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
         this.mContext = mContext;
         this.mDungeonList = dungeonEpics;
         mAdapterList = new ArrayList<>();
-        for (int pos = 0; pos < mDungeonList.size(); pos++) {
+        for(int pos = 0; pos < mDungeonList.size(); pos++)
             mAdapterList.add(new EpicPercentListAdapter(mContext, mDungeonList.get(pos)));
-        }
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +42,11 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
                     if (rvList.canScrollVertically(-1)) {
                         int pos = getAdapterPosition();
                         if (pos == RecyclerView.NO_POSITION) return;
-                        mAdapterList.get(pos).reqGetDropEpics(null);
+                        EpicPercentListAdapter adapter = mAdapterList.get(pos);
+                        if(adapter == null){
+                            adapter = new EpicPercentListAdapter(mContext, mDungeonList.get(pos));
+                        }
+                        adapter.reqGetDropEpics(null);
                     }
                 }
             });

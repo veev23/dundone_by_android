@@ -125,7 +125,6 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         etCharSearch.clearFocus();
         String serverId = servers.get(selectedServer).getServerId();
         String charName = etCharSearch.getText().toString();
-        Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색합니다.", Toast.LENGTH_LONG).show();
         Call<ResCharSearch> resCharSearchCall = Singleton.dundoneService.getCharSearchRes(serverId, charName);
         resCharSearchCall.enqueue(new Callback<ResCharSearch>() {
             @Override
@@ -138,6 +137,9 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                         searchAdapter.notifyDataSetChanged();
                         if (charSearchList.isEmpty()) {
                             Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색 결과입니다.", Toast.LENGTH_LONG).show();
                         }
                         updateSearchViewAfter();
                     } else {

@@ -35,8 +35,10 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     private int sum;
     private String dungeonName;
     private boolean isUpdating = false;
+    //서버의 데이터를 다 불러온 경우
+    private boolean isNoUpdate = false;
     private int nowPage = 1;
-    private String mItemName;
+    private static String mItemName;
     private static final int limit = 10;
 
     public interface OnItemClickListener {
@@ -47,24 +49,34 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         this.mListener = listener;
     }
 
-    private void loadingStart(){
+    public static String getItemSearchName(){
+        return mItemName;
+    }
+    private boolean loadingStart() {
+        if(isNoUpdate) return false;
         isUpdating = true;
         mItemList.add(null);
-        notifyItemInserted(mItemList.size()-1);
+        notifyItemInserted(mItemList.size() - 1);
+        return true;
     }
-    private void loadingEnd(){
+
+    private void loadingEnd() {
         isUpdating = false;
-        mItemList.remove(mItemList.size()-1);
+        mItemList.remove(mItemList.size() - 1);
         notifyItemRemoved(mItemList.size());
     }
-    public void reqGetDropEpics(String itemName) {
+
+    public void itemAllClear(){
+        mItemList.clear();
+        isNoUpdate =false;
+    }
+
+    public void reqGetDropEpics(final String itemName) {
         if (isUpdating) return;
-        Log.d("request", dungeonName+"에서");
-        loadingStart();
-        if (itemName != null) {
+        if(!loadingStart()) return;
+        if (itemName != null && !itemName.equals(mItemName)) {
             mItemName = itemName;
             nowPage = 1;
-            mItemList.clear();
         }
         Call<ResGetEpicDropList> call = dundoneService.getEpicDropList(nowPage, limit, dungeonName, mItemName);
         call.enqueue(new Callback<ResGetEpicDropList>() {
@@ -76,6 +88,9 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         ArrayList<EpicCountData> data = response.body().getItemList();
                         mItemList.addAll(data);
                         notifyItemRangeInserted(mItemList.size() - data.size(), mItemList.size());
+                        if(data.size() < limit){
+                            isNoUpdate = true;
+                        }
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -92,8 +107,10 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         });
         nowPage++;
     }
+
     private final static int VIEW_TYPE_LOADING = 1;
     private final static int VIEW_TYPE_ITEM = 0;
+
     @Override
     public int getItemViewType(int position) { //null값인 경우 로딩타입
         return mItemList.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
@@ -104,7 +121,6 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mItemList = new ArrayList<>();
         this.sum = dungeonepic.getCnt();
         dungeonName = dungeonepic.getDungeonName();
-        reqGetDropEpics(null);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -135,9 +151,11 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
     }
-    class ProgressViewHolder extends RecyclerView.ViewHolder{
+
+    class ProgressViewHolder extends RecyclerView.ViewHolder {
         private ProgressBar pbBar;
-        ProgressViewHolder(@NonNull View v){
+
+        ProgressViewHolder(@NonNull View v) {
             super(v);
             pbBar = v.findViewById(R.id.progressbar);
         }
@@ -147,11 +165,10 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        if(viewType == VIEW_TYPE_ITEM) {
+        if (viewType == VIEW_TYPE_ITEM) {
             View view = inflater.inflate(R.layout.item_count_info, parent, false);
             return new ViewHolder(view);
-        }
-        else if(viewType == VIEW_TYPE_LOADING){
+        } else if (viewType == VIEW_TYPE_LOADING) {
             View view = inflater.inflate(R.layout.item_progressbar, parent, false);
             return new ProgressViewHolder(view);
         }
@@ -160,7 +177,7 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        if(viewHolder instanceof ViewHolder) {
+        if (viewHolder instanceof ViewHolder) {
             ViewHolder holder = (ViewHolder) viewHolder;
             EpicCountData item = mItemList.get(position);
             holder.tvName.setText(item.getName());
@@ -172,8 +189,7 @@ public class EpicPercentListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     .load(url)
                     .centerCrop()
                     .into(holder.ivImage);
-        }
-        else if(viewHolder instanceof ProgressViewHolder){
+        } else if (viewHolder instanceof ProgressViewHolder) {
             ProgressViewHolder holder = (ProgressViewHolder) viewHolder;
             holder.pbBar.setIndeterminate(true);
         }

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.example.dundone.common_class.CustomRecyclerDecoration;
 import com.example.dundone.data.etc.ResDungeonList;
-import com.example.dundone.data.item.EpicCountData;
 
 import java.util.ArrayList;
 
@@ -24,8 +23,21 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
         this.mContext = mContext;
         this.mDungeonList = dungeonEpics;
         mAdapterList = new ArrayList<>();
-        for(int pos = 0; pos < mDungeonList.size(); pos++)
+        for (int pos = 0; pos < mDungeonList.size(); pos++)
             mAdapterList.add(new EpicPercentListAdapter(mContext, mDungeonList.get(pos)));
+    }
+
+    public void search(final int selectedPos, final String itemName) {
+        for(EpicPercentListAdapter i : mAdapterList){
+            i.itemAllClear();
+            i.notifyDataSetChanged();
+        }
+        mAdapterList.get(selectedPos).reqGetDropEpics(itemName);
+    }
+    public void initUpdate(final int selectedPos){
+        mAdapterList.get(selectedPos).reqGetDropEpics(
+                EpicPercentListAdapter.getItemSearchName()
+        );
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -43,9 +55,6 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
                         int pos = getAdapterPosition();
                         if (pos == RecyclerView.NO_POSITION) return;
                         EpicPercentListAdapter adapter = mAdapterList.get(pos);
-                        if(adapter == null){
-                            adapter = new EpicPercentListAdapter(mContext, mDungeonList.get(pos));
-                        }
                         adapter.reqGetDropEpics(null);
                     }
                 }
@@ -66,9 +75,9 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int pos) {
-        holder.rvList.setAdapter(mAdapterList.get(pos));
+        EpicPercentListAdapter adapter = mAdapterList.get(pos);
+        holder.rvList.setAdapter(adapter);
     }
-
     @Override
     public int getItemCount() {
         return mDungeonList == null ? 0 : mDungeonList.size();

@@ -2,9 +2,13 @@ package com.example.dundone.main.analysis;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -53,6 +57,34 @@ public class AnalysisEpicsFragment extends Fragment {
 
     @BindView(R.id.scrollView)
     HorizontalScrollView svScrollView;
+
+    @BindView(R.id.et_search)
+    EditText etSearch;
+    private void hideKeyBoard() {
+        InputMethodManager im = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+    }
+    private void initPressSearch() {
+        etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    search();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+    @OnClick(R.id.search_button)
+    void search(){
+        hideKeyBoard();
+        etSearch.clearFocus();
+
+        String searchName = etSearch.getText().toString();
+        mAdapter.search(mSelectedDungeon,searchName);
+    }
+
     private void dungeonTabOnClick(final int pos) {
         svScrollView.scrollTo(tvDungeons[pos].getLeft(),0);
         vpEpicViewPager.setCurrentItem(pos);
@@ -95,8 +127,10 @@ public class AnalysisEpicsFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 dungeonTabOnClick(position);
+                mAdapter.initUpdate(position);
             }
         });
+        mAdapter.initUpdate(0);
     }
 
     private void reqGetDungeons(){
@@ -128,6 +162,7 @@ public class AnalysisEpicsFragment extends Fragment {
         });
     }
     private void init(){
+        initPressSearch();
         reqGetDungeons();
     }
 

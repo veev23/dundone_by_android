@@ -21,7 +21,7 @@ public interface dundoneAPI {
     Call<ResCharStatus> getCharStatus(@Query("serverId")String serverId, @Query("characterId")String charId);
 
     //1번 : 캐릭터 업데이트
-    @PATCH
+    @PATCH("/updata")
     Call<BaseDundoneResponse> Update(@Query("serverId")String serverId, @Query("characterId")String charId);
 
     //2번 : 획득 에픽 리스트 반환

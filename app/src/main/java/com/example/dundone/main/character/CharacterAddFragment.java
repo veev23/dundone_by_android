@@ -249,7 +249,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
 
     private void charAddTransaction(final int p){
         FragmentManager fm = getActivity().getSupportFragmentManager();
-        String tag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
+        String tag = getString(R.string.char_list_fragment);
         Fragment fragment = fm.findFragmentByTag(tag);
 
         searchAdapter.notifyItemRemoved(p);

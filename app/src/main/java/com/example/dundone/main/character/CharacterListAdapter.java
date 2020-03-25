@@ -16,8 +16,22 @@ import com.example.dundone.data.character.CharacterOtherData;
 import java.util.ArrayList;
 
 public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdapter.CharacterListViewHolder> {
-    private ArrayList<CharacterOtherData> itemList;
-    private Context context;
+    private ArrayList<CharacterOtherData> mItemList;
+    private Context mContext;
+
+    private int nowSize;
+    public boolean addSize(){
+        if(mItemList.size() > nowSize) {
+            nowSize++;
+            return true;
+        }
+        return false;
+    }
+    public void remove(int pos){
+        mItemList.remove(pos);
+        if(nowSize > mItemList.size()) nowSize--;
+        notifyItemRemoved(pos);
+    }
 
     //OnItemClick
     private OnItemClickListener mListener = null;
@@ -42,9 +56,10 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
 
 
-    public CharacterListAdapter(ArrayList<CharacterOtherData> itemList, Context context) {
-        this.itemList = itemList;
-        this.context = context;
+    public CharacterListAdapter(ArrayList<CharacterOtherData> mItemList, Context mContext) {
+        this.mItemList = mItemList;
+        this.mContext = mContext;
+        nowSize = Math.min(5,mItemList.size());
     }
 
 
@@ -101,7 +116,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     @NonNull
     @Override
     public CharacterListViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         View view = inflater.inflate(R.layout.item_char_raid_state, viewGroup, false) ;
         CharacterListViewHolder vh = new CharacterListViewHolder(view);
@@ -110,11 +125,11 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
 
     @Override
     public void onBindViewHolder(@NonNull CharacterListViewHolder viewHolder, int i) {
-        CharacterOtherData item = itemList.get(i);
+        CharacterOtherData item = mItemList.get(i);
         viewHolder.tvCharName.setText(item.getCharData().getCharName());
         viewHolder.tvCharServer.setText(item.getServerData().getServerName());
         //아직 불러오지 않은 상태
-        if(item.getOthers().getEpicWeek() == -1){
+        if(item.getOthers().isNotYetLoaded()){
             viewHolder.tvEpics.setText("불러오는 중..");
         }
         else {
@@ -126,11 +141,11 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         }
         String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+
                 "/characters/"+item.getCharData().getCharId()+"?zoom=3";
-        Glide.with(context).load(url).into(viewHolder.ivCharImg);
+        Glide.with(mContext).load(url).into(viewHolder.ivCharImg);
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return nowSize;
     }
 }

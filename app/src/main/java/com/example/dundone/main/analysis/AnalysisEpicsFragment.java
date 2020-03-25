@@ -80,6 +80,7 @@ public class AnalysisEpicsFragment extends Fragment {
     void search(){
         hideKeyBoard();
         etSearch.clearFocus();
+        etSearch.setText("");
 
         String searchName = etSearch.getText().toString();
         mAdapter.search(mSelectedDungeon,searchName);

@@ -34,6 +34,9 @@ public class RaidRemainData implements Serializable {
     public void setNotYetLoaded(){
         epics = "-1/-1";
     }
+    public boolean isNotYetLoaded(){
+        return epics.equals("-1/-1");
+    }
 
     public void initParsing(){
         if(freye!=null) {

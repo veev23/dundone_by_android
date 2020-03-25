@@ -33,6 +33,10 @@ public class RecommendResultFragment extends Fragment {
     ImageView ivScrape;
     @BindView(R.id.hide_answer)
     View vHideAnswer;
+    @BindView(R.id.answer_channel)
+    TextView tvAnswerChannel;
+    @BindView(R.id.answer_num)
+    TextView tvAnswerNum;
 
     @OnClick(R.id.back_button)
     void back(){
@@ -61,7 +65,8 @@ public class RecommendResultFragment extends Fragment {
     @OnClick(R.id.hide_answer)
     void channelOpen(){
         vHideAnswer.setVisibility(View.GONE);
-        Toast.makeText(mContext, "안녕!", Toast.LENGTH_SHORT).show();
+        tvAnswerChannel.setText("ㅇㅇ");
+        tvAnswerNum.setText("12채널");
     }
     private void init(){
         initLayout();

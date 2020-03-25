@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorBackground"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:clickable="true"
-    android:focusable="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:focusable="true">
 
 
     <ImageView
@@ -37,12 +37,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        tools:text="많이 먹게 해주세요!!"
         android:textColor="#ffffff"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        tools:text="많이 먹게 해주세요!!" />
 
     <FrameLayout
         android:id="@+id/frameLayout2"
@@ -74,16 +74,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title">
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:background="@drawable/radius_empty_rect"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/answer_channel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorButtonBackgorund"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/answer_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorButtonBackgorund"
+                    android:textSize="32sp" />
+            </LinearLayout>
+        </FrameLayout>
 
         <FrameLayout
             android:id="@+id/hide_answer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
-            tools:background="@drawable/border_sky">
+            tools:background="@drawable/border_sky"
+            tools:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_scrape"

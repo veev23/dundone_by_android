@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,9 +45,9 @@ import static com.example.dundone.Singleton.gson;
 
 public class CharListFragment extends Fragment
         implements AddToAdapterInterface<CharInfoData>, onMainButtonClickListener,
-SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener {
 
-    private HashSet<CharInfoData> havedCharIds = new HashSet<>();
+    private HashSet<String> havedCharIds = new HashSet<>();
 
     @Override
     public void onMainButtonClick() {
@@ -128,13 +129,13 @@ SwipeRefreshLayout.OnRefreshListener {
         characterOtherDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterOtherData>>() {
         }.getType());
         for (CharacterOtherData ch : characterOtherDataList) {
-            havedCharIds.add(new CharInfoData(ch.getCharData(), ch.getServerData()));
+            havedCharIds.add(ch.getCharData().getCharId());
         }
     }
 
     @Override
     public void onStop() {
-       // prefCharDataSave(characterOtherDataList);
+        prefCharDataSave(characterOtherDataList);
         super.onStop();
     }
 
@@ -157,7 +158,7 @@ SwipeRefreshLayout.OnRefreshListener {
         ((MainActivity) getActivity()).addFragment(cdf, getString(R.string.char_detail_fragment));
     }
 
-    private void reqGetStatus(CharacterOtherData charData, int i) {
+    private void reqGetStatus(CharacterOtherData charData, final int i) {
         Call<ResCharStatus> charStatusCall =
                 dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharData().getCharId());
         charStatusCall.enqueue(new Callback<ResCharStatus>() {
@@ -176,42 +177,14 @@ SwipeRefreshLayout.OnRefreshListener {
                     Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
                 }
                 refreshCount++;
-                if(refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
+                if (refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<ResCharStatus> call, Throwable t) {
                 Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
                 refreshCount++;
-                if(refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
-            }
-        });
-
-    }
-
-    private void reqGetStatus(CharInfoData charData) {
-        Call<ResCharStatus> charStatusCall =
-                dundoneService.getCharStatus(charData.getServerData().getServerId(), charData.getCharData().getCharId());
-        charStatusCall.enqueue(new Callback<ResCharStatus>() {
-            @Override
-            public void onResponse(Call<ResCharStatus> call, Response<ResCharStatus> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().getCode() == ResponseCode.SUCCESS) {
-                        RaidRemainData rdData = response.body().getOthers();
-                        rdData.initParsing();
-                        characterOtherDataList.add(new CharacterOtherData(charData, rdData));
-                        characterListAdapter.notifyItemInserted(characterOtherDataList.size());
-                    } else {
-                        Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(mContext, "errorcode " + response.code() + " : " + response.message(), Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResCharStatus> call, Throwable t) {
-                Toast.makeText(mContext, "Request Fail : " + t.toString(), Toast.LENGTH_LONG).show();
+                if (refreshCount == characterOtherDataList.size()) srlRefresh.setRefreshing(false);
             }
         });
 
@@ -229,20 +202,22 @@ SwipeRefreshLayout.OnRefreshListener {
                 .setPositiveButton("네", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        characterOtherDataList.remove(pos);
-                        characterListAdapter.notifyItemRemoved(pos);
+                        havedCharIds.remove(characterOtherDataList.get(pos).getCharData().getCharId());
+                        characterListAdapter.remove(pos);
                     }
                 }).show();
     }
 
     private int refreshCount;
-    private void UpdateStatusList(){
+
+    private void UpdateStatusList() {
         refreshCount = 0;
         for (int i = 0; i < characterOtherDataList.size(); i++) {
             characterOtherDataList.get(i).getOthers().setNotYetLoaded();
             reqGetStatus(characterOtherDataList.get(i), i);
         }
     }
+
     private void initRecyclerView() {
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
         rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
@@ -264,29 +239,43 @@ SwipeRefreshLayout.OnRefreshListener {
                 return true;
             }
         });
+        rvCharListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (rvCharListView.canScrollVertically(-1)) {
+                    if(characterListAdapter.addSize()){
+                        final int pos = characterListAdapter.getItemCount()-1;
+                        reqGetStatus(characterOtherDataList.get(pos), pos);
+                    }
+                }
+            }
+        });
     }
 
-    public void reqCharStatusUpdate(CharInfoData data){
-        String serverId=data.getServerData().getServerId();
-        String charId=data.getCharData().getCharId();
+    public void reqCharStatusUpdate(CharacterOtherData data, final int pos) {
+        String serverId = data.getServerData().getServerId();
+        String charId = data.getCharData().getCharId();
         Call<BaseDundoneResponse> call = dundoneService.Update(serverId, charId);
         call.enqueue(new Callback<BaseDundoneResponse>() {
             @Override
             public void onResponse(Call<BaseDundoneResponse> call, Response<BaseDundoneResponse> response) {
-                reqGetStatus(data);
+                reqGetStatus(data, pos);
             }
 
             @Override
             public void onFailure(Call<BaseDundoneResponse> call, Throwable t) {
-
-                reqGetStatus(data);
             }
         });
     }
 
     @Override
     public void add(CharInfoData data) {
-        reqCharStatusUpdate(data);
+        characterOtherDataList.add(new CharacterOtherData(data, new RaidRemainData("0/0", "0/0", "-1/-1")));
+        characterListAdapter.notifyItemInserted(characterOtherDataList.size());
+        havedCharIds.add(data.getCharData().getCharId());
+        final int pos = characterOtherDataList.size() - 1;
+        reqCharStatusUpdate(characterOtherDataList.get(pos), pos);
     }
 
     @Override

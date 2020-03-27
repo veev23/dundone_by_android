@@ -67,55 +67,58 @@
 
     <FrameLayout
         android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="250dp"
+        android:layout_width="350dp"
+        android:layout_height="194dp"
+        android:layout_marginTop="230dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title">
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        tools:background="@drawable/border_sky">
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:background="@drawable/radius_empty_rect"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/answer_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:background="@drawable/white_radius"
+                android:text="안녕!"
+                android:textColor="@color/colorButtonBackgorund"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/answer_channel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorButtonBackgorund"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/answer_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorButtonBackgorund"
-                    android:textSize="32sp" />
-            </LinearLayout>
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/hide_answer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            tools:background="@drawable/border_sky"
-            tools:visibility="gone">
-
-            <ImageView
-                android:id="@+id/iv_scrape"
+            <TextView
+                android:id="@+id/answer_num"
                 android:layout_width="wrap_content"
-                android:layout_height="120dp"
-                android:layout_gravity="center"
-                tools:srcCompat="@drawable/scrape_sky" />
-        </FrameLayout>
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorButtonBackgorund"
+                android:textSize="32sp" />
+        </LinearLayout>
+
+        <com.anupkumarpanwar.scratchview.ScratchView
+            android:id="@+id/scratchView_sky"
+            android:layout_width="300dp"
+            android:layout_height="145dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp"
+            app:overlay_height="145dp"
+            app:overlay_image="@drawable/scrape_sky"
+            app:overlay_width="300dp"
+            />
+        <com.anupkumarpanwar.scratchview.ScratchView
+            android:id="@+id/scratchView_little_red"
+            android:layout_width="300dp"
+            android:layout_height="145dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp"
+            app:overlay_height="145dp"
+            app:overlay_image="@drawable/scrape_little_red"
+            app:overlay_width="300dp"
+            />
+
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

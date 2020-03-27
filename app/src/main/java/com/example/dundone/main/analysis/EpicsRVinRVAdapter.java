@@ -28,6 +28,7 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
     }
 
     public void search(final int selectedPos, final String itemName) {
+        if(itemName.equals("") && EpicPercentListAdapter.getItemSearchName().equals("")) return;
         for(EpicPercentListAdapter i : mAdapterList){
             i.itemAllClear();
             i.notifyDataSetChanged();

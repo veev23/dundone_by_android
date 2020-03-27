@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anupkumarpanwar.scratchview.ScratchView;
 import com.example.dundone.R;
 import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.NeopleAPI;
@@ -29,9 +30,11 @@ public class RecommendResultFragment extends Fragment {
     TextView tvTitle;
     @BindView(R.id.iv_neople_openapi)
     View ivToDevSite;
-    @BindView(R.id.iv_scrape)
-    ImageView ivScrape;
-    @BindView(R.id.hide_answer)
+    @BindView(R.id.scratchView_sky)
+    ScratchView svScratchView_sky;
+    @BindView(R.id.scratchView_little_red)
+    ScratchView svScratchView_little_red;
+    @BindView(R.id.frameLayout)
     View vHideAnswer;
     @BindView(R.id.answer_channel)
     TextView tvAnswerChannel;
@@ -52,21 +55,15 @@ public class RecommendResultFragment extends Fragment {
         if(type == many){
             ivBackground.setImageResource(R.drawable.recommend_background1);
             tvTitle.setText("많이 먹게 해주세요!!");
-            ivScrape.setImageResource(R.drawable.scrape_sky);
+            svScratchView_little_red.setVisibility(View.GONE);
             vHideAnswer.setBackground(mContext.getDrawable(R.drawable.border_sky));
         }
         else{
             ivBackground.setImageResource(R.drawable.recommend_background2);
             tvTitle.setText("신화 먹게 해주세요!!");
-            ivScrape.setImageResource(R.drawable.scrape_little_red);
+            svScratchView_sky.setVisibility(View.GONE);
             vHideAnswer.setBackground(mContext.getDrawable(R.drawable.border_little_red));
         }
-    }
-    @OnClick(R.id.hide_answer)
-    void channelOpen(){
-        vHideAnswer.setVisibility(View.GONE);
-        tvAnswerChannel.setText("ㅇㅇ");
-        tvAnswerNum.setText("12채널");
     }
     private void init(){
         initLayout();

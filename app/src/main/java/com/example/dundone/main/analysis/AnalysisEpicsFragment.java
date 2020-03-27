@@ -79,10 +79,9 @@ public class AnalysisEpicsFragment extends Fragment {
     @OnClick(R.id.search_button)
     void search(){
         hideKeyBoard();
+        String searchName = etSearch.getText().toString();
         etSearch.clearFocus();
         etSearch.setText("");
-
-        String searchName = etSearch.getText().toString();
         mAdapter.search(mSelectedDungeon,searchName);
     }
 

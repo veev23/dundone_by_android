@@ -49,5 +49,5 @@ dependencies {
     implementation 'com.yinglan.shadowimageview:shadowimageview:1.0.4'
     //https://github.com/ongakuer/CircleIndicator
     implementation 'me.relex:circleindicator:2.1.4'
-
+    implementation 'com.github.anupkumarpanwar:scratchview:1.2'
 }

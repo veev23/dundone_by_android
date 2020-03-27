@@ -19,6 +19,7 @@ import com.example.dundone.main.MainActivity;
 import com.example.dundone.main.ResponseCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,6 +58,11 @@ public class CharLookupEpicFragment extends Fragment {
         ((MainActivity) getActivity()).backFragment();
     }
 
+    @BindView(R.id.recent)
+    TextView tvRecent;
+    @BindView(R.id.old)
+    TextView tvOld;
+
     private void initCharStatus() {
         tvCharName = vCharMenu.findViewById(R.id.tv_name);
         tvTitle = vCharMenu.findViewById(R.id.tv_title);
@@ -66,7 +72,7 @@ public class CharLookupEpicFragment extends Fragment {
         if (bundle != null) {
             CharInfoData charData = (CharInfoData) bundle.getSerializable(getString(R.string.char_data));
             tvCharName.setText(charData.getCharData().getCharName());
-            tvTitle.setText("에픽 조회");
+            tvTitle.setText("이번 달 에픽 조회");
             String url = "https://img-api.neople.co.kr/df/servers/" + charData.getServerData().getServerId()
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
@@ -78,12 +84,19 @@ public class CharLookupEpicFragment extends Fragment {
     }
 
     private boolean isInverse = false;
+    void selectedOrder(TextView selected, TextView unselected){
+        selected.setTextColor(mContext.getColor(R.color.colorButtonBackgorund));
+        selected.setBackground(mContext.getDrawable(R.drawable.radius_little_red_rect));
+        unselected.setTextColor(mContext.getColor(R.color.colorLittleRed));
+        unselected.setBackground(mContext.getDrawable(R.drawable.radius_empty_little_red_rect));
+    }
 
     @OnClick(R.id.recent)
     void listToRecent() {
         if (isInverse) {
             isInverse = false;
             inverseList();
+            selectedOrder(tvRecent, tvOld);
         }
     }
 
@@ -92,13 +105,13 @@ public class CharLookupEpicFragment extends Fragment {
         if (!isInverse) {
             isInverse = true;
             inverseList();
+            selectedOrder(tvOld,tvRecent);
         }
     }
 
     private void inverseList() {
-        ArrayList<EpicData> tmp = mEpicList;
+        Collections.reverse(mEpicList);
         baseInfoAdapter.notifyDataSetChanged();
-        Toast.makeText(mContext, "클릭", Toast.LENGTH_SHORT).show();
     }
 
     private void reqGetEpicList(boolean recently) {

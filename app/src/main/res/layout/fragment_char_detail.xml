@@ -100,9 +100,9 @@
                                 android:id="@+id/guildname_in_char_detail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="샛빛"
                                 android:textColor="@color/colorButtonBackgorund"
-                                android:textSize="28sp" />
+                                android:textSize="28sp"
+                                tools:text="샛빛" />
                         </LinearLayout>
                     </LinearLayout>
 

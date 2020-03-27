@@ -75,15 +75,7 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
                 public void onClick(View v) {
                     int pos = getAdapterPosition();
                     if (pos == RecyclerView.NO_POSITION) return;
-                    if(activeFL !=null) {
-                        activeFL.setVisibility(View.GONE);
-                        // Delete old fragment
-                        /*Fragment oldFragment = fmManager.findFragmentById(activeFL.getId());
-                        if (oldFragment != null) {
-                            fmManager.beginTransaction().remove(oldFragment).commit();
-                        }
-                        */
-                    }
+                    FrameLayout tmpFl = activeFL;
                     if (activeIdx != pos) {
                         flGrapeFragment.setVisibility(View.VISIBLE);
                         activeIdx = pos;
@@ -96,6 +88,15 @@ public class RainforceGraphAdapter extends RecyclerView.Adapter<RainforceGraphAd
                         activeIdx = -1;
                         activeFL = null;
                         flGrapeFragment.setVisibility(View.GONE);
+                    }
+                    if(tmpFl !=null) {
+                        tmpFl.setVisibility(View.GONE);
+                        // Delete old fragment
+                        /*Fragment oldFragment = fmManager.findFragmentById(activeFL.getId());
+                        if (oldFragment != null) {
+                            fmManager.beginTransaction().remove(oldFragment).commit();
+                        }
+                        */
                     }
                 }
             });

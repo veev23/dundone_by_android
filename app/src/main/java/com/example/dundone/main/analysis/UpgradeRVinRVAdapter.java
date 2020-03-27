@@ -50,6 +50,9 @@ public class UpgradeRVinRVAdapter extends RecyclerView.Adapter<UpgradeRVinRVAdap
         RecyclerView v = new RecyclerView(mContext);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         v.setLayoutParams(params);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        v.setLayoutManager(linearLayoutManager);
         v.addItemDecoration(new CustomRecyclerDecoration(10));
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -60,7 +63,7 @@ public class UpgradeRVinRVAdapter extends RecyclerView.Adapter<UpgradeRVinRVAdap
         mAdapterList.get(pos).setOnItemActiveListener(new RainforceGraphAdapter.OnItemActiveListener() {
             @Override
             public void onItemActiveListener(View v, int p) {
-                holder.rvList.smoothScrollToPosition(pos);
+                holder.rvList.smoothScrollToPosition(p);
             }
         });
         holder.rvList.setAdapter(mAdapterList.get(pos));

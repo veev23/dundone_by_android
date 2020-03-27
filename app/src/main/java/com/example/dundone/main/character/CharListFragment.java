@@ -272,9 +272,13 @@ public class CharListFragment extends Fragment
     @Override
     public void add(CharInfoData data) {
         characterOtherDataList.add(new CharacterOtherData(data, new RaidRemainData("0/0", "0/0", "-1/-1")));
+        if(characterListAdapter.isSoMiniSize()){
+            characterListAdapter.addSize();
+        }
         characterListAdapter.notifyItemInserted(characterOtherDataList.size());
         havedCharIds.add(data.getCharData().getCharId());
         final int pos = characterOtherDataList.size() - 1;
+
         reqCharStatusUpdate(characterOtherDataList.get(pos), pos);
     }
 

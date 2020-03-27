@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
@@ -34,7 +35,7 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity
 implements FragmentChange {
 
-    private final Context context = this;
+    private final Context mContext = this;
     @BindView(R.id.tl_main_tab)
     TabLayout tlMainTab;
     @BindView(R.id.main_button)
@@ -104,8 +105,9 @@ implements FragmentChange {
     @OnClick(R.id.main_button)
     void mainButtonOnClick(){
         FragmentManager.BackStackEntry backStackEntry =
-                fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount()-1);
+                fragmentManager.getBackStackEntryAt(0);
         Fragment fragment = fragmentManager.findFragmentByTag(backStackEntry.getName());
+
         if(fragment instanceof onMainButtonClickListener){
             ((onMainButtonClickListener) fragment).onMainButtonClick();
         }
@@ -181,6 +183,7 @@ implements FragmentChange {
         return false;
     }
 
+    private long backKeyPressedTime=0;
     @Override
     public void onBackPressed() {
         if(fragmentManager.getBackStackEntryCount() > 1) {
@@ -195,7 +198,13 @@ implements FragmentChange {
             }
         }
         else {
-            finish();
+            if(System.currentTimeMillis()>backKeyPressedTime+2000){
+                backKeyPressedTime = System.currentTimeMillis();
+                Toast.makeText(this, getString(R.string.APP_TERMINATE_BACK_BUTTON), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                finish();
+            }
         }
     }
     @Override

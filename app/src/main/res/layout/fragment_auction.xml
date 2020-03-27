@@ -12,7 +12,7 @@
         android:id="@+id/item_name_et"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/radius_empty_rect"
+        android:background="@drawable/radius_empty_buttonbackgroundcolor_rect"
         android:hint="이곳에 아이템을 입력해주세요"
         android:fontFamily=""
         android:textSize="18sp"

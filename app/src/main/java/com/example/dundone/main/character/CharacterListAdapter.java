@@ -20,12 +20,16 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     private Context mContext;
 
     private int nowSize;
+    private static final int minSize = 7;
     public boolean addSize(){
         if(mItemList.size() > nowSize) {
             nowSize++;
             return true;
         }
         return false;
+    }
+    public boolean isSoMiniSize(){
+        return nowSize < minSize;
     }
     public void remove(int pos){
         mItemList.remove(pos);
@@ -59,7 +63,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
     public CharacterListAdapter(ArrayList<CharacterOtherData> mItemList, Context mContext) {
         this.mItemList = mItemList;
         this.mContext = mContext;
-        nowSize = Math.min(5,mItemList.size());
+        nowSize = Math.min(minSize,mItemList.size());
     }
 
 

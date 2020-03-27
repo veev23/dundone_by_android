@@ -67,7 +67,9 @@ public class CharDetailFragment extends Fragment {
                     if (response.isSuccessful()) {
                         if (response.body() != null) {
                             tvLevel.setText(String.valueOf(response.body().getLevel()));
-                            tvGuildName.setText(String.valueOf(response.body().getGuildName()));
+                            if(response.body().getGuildName() != null){
+                                tvGuildName.setText(response.body().getGuildName());
+                            }
                         }
                     } else {
                         Toast.makeText(mContext, "neople errorcode : " + response.code(), Toast.LENGTH_SHORT).show();

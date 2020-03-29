@@ -113,7 +113,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void crawling(){
-        Log.d("크롤링", "하였습니다.");
         String base = "http://df.nexon.com";
         String eventPath = "/df/news/event";
         String noticePath = "/df/news/notice";

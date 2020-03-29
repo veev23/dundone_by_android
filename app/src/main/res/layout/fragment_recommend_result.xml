@@ -89,6 +89,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/answer_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,6 +98,7 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:layout_gravity="center"
                 android:id="@+id/answer_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

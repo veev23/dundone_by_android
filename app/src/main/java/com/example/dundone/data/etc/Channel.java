@@ -8,7 +8,7 @@ public class Channel {
     @SerializedName("channelNo")
     private int channelNo;
     @SerializedName("channelName")
-    private int channelName;
+    private String channelName;
 
     public String getDungeonName() {
         return dungeonName;
@@ -18,11 +18,11 @@ public class Channel {
         return channelNo;
     }
 
-    public int getChannelName() {
+    public String getChannelName() {
         return channelName;
     }
 
-    public Channel(String dungeonName, int channelNo, int channelName) {
+    public Channel(String dungeonName, int channelNo, String channelName) {
         this.dungeonName = dungeonName;
         this.channelNo = channelNo;
         this.channelName = channelName;

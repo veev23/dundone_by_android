@@ -88,7 +88,7 @@ public class RecommendResultFragment extends Fragment {
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String itemName = input.getText().toString();
@@ -96,7 +96,7 @@ public class RecommendResultFragment extends Fragment {
                 reqGetRecommendChannel(itemName);
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(mContext, "뭔지는 모르겠지만..",Toast.LENGTH_SHORT).show();
@@ -116,7 +116,7 @@ public class RecommendResultFragment extends Fragment {
                     if (response.body().getCode() == ResponseCode.SUCCESS) {
                        Channel data = response.body().getChannel();
                        tvAnswerChannelName.setText(data.getChannelName());
-                       tvAnswerChNum.setText(data.getChannelNo());
+                       tvAnswerChNum.setText(getString(R.string.channel_recommend, data.getChannelNo()));
                     } else {
                         Toast.makeText(mContext, "errorcode " + response.body().getCode() + " : " + response.body().getMessage(), Toast.LENGTH_LONG).show();
                     }

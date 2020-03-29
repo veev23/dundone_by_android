@@ -39,15 +39,6 @@ public interface dundoneAPI {
     @GET("/raid")
     Call<ResRaidClearCounts> getRaidClearCounts(@Query("serverId")String serverId, @Query("characterId") String charId);
 
-    /*
-    //캐릭터 강화 통계
-    @GET("/reinforce")
-    Call<ResUpgradeCounts> getUpgradeCounts(@Query("serverId")String serverId, @Query("characterId") String charId);
-
-    //총 강화 통계
-    @GET("/reinforce/{grade}")
-    Call<ResUpgradeCounts> getUpgradeCounts(@Path("grade") int grade);
-    */
     //캐릭터 강화 통계
     @GET("/reinforce/reinforcement")
     Call<ResUpgradeCounts> getUpgradeCountsReinforce(@Query("serverId")String serverId, @Query("characterId") String charId, @Query("min")int min, @Query("max")int max);
@@ -67,4 +58,9 @@ public interface dundoneAPI {
     // 11번 : 에픽 드롭 목록
     @GET("/itemacquire")
     Call<ResGetEpicDropList> getEpicDropList(@Query("page")int page,@Query("limit")int limit,@Query("dungeonName")String dungeonName, @Query("itemName")String itemName);
+
+    // 12번 : 에픽 추천
+    @GET("/hellch")
+    Call<ResRecommendHellCh> getHellChannel(@Query("itemName")String itemName);
+
 }

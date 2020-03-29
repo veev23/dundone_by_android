@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.example.dundone.Singleton.DpToPixel;
+
 public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<ResDungeonList.DungeonEpic> mDungeonList;
@@ -69,7 +71,7 @@ public class EpicsRVinRVAdapter extends RecyclerView.Adapter<EpicsRVinRVAdapter.
         RecyclerView v = new RecyclerView(mContext);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         v.setLayoutParams(params);
-        v.addItemDecoration(new CustomRecyclerDecoration(10));
+        v.addItemDecoration(new CustomRecyclerDecoration(DpToPixel(mContext, 20)));
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }

@@ -80,13 +80,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/white_radius"
+                android:text="지금은.."
+                android:textColor="@color/colorButtonBackgorund"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/answer_channel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/white_radius"
-                android:text="안녕!"
                 android:textColor="@color/colorButtonBackgorund"
                 android:textSize="20sp" />
 
@@ -99,6 +105,7 @@
         </LinearLayout>
 
         <com.anupkumarpanwar.scratchview.ScratchView
+            tools:visibility="gone"
             android:id="@+id/scratchView_sky"
             android:layout_width="300dp"
             android:layout_height="145dp"

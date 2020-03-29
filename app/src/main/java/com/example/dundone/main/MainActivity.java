@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
+import com.example.dundone.main.analysis.AnalysisEpicsFragment;
 import com.example.dundone.main.analysis.AnalysisFragment;
 import com.example.dundone.main.character.CharListFragment;
 import com.example.dundone.main.entities.TabItem;
@@ -46,12 +47,17 @@ implements FragmentChange {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
+    private Fragment[] fragments = new Fragment[MAIN_TAB_ITEM_SIZE];
 
     private void tabSetting() {
         tiMainTabItem[0] = new TabItem(R.drawable.home_off, R.drawable.home_on, "홈");
         tiMainTabItem[1] = new TabItem(R.drawable.character_off2, R.drawable.character_on, "캐릭터");
         tiMainTabItem[2] = new TabItem(R.drawable.market_off, R.drawable.market_on, "통계");
         tiMainTabItem[3] = new TabItem(R.drawable.hcr_off, R.drawable.hcr_on, "헬추첨");
+        fragments[0] = new HomeFragment();
+        fragments[1] = new CharListFragment();
+        fragments[2] = new AnalysisFragment();
+        fragments[3] = new HellRecommendFragment();
         final boolean clicked[] = {true, false, false, false};
         for (int i = 0; i < MAIN_TAB_ITEM_SIZE; i++) {
             View v = createMenuTabView(tiMainTabItem[i], clicked[i]);
@@ -66,19 +72,19 @@ implements FragmentChange {
                 switch (pos) {
                     case 0:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
-                        replaceFragment(new HomeFragment(), getString(R.string.char_home_fragment));
+                        replaceFragment(fragments[pos], getString(R.string.char_home_fragment));
                         break;
                     case 1:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_plus));
-                        replaceFragment(new CharListFragment(), getString(R.string.char_list_fragment));
+                        replaceFragment(fragments[pos], getString(R.string.char_list_fragment));
                         break;
                     case 2:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
-                        replaceFragment(new AnalysisFragment(), getString(R.string.analysis_fragment));
+                        replaceFragment(fragments[pos], getString(R.string.analysis_fragment));
                         break;
                     case 3:
                         ivMainButton.setImageDrawable(getDrawable(R.drawable.button_search));
-                        replaceFragment(new HellRecommendFragment(), getString(R.string.hell_recommend_fragment));
+                        replaceFragment(fragments[pos], getString(R.string.hell_recommend_fragment));
                         break;
                     default:
                         return;
@@ -112,7 +118,7 @@ implements FragmentChange {
             ((onMainButtonClickListener) fragment).onMainButtonClick();
         }
         else{
-            //그 외 경우..
+            Toast.makeText(mContext, "준비중입니다.", Toast.LENGTH_SHORT).show();
         }
     }
     private void changeMenuTabView(View tab, int tabIndex, boolean clicked) {

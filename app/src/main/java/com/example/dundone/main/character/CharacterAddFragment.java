@@ -188,7 +188,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                     gridLayoutSetting(inflater, response.body().getRows());
                 } else {
                     gridLayoutSetting(inflater, null);
-                    Toast.makeText(mContext, "neople errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Neople Code : " + response.code() + "\n"+response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -293,7 +293,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                 charAddConfirmDialog(p);
             }
         });
-        CustomRecyclerDecoration customDivider = new CustomRecyclerDecoration(20);
+        CustomRecyclerDecoration customDivider = new CustomRecyclerDecoration(DpToPixel(mContext, 20));
         rvCharResult.addItemDecoration(customDivider);
     }
 

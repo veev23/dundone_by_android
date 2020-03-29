@@ -134,7 +134,7 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         viewHolder.tvCharServer.setText(item.getServerData().getServerName());
         //아직 불러오지 않은 상태
         if(item.getOthers().isNotYetLoaded()){
-            viewHolder.tvEpics.setText("불러오는 중..");
+            viewHolder.tvEpics.setText("Loading..");
         }
         else {
             viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()) + " / 2");

@@ -15,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static com.example.dundone.Singleton.DpToPixel;
+
 public class UpgradeRVinRVAdapter extends RecyclerView.Adapter<UpgradeRVinRVAdapter.ViewHolder> {
     private Context mContext;
     //Pair<Tab name, Rainforce list>
@@ -53,7 +55,7 @@ public class UpgradeRVinRVAdapter extends RecyclerView.Adapter<UpgradeRVinRVAdap
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         v.setLayoutManager(linearLayoutManager);
-        v.addItemDecoration(new CustomRecyclerDecoration(10));
+        v.addItemDecoration(new CustomRecyclerDecoration(DpToPixel(mContext, 20)));
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }

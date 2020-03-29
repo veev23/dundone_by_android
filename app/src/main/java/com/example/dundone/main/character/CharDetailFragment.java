@@ -72,7 +72,7 @@ public class CharDetailFragment extends Fragment {
                             }
                         }
                     } else {
-                        Toast.makeText(mContext, "neople errorcode : " + response.code(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, "Neople Code : " + response.code() + "\n"+response.message(), Toast.LENGTH_SHORT).show();
                     }
                 }
 

@@ -46,7 +46,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
                         android:layout_margin="16dp"
-                        android:background="@drawable/radius_white_rect"
+                        android:background="@drawable/radius20_white_rect"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
                             android:layout_column="0"
                             android:layout_columnWeight="1"
                             android:layout_margin="8dp"
-                            android:background="@drawable/radius_white_rect">
+                            android:background="@drawable/radius20_white_rect">
 
                             <ImageView
                                 android:layout_width="64dp"
@@ -155,7 +155,7 @@
                             android:layout_column="1"
                             android:layout_columnWeight="1"
                             android:layout_margin="8dp"
-                            android:background="@drawable/radius_white_rect">
+                            android:background="@drawable/radius20_white_rect">
 
                             <ImageView
                                 android:layout_width="64dp"
@@ -188,7 +188,7 @@
                             android:layout_column="0"
                             android:layout_columnWeight="1"
                             android:layout_margin="8dp"
-                            android:background="@drawable/radius_white_rect">
+                            android:background="@drawable/radius20_white_rect">
 
                             <ImageView
                                 android:layout_width="64dp"

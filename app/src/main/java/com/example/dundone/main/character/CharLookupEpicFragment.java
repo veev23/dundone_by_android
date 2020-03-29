@@ -31,6 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.dundone.Singleton.DpToPixel;
 import static com.example.dundone.Singleton.dundoneService;
 
 public class CharLookupEpicFragment extends Fragment {
@@ -147,7 +148,7 @@ public class CharLookupEpicFragment extends Fragment {
 
     private void initRecyclerView() {
         rvEpicViews.setLayoutManager(new LinearLayoutManager(mContext));
-        rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(10));
+        rvEpicViews.addItemDecoration(new CustomRecyclerDecoration(DpToPixel(mContext, 20)));
         baseInfoAdapter = new BaseInfoAdapter<>(mContext, mEpicList, R.layout.item_base_info);
         rvEpicViews.setAdapter(baseInfoAdapter);
     }

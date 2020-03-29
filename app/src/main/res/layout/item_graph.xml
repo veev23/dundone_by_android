@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/radius_white_rect"
+    android:background="@drawable/radius20_white_rect"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/rainforce_mini"
@@ -27,7 +27,7 @@
             android:paddingEnd="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="@drawable/radius_grey_rect"
+            android:background="@drawable/radius15_grey_rect"
             android:textColor="@color/colorButtonBackgorund"
             tools:text="80%"
             android:id="@+id/rainforce_percent"

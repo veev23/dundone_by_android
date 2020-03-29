@@ -40,6 +40,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static com.example.dundone.Singleton.DpToPixel;
 import static com.example.dundone.Singleton.dundoneService;
 import static com.example.dundone.Singleton.gson;
 
@@ -220,7 +221,7 @@ public class CharListFragment extends Fragment
 
     private void initRecyclerView() {
         rvCharListView.setLayoutManager(new LinearLayoutManager(mContext));
-        rvCharListView.addItemDecoration(new CustomRecyclerDecoration(10));
+        rvCharListView.addItemDecoration(new CustomRecyclerDecoration(DpToPixel(mContext, 20)));
 
         UpdateStatusList();
 

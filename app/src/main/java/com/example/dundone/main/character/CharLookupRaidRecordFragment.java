@@ -31,6 +31,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.dundone.Singleton.DpToPixel;
 import static com.example.dundone.main.ResponseCode.SUCCESS;
 import static com.example.dundone.main.ResponseCode.SUCCESS_PATCH;
 
@@ -122,7 +123,7 @@ public class CharLookupRaidRecordFragment extends Fragment {
     private void initRecyclerView(){
         mNameAndValueList = new ArrayList<>();
         rvRaidSumList.setLayoutManager(new LinearLayoutManager(mContext));
-        rvRaidSumList.addItemDecoration(new CustomRecyclerDecoration(10));
+        rvRaidSumList.addItemDecoration(new CustomRecyclerDecoration(DpToPixel(mContext, 20)));
         mResultAdapter = new PairAdapter<>(mContext,mNameAndValueList);
         rvRaidSumList.setAdapter(mResultAdapter);
     }

@@ -1,20 +1,30 @@
 package com.example.dundone.main.home;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import me.relex.circleindicator.CircleIndicator2;
 import me.relex.circleindicator.CircleIndicator3;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.QuickContactBadge;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dundone.R;
 import com.example.dundone.main.NeopleAPI;
@@ -22,6 +32,12 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
@@ -37,6 +53,9 @@ public class HomeFragment extends Fragment {
     @BindView(R.id.event_viewpager)
     ViewPager2 vpEventPager;
     private ImageViewAdapter eventAdapter;
+
+    @BindViews({R.id.notice0, R.id.notice1,R.id.notice2,R.id.notice3,R.id.notice4})
+    TextView[] tvNotices;
     /**
      * Called when leaving the activity
      */
@@ -75,21 +94,77 @@ public class HomeFragment extends Fragment {
         mAdView.loadAd(adRequest);
     }
 
+    public void toURL(String url){
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
+    }
+    //event image, event url
+    private Pair<ArrayList<String>, ArrayList<String>> mEventPair = new Pair<>(new ArrayList<>(), new ArrayList<>());
     private void initViewPager() {
-        ArrayList<String> srcList = new ArrayList<>();
-        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
-        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
-        srcList.add("https://img-api.neople.co.kr/df/servers/bakal/characters/c269d0beddd7b2ae69be74a127fc0292?zoom=1");
-        eventAdapter = new ImageViewAdapter(srcList, mContext);
+        eventAdapter = new ImageViewAdapter(mEventPair.first, mContext);
+        eventAdapter.setOnItemClickListener(new ImageViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemCilckListener(View v, int p) {
+                toURL(mEventPair.second.get(p));
+            }
+        });
         vpEventPager.setAdapter(eventAdapter);
         ciEventIndicator.setViewPager(vpEventPager);
     }
 
-    ;
+    private void crawling(){
+        Log.d("크롤링", "하였습니다.");
+        String base = "http://df.nexon.com";
+        String eventPath = "/df/news/event";
+        String noticePath = "/df/news/notice";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Document soup = Jsoup.connect(base+eventPath).get();
+                    Elements events = soup.select("#container > div.contnet > div.event_con > div > ul > li");
+                    for(Element event : events){
+                        if(event.text().equals("")) continue;
+                        String eventPath= event.select("a").attr("href");
+                        mEventPair.second.add(base+eventPath);
+                        String eventImageUrl = event.select("img").attr("src");
+                        mEventPair.first.add("http:"+eventImageUrl);
+                    }
+
+                    soup = Jsoup.connect(base+noticePath).get();
+                    Elements notices =soup.select("#container > div.contnet > table > tbody > tr");
+                    notices.remove(0);
+                    Handler handler = new Handler(Looper.getMainLooper());
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            initViewPager();
+
+                            for(int i = 0;i<5; i++){
+                                String text = notices.get(i).select("a").text();
+                                tvNotices[i].setText(text);
+                                String fullUrl =base+notices.get(i).select("a").attr("href");
+                                tvNotices[i].setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        toURL(fullUrl);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                catch (IOException e){
+
+                }
+            }
+        }).start();
+
+    }
 
     private void init() {
         adViewInit();
-        initViewPager();
+        crawling();
         ivNeopleDevSite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

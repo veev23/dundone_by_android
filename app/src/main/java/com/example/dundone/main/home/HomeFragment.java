@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.relex.circleindicator.CircleIndicator2;
 import me.relex.circleindicator.CircleIndicator3;
 
@@ -54,8 +55,9 @@ public class HomeFragment extends Fragment {
     ViewPager2 vpEventPager;
     private ImageViewAdapter eventAdapter;
 
-    @BindViews({R.id.notice0, R.id.notice1,R.id.notice2,R.id.notice3,R.id.notice4})
+    @BindViews({R.id.notice0, R.id.notice1, R.id.notice2, R.id.notice3, R.id.notice4})
     TextView[] tvNotices;
+
     /**
      * Called when leaving the activity
      */
@@ -94,12 +96,14 @@ public class HomeFragment extends Fragment {
         mAdView.loadAd(adRequest);
     }
 
-    public void toURL(String url){
+    public void toURL(String url) {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
+
     //event image, event url
     private Pair<ArrayList<String>, ArrayList<String>> mEventPair = new Pair<>(new ArrayList<>(), new ArrayList<>());
+
     private void initViewPager() {
         eventAdapter = new ImageViewAdapter(mEventPair.first, mContext);
         eventAdapter.setOnItemClickListener(new ImageViewAdapter.OnItemClickListener() {
@@ -112,53 +116,8 @@ public class HomeFragment extends Fragment {
         ciEventIndicator.setViewPager(vpEventPager);
     }
 
-    private void crawling(){
-        String base = "http://df.nexon.com";
-        String eventPath = "/df/news/event";
-        String noticePath = "/df/news/notice";
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Document soup = Jsoup.connect(base+eventPath).get();
-                    Elements events = soup.select("#container > div.contnet > div.event_con > div > ul > li");
-                    for(Element event : events){
-                        if(event.text().equals("")) continue;
-                        String eventPath= event.select("a").attr("href");
-                        mEventPair.second.add(base+eventPath);
-                        String eventImageUrl = event.select("img").attr("src");
-                        mEventPair.first.add("http:"+eventImageUrl);
-                    }
-
-                    soup = Jsoup.connect(base+noticePath).get();
-                    Elements notices =soup.select("#container > div.contnet > table > tbody > tr");
-                    notices.remove(0);
-                    Handler handler = new Handler(Looper.getMainLooper());
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            initViewPager();
-
-                            for(int i = 0;i<5; i++){
-                                String text = notices.get(i).select("a").text();
-                                tvNotices[i].setText(text);
-                                String fullUrl =base+notices.get(i).select("a").attr("href");
-                                tvNotices[i].setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        toURL(fullUrl);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-                catch (IOException e){
-
-                }
-            }
-        }).start();
-
+    private void crawling() {
+        new CrawlingThread().start();
     }
 
     private void init() {
@@ -173,6 +132,16 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @OnClick(R.id.noticeViewAll)
+    void onClickToNoticeViewAll(){
+        toURL("http://df.nexon.com/df/news/event");
+    }
+
+    @OnClick(R.id.eventViewAll)
+    void onClickToEventViewAll(){
+        toURL("http://df.nexon.com/df/news/notice");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -183,5 +152,55 @@ public class HomeFragment extends Fragment {
         init();
 
         return v;
+    }
+
+    class CrawlingThread extends Thread {
+        private String base = "http://df.nexon.com";
+        private String eventPath = "/df/news/event";
+        private String noticePath = "/df/news/notice";
+        @Override
+        public void run() {
+            try {
+                Document soup = Jsoup.connect(base + eventPath).get();
+                Elements events = soup.select("#container > div.contnet > div.event_con > div > ul > li");
+                for (Element event : events) {
+                    if (event.text().equals("")) continue;
+                    String eventPath = event.select("a").attr("href");
+                    mEventPair.second.add(base + eventPath);
+                    String eventImageUrl = event.select("img").attr("src");
+                    mEventPair.first.add("http:" + eventImageUrl);
+                }
+
+                soup = Jsoup.connect(base + noticePath).get();
+                Elements notices = soup.select("#container > div.contnet > table > tbody > tr");
+                notices.remove(0);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        initViewPager();
+
+                        for (int i = 0; i < 5; i++) {
+                            try {
+                                String text = notices.get(i).select("a").text();
+                                tvNotices[i].setText(text);
+                            }
+                            catch(Exception e){
+                                tvNotices[i].setText(getString(R.string.contact_to_dev));
+                            }
+                            String fullUrl = base + notices.get(i).select("a").attr("href");
+                            tvNotices[i].setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    toURL(fullUrl);
+                                }
+                            });
+                        }
+                    }
+                });
+            } catch (IOException e) {
+
+            }
+        }
     }
 }

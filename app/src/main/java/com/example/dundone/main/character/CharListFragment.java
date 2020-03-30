@@ -285,6 +285,10 @@ public class CharListFragment extends Fragment
 
     @Override
     public void onRefresh() {
+        if(characterOtherDataList.isEmpty()) {
+            srlRefresh.setRefreshing(false);
+            return;
+        }
         UpdateStatusList();
     }
 

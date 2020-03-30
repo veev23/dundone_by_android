@@ -1,6 +1,8 @@
 package com.example.dundone;
 
 import com.example.dundone.data.character.ResCharBaseDataFromDNF;
+import com.example.dundone.data.item.ResGetAuctionItems;
+import com.example.dundone.data.item.ResGetItemIds;
 import com.example.dundone.data.server.ResServerList;
 
 import retrofit2.Call;
@@ -16,4 +18,11 @@ public interface dnfAPI {
     @GET("/df/servers/{server}/characters/{charId}")
     Call<ResCharBaseDataFromDNF> getCharBaseData(@Path("server") String serverId, @Path("charId") String charId,@Query("apikey") String apikey);
 
+    //17번 : 아이템 검색
+    @GET("/df/items?wordType=front&limit=30&q=trade:false")
+    Call<ResGetItemIds> getAuctionItemIds(@Query("itemName")String itemName,@Query("apikey")String apiKey);
+
+    //15번 : 경매장 아이템 검색
+    @GET("df/auction")
+    Call<ResGetAuctionItems> getAuctionItemList(@Query("itemId")String itemId, @Query("apikey")String apikey);
 }

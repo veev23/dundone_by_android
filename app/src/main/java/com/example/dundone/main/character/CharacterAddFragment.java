@@ -55,8 +55,6 @@ import static com.example.dundone.Singleton.DpToPixel;
 public class CharacterAddFragment extends Fragment implements onBackPressListener {
 
     private boolean isSearched = false;
-    private HashSet<String> havedCharIds;
-
     @Override
     public void onBackPress() {
         if (isSearched) {
@@ -66,7 +64,8 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
         }
     }
 
-    ArrayList<CharacterOtherData> charDataAddedList;
+
+    private HashSet<String> havedCharIds;
 
     private Context mContext;
     private ArrayList<ServerData> servers = new ArrayList<>();
@@ -94,6 +93,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
     private ConstraintSet mBeforeConstSet = new ConstraintSet();
 
     private void updateSearchViewBefore() {
+        etCharSearch.setText("");
         isSearched = false;
         ivToDevSite.setVisibility(View.VISIBLE);
         TransitionManager.beginDelayedTransition(container, new AutoTransition().setDuration(400));
@@ -139,7 +139,7 @@ public class CharacterAddFragment extends Fragment implements onBackPressListene
                             Toast.makeText(mContext, "검색 결과가 존재하지 않습니다.", Toast.LENGTH_LONG).show();
                         }
                         else{
-                            Toast.makeText(mContext, "\"" + etCharSearch.getText() + "\" 검색 결과입니다.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(mContext, "\"" + charName + "\" 검색 결과입니다.", Toast.LENGTH_LONG).show();
                         }
                         updateSearchViewAfter();
                     } else {

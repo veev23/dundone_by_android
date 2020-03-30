@@ -6,44 +6,77 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusable="true"
-    android:background="@color/colorBackground">
-
-    <EditText
-        android:id="@+id/item_name_et"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/radius_empty_buttonbackgroundcolor_rect"
-        android:hint="이곳에 아이템을 입력해주세요"
-        android:fontFamily=""
-        android:textSize="18sp"
-        android:padding="15dp"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:textColorHint="#626382"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline" />
+    android:background="@color/colorButtonBackgorund">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="경매장 검색"
-        android:textColor="#646382"
-        android:textSize="40sp"
-        android:fontFamily="@font/font_family"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        android:id="@+id/title"
+        style="@style/Title"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="경매장 아이템 검색"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.27"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_search_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/radius20_white_rect"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="293dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title">
 
+        <EditText
+            android:id="@+id/et_char_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textColor="@color/colorButtonBackgorund"
+            android:textSize="14sp" />
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:layout_weight="0">
+
+            <ImageView
+                android:id="@+id/search_button_in_char_add"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/search_g" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="@color/colorBackground"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ll_search_layout" >
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="16dp"
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

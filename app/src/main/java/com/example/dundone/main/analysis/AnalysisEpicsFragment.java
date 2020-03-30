@@ -48,7 +48,6 @@ public class AnalysisEpicsFragment extends Fragment {
     LinearLayout llDungeonLayout;
     @BindView(R.id.viewpager)
     ViewPager2 vpEpicViewPager;
-    private ArrayList<ArrayList<EpicCountData>> mDataList;
     private EpicsRVinRVAdapter mAdapter;
 
     private int mSelectedDungeon = 0;

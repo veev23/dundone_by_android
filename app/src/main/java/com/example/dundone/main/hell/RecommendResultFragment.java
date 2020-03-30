@@ -92,19 +92,23 @@ public class RecommendResultFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String itemName = input.getText().toString();
-                Toast.makeText(mContext, "\""+itemName+"\"으로 빌어볼게요!!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "\""+itemName+"\"(으)로 빌어볼게요!!",Toast.LENGTH_SHORT).show();
                 reqGetRecommendChannel(itemName);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(mContext, "뭔지는 모르겠지만..",Toast.LENGTH_SHORT).show();
-                reqGetRecommendChannel(null);
                 dialog.cancel();
             }
         });
-
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                Toast.makeText(mContext, "뭔지는 모르겠지만..",Toast.LENGTH_SHORT).show();
+                reqGetRecommendChannel(null);
+            }
+        });
         builder.show();
     }
     private void reqGetRecommendChannel(String itemName){

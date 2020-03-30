@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.example.dundone.FragmentChange;
 import com.example.dundone.R;
-import com.example.dundone.main.analysis.AnalysisEpicsFragment;
 import com.example.dundone.main.analysis.AnalysisFragment;
+import com.example.dundone.main.auction.AuctionFragment;
 import com.example.dundone.main.character.CharListFragment;
 import com.example.dundone.main.entities.TabItem;
 import com.example.dundone.main.hell.HellRecommendFragment;
@@ -52,7 +52,7 @@ implements FragmentChange {
     private void tabSetting() {
         tiMainTabItem[0] = new TabItem(R.drawable.home_off, R.drawable.home_on, "홈");
         tiMainTabItem[1] = new TabItem(R.drawable.character_off2, R.drawable.character_on, "캐릭터");
-        tiMainTabItem[2] = new TabItem(R.drawable.market_off, R.drawable.market_on, "통계");
+        tiMainTabItem[2] = new TabItem(R.drawable.analysis_off, R.drawable.analysis_on, "통계");
         tiMainTabItem[3] = new TabItem(R.drawable.hcr_off, R.drawable.hcr_on, "헬추첨");
         fragments[0] = new HomeFragment();
         fragments[1] = new CharListFragment();
@@ -119,6 +119,7 @@ implements FragmentChange {
         }
         else{
             Toast.makeText(mContext, "준비중입니다.", Toast.LENGTH_SHORT).show();
+            //addFragment(new AuctionFragment(), getString(R.string.auction_fragment));
         }
     }
     private void changeMenuTabView(View tab, int tabIndex, boolean clicked) {

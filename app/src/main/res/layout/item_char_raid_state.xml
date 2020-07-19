@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     style="@style/RadiusItem"
+    android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
     >
 
@@ -16,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@drawable/radius15_grey_rect"
+        android:background="@drawable/radius10_grey_rect"
         android:orientation="vertical"
         style="@style/DefaultPadding">
 

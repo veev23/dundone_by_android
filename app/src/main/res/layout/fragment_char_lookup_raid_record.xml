@@ -70,12 +70,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
-                            android:text="핀드워"
+                            android:text="프레이"
                             android:textColor="@color/colorButtonBackgorund"
                             android:textSize="28sp" />
 
                         <TextView
-                            android:id="@+id/fiend_today_clear"
+                            android:id="@+id/prey_today_clear"
                             style="@style/TextPadding"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -86,10 +86,10 @@
                             android:textColor="@color/colorListBackground"
                             android:textSize="8sp"
                             android:visibility="gone"
-                            tools:visibility="visible" />
+                            tools:visibility="gone" />
 
                         <TextView
-                            android:id="@+id/fiend_remain"
+                            android:id="@+id/prey_remain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorButtonBackgorund"
@@ -123,12 +123,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="16dp"
-                            android:text="프레이"
+                            android:text="시로코"
                             android:textColor="@color/colorButtonBackgorund"
                             android:textSize="28sp" />
 
                         <TextView
-                            android:id="@+id/prey_today_clear"
+                            android:id="@+id/siroco_today_clear"
                             style="@style/TextPadding"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -139,10 +139,10 @@
                             android:textColor="@color/colorListBackground"
                             android:textSize="8sp"
                             android:visibility="gone"
-                            tools:visibility="gone" />
+                            tools:visibility="visible" />
 
                         <TextView
-                            android:id="@+id/prey_remain"
+                            android:id="@+id/siroco_remain"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorButtonBackgorund"

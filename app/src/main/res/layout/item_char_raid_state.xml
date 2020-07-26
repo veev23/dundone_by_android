@@ -113,7 +113,52 @@
                 android:textSize="18sp"
                 tools:text="1 / 2" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            style="@style/DefaultPadding"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="9dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/raids"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineSpacingExtra="1.5sp"
+                android:text="시로코"
+                android:textColor="@color/colorListBackground"
+                android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/siroco_today_clear_in_raid_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/radius_little_red_rect"
+                android:lineSpacingExtra="1.3sp"
+                style="@style/TextPadding"
+                android:text="오늘 클리어!"
+                android:textColor="@color/colorListBackground"
+                android:layout_marginEnd="14dp"
+                android:textSize="12sp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/siroco_remain_in_raid_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="1.5sp"
+                android:textColor="@color/colorListBackground"
+                android:textSize="18sp"
+                tools:text="1 / 2" />
+
+
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

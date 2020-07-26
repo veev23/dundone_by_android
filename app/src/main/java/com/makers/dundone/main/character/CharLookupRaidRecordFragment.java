@@ -42,12 +42,12 @@ public class CharLookupRaidRecordFragment extends Fragment {
     private PairAdapter<String, Integer> mResultAdapter;
     private ArrayList<Pair<String, Integer>> mNameAndValueList;
 
-    @BindView(R.id.fiend_remain)
-    TextView tvFiendRemain;
+    @BindView(R.id.siroco_remain)
+    TextView tvSirocoRemain;
     @BindView(R.id.prey_remain)
     TextView tvPreyRemain;
-    @BindView(R.id.fiend_today_clear)
-    TextView tvFiendToday;
+    @BindView(R.id.siroco_today_clear)
+    TextView tvSirocoToday;
     @BindView(R.id.prey_today_clear)
     TextView tvPreyToday;
 
@@ -77,11 +77,11 @@ public class CharLookupRaidRecordFragment extends Fragment {
                     + "/characters/" + charData.getCharData().getCharId() + "?zoom=3";
             Glide.with(mContext).load(url).into(ivCharImg);
 
-            if(charData.getOthers().isFiendTodayClear())
-                tvFiendToday.setVisibility(View.VISIBLE);
+            if(charData.getOthers().isSirocoTodayClear())
+                tvSirocoToday.setVisibility(View.VISIBLE);
             if(charData.getOthers().isPreyTodayClear())
                 tvPreyToday.setVisibility(View.VISIBLE);
-            tvFiendRemain.setText(charData.getOthers().getFiendRemain() + " / 2");
+            tvSirocoRemain.setText(charData.getOthers().getSirocoRemain() + " / 2");
             tvPreyRemain.setText(charData.getOthers().getPreyRemain() + " / 2");
 
         } else {

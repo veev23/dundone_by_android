@@ -17,6 +17,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -127,8 +128,13 @@ public class CharListFragment extends Fragment
         if (json.equals("null")) {
             characterOtherDataList = new ArrayList<>();
         }
-        characterOtherDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterOtherData>>() {
-        }.getType());
+        try {
+            characterOtherDataList = gson.fromJson(json, new TypeToken<ArrayList<CharacterOtherData>>() {
+            }.getType());
+        }catch (Exception e){
+            characterOtherDataList = new ArrayList<>();
+            Toast.makeText(mContext, R.string.contact_to_dev, Toast.LENGTH_SHORT).show();
+        }
         for (CharacterOtherData ch : characterOtherDataList) {
             havedCharIds.add(ch.getCharData().getCharId());
         }
@@ -263,14 +269,14 @@ public class CharListFragment extends Fragment
 
             @Override
             public void onFailure(Call<BaseDundoneResponse> call, Throwable t) {
-                Toast.makeText(mContext, "error : " + t.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(mContext, "charStateUpdate fail : " + t.toString(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
     @Override
     public void add(CharInfoData data) {
-        characterOtherDataList.add(new CharacterOtherData(data, new RaidRemainData("0/0", "0/0", "-1/-1")));
+        characterOtherDataList.add(new CharacterOtherData(data, new RaidRemainData("0/0", "0/0","0/0", "-1/-1")));
         if (characterListAdapter.isSoMiniSize()) {
             characterListAdapter.addSize();
         }

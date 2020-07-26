@@ -8,6 +8,7 @@ public class CharacterOtherData extends CharInfoData implements Serializable {
         this.others =others;
     }
     public RaidRemainData getOthers() {
+        if(others == null) others = new RaidRemainData();
         return others;
     }
 
@@ -15,5 +16,5 @@ public class CharacterOtherData extends CharInfoData implements Serializable {
         this.others = others;
     }
 
-    private RaidRemainData others;
+    private transient RaidRemainData others;
 }

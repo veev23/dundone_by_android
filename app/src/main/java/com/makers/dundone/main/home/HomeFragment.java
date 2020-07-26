@@ -103,12 +103,7 @@ public class HomeFragment extends Fragment {
 
     private void initViewPager() {
         eventAdapter = new ImageViewAdapter(mEventPair.first, mContext);
-        eventAdapter.setOnItemClickListener(new ImageViewAdapter.OnItemClickListener() {
-            @Override
-            public void onItemCilckListener(View v, int p) {
-                toURL(mEventPair.second.get(p));
-            }
-        });
+        eventAdapter.setOnItemClickListener((v, p) -> toURL(mEventPair.second.get(p)));
         vpEventPager.setAdapter(eventAdapter);
         ciEventIndicator.setViewPager(vpEventPager);
     }
@@ -120,12 +115,9 @@ public class HomeFragment extends Fragment {
     private void init() {
         adViewInit();
         crawling();
-        ivNeopleDevSite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NeopleAPI neopleAPI = new NeopleAPI(mContext);
-                neopleAPI.toNeopleDeveloperSite();
-            }
+        ivNeopleDevSite.setOnClickListener(v -> {
+            NeopleAPI neopleAPI = new NeopleAPI(mContext);
+            neopleAPI.toNeopleDeveloperSite();
         });
     }
 

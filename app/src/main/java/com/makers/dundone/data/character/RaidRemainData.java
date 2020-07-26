@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class RaidRemainData implements Serializable {
     public static final int PREY_MAX = 2;
     public static final int FIEND_MAX = 2;
+    public static final int SIROCO_MAX = 2;
     public int getPreyRemain() {
         return preyRemain;
     }
@@ -24,6 +25,14 @@ public class RaidRemainData implements Serializable {
 
     public boolean isFiendTodayClear() {
         return fiendTodayClear;
+    }
+
+    public int getSirocoRemain() {
+        return sirocoRemain;
+    }
+
+    public boolean isSirocoTodayClear() {
+        return sirocoTodayClear;
     }
 
     public int getEpicWeek() {
@@ -49,16 +58,29 @@ public class RaidRemainData implements Serializable {
             else fiendTodayClear = false;
             fiendRemain = FIEND_MAX - Integer.parseInt(fiendWars[1]);
         }
+        if(siroco!=null) {
+            String[] sirocos = siroco.split("/");
+            if (sirocos[0].equals("1")) sirocoTodayClear = true;
+            else sirocoTodayClear = false;
+            sirocoRemain = SIROCO_MAX - Integer.parseInt(sirocos[1]);
+        }
         if(epics!=null) {
             String[] epicCount = epics.split("/");
             epicWeek = Integer.parseInt(epicCount[1]);
         }
     }
 
-    public RaidRemainData(String freye, String fienWar, String epics) {
+    public RaidRemainData(String freye, String fienWar, String siroco, String epics) {
         this.freye = freye;
         this.fienWar = fienWar;
+        this.siroco = siroco;
         this.epics = epics;
+    }
+    public RaidRemainData(){
+        this.freye = "0/0";
+        this.fienWar = "0/0";
+        this.siroco = "0/0";
+        this.epics = "-1/-1";
     }
 
     @SerializedName("freye")
@@ -67,6 +89,9 @@ public class RaidRemainData implements Serializable {
     @SerializedName("fienWar")
     @Expose
     private String fienWar;
+    @SerializedName("siroco")
+    @Expose
+    private String siroco;
     @SerializedName("epics")
     @Expose
     private String epics;
@@ -74,6 +99,8 @@ public class RaidRemainData implements Serializable {
     private boolean preyTodayClear;
     private int fiendRemain;
     private boolean fiendTodayClear;
+    private int sirocoRemain;
+    private boolean sirocoTodayClear;
 
     private int epicWeek;
 }

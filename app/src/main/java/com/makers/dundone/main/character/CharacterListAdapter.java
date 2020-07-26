@@ -73,8 +73,10 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         TextView tvCharServer;
         TextView tvPreyRemain;
         TextView tvFiendRemain;
+        TextView tvSirocoRemain;
         TextView tvPreyTodayClear;
         TextView tvFiendTodayClear;
+        TextView tvSirocoTodayClear;
         TextView tvEpics;
         ImageView ivCharImg;
 
@@ -87,8 +89,10 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
             tvCharServer = vCharInfo.findViewById(R.id.tv_detail_info);
             tvPreyRemain = itemView.findViewById(R.id.prey_remain_in_raid_state);
             tvFiendRemain = itemView.findViewById(R.id.fiend_remain_in_raid_state);
+            tvSirocoRemain = itemView.findViewById(R.id.siroco_remain_in_raid_state);
             tvPreyTodayClear = itemView.findViewById(R.id.prey_today_clear_in_raid_state);
             tvFiendTodayClear = itemView.findViewById(R.id.fiend_today_clear_in_raid_state);
+            tvSirocoTodayClear = itemView.findViewById(R.id.siroco_today_clear_in_raid_state);
             tvEpics = itemView.findViewById(R.id.epic_count);
             ivCharImg = vCharInfo.findViewById(R.id.iv_descript_img);
             itemView.setOnClickListener(v -> {
@@ -133,9 +137,11 @@ public class CharacterListAdapter extends RecyclerView.Adapter<CharacterListAdap
         else {
             viewHolder.tvPreyRemain.setText(String.valueOf(item.getOthers().getPreyRemain()) + " / 2");
             viewHolder.tvFiendRemain.setText(String.valueOf(item.getOthers().getFiendRemain()) + " / 2");
+            viewHolder.tvSirocoRemain.setText(String.valueOf(item.getOthers().getSirocoRemain()) + " / 2");
             viewHolder.tvEpics.setText(String.valueOf(item.getOthers().getEpicWeek()));
             viewHolder.tvPreyTodayClear.setVisibility(item.getOthers().isPreyTodayClear() ? View.VISIBLE : View.INVISIBLE);
             viewHolder.tvFiendTodayClear.setVisibility(item.getOthers().isFiendTodayClear() ? View.VISIBLE : View.INVISIBLE);
+            viewHolder.tvSirocoTodayClear.setVisibility(item.getOthers().isSirocoTodayClear() ? View.VISIBLE : View.INVISIBLE);
         }
         String url = "https://img-api.neople.co.kr/df/servers/"+item.getServerData().getServerId()+
                 "/characters/"+item.getCharData().getCharId()+"?zoom=3";
